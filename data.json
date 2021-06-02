@@ -1,0 +1,218 @@
+{
+  "resourceCategory": [
+    // Primary
+    "Wood", // 0
+    "Stone", // 1
+    "Clay", // 2
+    "Forage", // 3
+    "Animal", // 4
+    "Farming", // 5
+    // Secondary
+    "Food", // 6
+    "Metal", // 7
+    "Fuel" // 8
+  ],
+  "resource": [
+    {
+      "id": 0,
+      "name": "Logs",
+      "category": 0
+    },
+    {
+      "id": 1,
+      "name": "Boards",
+      "category": 0
+    },
+    {
+      "id": 2,
+      "name": "Stone",
+      "category": 1
+    },
+    {
+      "id": 3,
+      "name": "Ore",
+      "category": 1
+    },
+    {
+      "id": 4,
+      "name": "Clay",
+      "category": 2
+    },
+    {
+      "id": 5,
+      "name": "Berries",
+      "category": 3
+    },
+    {
+      "id": 6,
+      "name": "Plants",
+      "category": 3
+    },
+    {
+      "id": 7,
+      "name": "Bones",
+      "category": 4
+    },
+    {
+      "id": 8,
+      "name": "Hides",
+      "category": 4
+    },
+    {
+      "id": 9,
+      "name": "MeatRaw",
+      "category": 4
+    },
+    {
+      "id": 10,
+      "name": "Seeds",
+      "category": 5
+    },
+    {
+      "id": 11,
+      "name": "Fiber",
+      "category": 5
+    },
+    {
+      "id": 12,
+      "name": "Fish",
+      "category": 6
+    },
+    {
+      "id": 13,
+      "name": "MeatDish",
+      "category": 6
+    },
+    {
+      "id": 14,
+      "name": "Baked",
+      "category": 6
+    },
+    {
+      "id": 15,
+      "name": "Drinks",
+      "category": 6
+    },
+    {
+      "id": 15,
+      "name": "MetalSoft",
+      "category": 7
+    },
+    {
+      "id": 16,
+      "name": "MetalHard",
+      "category": 7
+    },
+    {
+      "id": 17,
+      "name": "MetalPrecious",
+      "category": 7
+    },
+    {
+      "id": 18,
+      "name": "Charcoal",
+      "category": 8
+    },
+    {
+      "id": 19,
+      "name": "Coal",
+      "category": 8
+    },
+  ],
+  "tasks": [
+    {
+      "name": "Logging",
+      "input": {},
+      "output": {
+        "0": 2
+      },
+      "energyCost": 3
+    },
+    {
+      "name": "Mining",
+      "input": {},
+      "output": {
+        "2": 2
+      },
+      "energyCost": 3
+    },
+    {
+      "name": "Harvesting",
+      "input": {},
+      "output": {
+        "4": 1
+      },
+      "energyCost": 2
+    },
+    {
+      "name": "Foraging",
+      "input": {},
+      "output": {
+        "5": 2,
+        "6": 2
+      },
+      "energyCost": 1
+    },
+    {
+      "name": "Hunting",
+      "input": {},
+      "output": {
+        "7": 1,
+        "8": 1,
+        "9": 1
+      },
+      "energyCost": 2
+    },
+    {
+      "name": "Farming",
+      "input": {
+        "5": 1,
+        "6": 1
+      },
+      "output": {
+        "10": 2,
+        "11": 1
+      },
+      "energyCost": 3
+    },
+    {
+      "name": "Cooking",
+      "input": {},
+      "output": {
+        "13": 1,
+        "14": 1,
+        "15": 1
+      },
+      "energyCost": 1
+    },
+    {
+      "name": "Crafting",
+      "input": {},
+      "output": {},
+      "energyCost": 1
+    },
+    {
+      "name": "Building",
+      "input": {
+        "0": 2,
+        "2": 2,
+        "4": 1
+      },
+      "inputMode": "Any",
+      "output": {},
+      "energyCost": 5
+    },
+    {
+      "name": "Resting",
+      "input": {},
+      "output": {},
+      "energyCost": -10
+    },
+    {
+      "name": "Eating",
+      "input": {},
+      "output": {},
+      "energyCost": -10
+    }
+  ]
+}
