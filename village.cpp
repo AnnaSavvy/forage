@@ -8,22 +8,19 @@ Village::Village()
 {
     _name = "Grudinino";
 
-    std::fill( _inventory, _inventory + static_cast<size_t>( ResourceCategory::All ), 0 );
-    std::fill( _resources, _resources + static_cast<size_t>( ResourceSubtype::All ), 0 );
+    const nlohmann::json & data = getStaticData();
+    _inventory.resize( data["resourceCategory"].size(), 0 );
+    _resources.resize( data["resource"].size(), 0 );
 
     for ( int i = 0; i < 5; i++ ) {
         _villagers.emplace_back( this );
     }
-
-    const nlohmann::json & data = getStaticData();
-
-    std::cout << data["resourceCategory"][0];
-    std::cout << data["resourceCategory"][1];
 }
 
 void Village::printStatus()
 {
     int totalScore = 0;
+    const nlohmann::json & data = getStaticData();
 
     printLine( "*** " + _name + " ***" );
     printLine( "Current villagers: " + std::to_string( _villagers.size() ) );
@@ -32,8 +29,10 @@ void Village::printStatus()
     }
 
     printLine( "Village inventory: " );
-    for ( const auto & category : resAllCategories ) {
-        std::cout << "  - " << getCategoryName( category ) << ": " << _inventory[static_cast<size_t>( category )] << std::endl;
+    size_t id = 0;
+    for ( auto & category : data["resourceCategory"] ) {
+        std::cout << "  - " << category << ": " << _inventory[id] << std::endl;
+        id++;
     }
 }
 
@@ -60,5 +59,18 @@ void Village::update()
 
     for ( auto & unit : _villagers ) {
         unit.update();
+    }
+
+    // Reset category totals
+    for ( auto & inv : _inventory ) {
+        inv = 0;
+    }
+
+    // Recalculate category totals
+    const auto & resourceData = getStaticData()["resource"];
+    for ( auto & res : resourceData ) {
+        const int id = res["id"].get<int>();
+        const int categoryID = res["category"].get<int>();
+        _inventory[categoryID] += _resources[id];
     }
 }

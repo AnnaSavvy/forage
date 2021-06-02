@@ -1,31 +1,10 @@
 #include "logger.h"
+#include "static.h"
 #include "unit_villager.h"
 #include "village.h"
 
 #include <iostream>
-
-uint32_t getInventoryID( Villager::Task task )
-{
-    switch ( task ) {
-    case Villager::Task::Logging:
-        return ResourceCategory::Wood;
-    case Villager::Task::Mining:
-        return ResourceCategory::Stone;
-    case Villager::Task::Harvesting:
-        return ResourceCategory::Clay;
-    case Villager::Task::Foraging:
-        return ResourceCategory::Forage;
-    case Villager::Task::Hunting:
-        return ResourceCategory::Animal;
-    case Villager::Task::Farming:
-        return ResourceCategory::Farming;
-    case Villager::Task::Cooking:
-        return ResourceCategory::Stone;
-    default:
-        break;
-    }
-    return 0;
-}
+#include <string>
 
 Villager::Villager( Village * reference )
     : home( reference )
@@ -82,6 +61,23 @@ const std::string & Villager::getName() const
 
 void Villager::update()
 {
-    home->_inventory[getInventoryID(task)]++;
-    morale--;
+    const auto & tasksData = getStaticData()["tasks"];
+    const size_t taskID = static_cast<size_t>( task );
+
+    if ( taskID >= tasksData.size() ) {
+        return;
+    }
+    const auto & taskEntry = tasksData[taskID];
+
+    for ( const auto & res : taskEntry["input"].items() ) {
+        const int key = std::stoi( res.key() );
+        const int value = res.value().get<int>();
+        home->_resources[key] -= value;
+    }
+    for ( const auto & res : taskEntry["output"].items() ) {
+        const int key = std::stoi( res.key() );
+        const int value = res.value().get<int>();
+        home->_resources[key] += value;
+    }
+    morale -= taskEntry["energyCost"].get<int>();
 }

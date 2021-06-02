@@ -141,7 +141,6 @@
   <ItemGroup>
     <ClCompile Include="logger.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="resource.cpp" />
     <ClCompile Include="static.cpp" />
     <ClCompile Include="unit.cpp" />
     <ClCompile Include="village.cpp" />

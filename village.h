@@ -9,8 +9,8 @@ class Village
 {
 public:
     std::string _name;
-    int _inventory[static_cast<size_t>( ResourceCategory::All )];
-    int _resources[static_cast<size_t>( ResourceSubtype::All )];
+    std::vector<int> _inventory;
+    std::vector<int> _resources;
     std::vector<Villager> _villagers;
 
     Village();
