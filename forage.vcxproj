@@ -147,12 +147,17 @@
     <ClCompile Include="village.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="json.hpp" />
     <ClInclude Include="logger.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="static.h" />
     <ClInclude Include="unit.h" />
     <ClInclude Include="unit_villager.h" />
     <ClInclude Include="village.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

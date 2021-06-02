@@ -1,6 +1,14 @@
-#include "resource.h"
-#include "unit_villager.h"
+#include "static.h"
 
-#include <vector>
+#include <iomanip>
+#include <fstream>
 
-static const std::vector<Unit> set;
+const nlohmann::json & getStaticData()
+{
+    static nlohmann::json j;
+    if ( j.empty() ) {
+        std::ifstream dataStream( "data.json" );
+        dataStream >> j;
+    }
+    return j;
+}

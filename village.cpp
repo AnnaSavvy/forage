@@ -1,6 +1,7 @@
 #include "village.h"
 #include "logger.h"
 
+#include "static.h"
 #include <iostream>
 
 Village::Village()
@@ -13,6 +14,11 @@ Village::Village()
     for ( int i = 0; i < 5; i++ ) {
         _villagers.emplace_back( this );
     }
+
+    const nlohmann::json & data = getStaticData();
+
+    std::cout << data["resourceCategory"][0];
+    std::cout << data["resourceCategory"][1];
 }
 
 void Village::printStatus()

@@ -1,16 +1,14 @@
 {
   "resourceCategory": [
-    // Primary
-    "Wood", // 0
-    "Stone", // 1
-    "Clay", // 2
-    "Forage", // 3
-    "Animal", // 4
-    "Farming", // 5
-    // Secondary
-    "Food", // 6
-    "Metal", // 7
-    "Fuel" // 8
+    "Wood",
+    "Stone",
+    "Clay",
+    "Forage",
+    "Animal",
+    "Farming",
+    "Food",
+    "Metal",
+    "Fuel"
   ],
   "resource": [
     {
@@ -117,7 +115,7 @@
       "id": 19,
       "name": "Coal",
       "category": 8
-    },
+    }
   ],
   "tasks": [
     {
@@ -198,7 +196,6 @@
         "2": 2,
         "4": 1
       },
-      "inputMode": "Any",
       "output": {},
       "energyCost": 5
     },

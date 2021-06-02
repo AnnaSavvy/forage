@@ -1,14 +1,17 @@
 #pragma once
 #include "unit.h"
-#include "json.hpp"
 
 #include <string>
+#include <vector>
 
 class Village;
 
 struct Task
 {
-
+    std::string name;
+    std::vector<std::pair<uint32_t, int> > input;
+    std::vector<std::pair<uint32_t, int> > output;
+    int energyCost;
 };
 
 class Villager : public Unit
