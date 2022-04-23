@@ -35,8 +35,35 @@ std::vector<int> WaveTile::getPossibilities() const
 
 void WaveTile::limit( int fromTileType )
 {
+    int mask = 0;
     // Rules!
-    possible = LAKE1 | LAKE2 | DEEP_WATER;
+    switch ( fromTileType ) {
+    case FOREST:
+        mask = FOREST | TREES;
+        break;
+    case TREES:
+        mask = FOREST | TREES | GRASS | RIVER;
+        break;
+    case GRASS:
+        mask = TREES | GRASS | RIVER | LAKE1;
+        break;
+    case RIVER:
+        mask = RIVER | GRASS;
+        break;
+    case LAKE1:
+        mask = RIVER | GRASS | LAKE1 | LAKE2;
+        break;
+    case LAKE2:
+        mask = LAKE1 | LAKE2 | DEEP_WATER;
+        break;
+    case DEEP_WATER:
+        mask = LAKE2 | DEEP_WATER;
+        break;
+    default:
+        break;
+    }
+    // Disable non-masked bits
+    possible = possible & mask;
 }
 
 WaveMap::WaveMap( size_t side )
@@ -98,13 +125,13 @@ bool WaveMap::place( size_t index )
         WaveTile & tile = _map[index];
         const int possible = tile.countPossibilities();
         if ( possible ) {
-            int chosenOne = possible - 1;
+            int chosenOne = possible;
             if ( possible > 1 ) {
                 std::uniform_int_distribution<std::mt19937::result_type> distribution( 1, possible );
 
                 chosenOne = distribution( rng );
             }
-            tile.type = tile.getPossibilities()[chosenOne];
+            tile.type = tile.getPossibilities()[chosenOne - 1];
 
             for ( size_t adjacent : getAdjacent4( index ) ) {
                 _map[adjacent].limit( tile.type );
@@ -113,6 +140,17 @@ bool WaveMap::place( size_t index )
         }
     }
     return false;
+}
+
+bool WaveMap::waveIterate()
+{
+    for ( size_t index = 0; index < _map.size(); index++ ) {
+        if ( !place( index ) ) {
+            // something went wrong!
+            return false;
+        }
+    }
+    return true;
 }
 
 void WaveRenderer::renderMap( const WaveMap & map ) const

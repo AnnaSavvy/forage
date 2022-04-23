@@ -144,6 +144,7 @@
     <ClCompile Include="static.cpp" />
     <ClCompile Include="unit.cpp" />
     <ClCompile Include="village.cpp" />
+    <ClCompile Include="wave_function.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="json.hpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="unit.h" />
     <ClInclude Include="unit_villager.h" />
     <ClInclude Include="village.h" />
+    <ClInclude Include="wave_function.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data.json" />

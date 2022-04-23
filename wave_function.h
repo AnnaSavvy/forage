@@ -44,11 +44,13 @@ public:
     std::vector<size_t> getAdjacent8( size_t index ) const;
     bool place( size_t index );
 
+    bool waveIterate();
     // findSmallest
 };
 
 class WaveRenderer
 {
+public:
     virtual void renderMap( const WaveMap & map ) const;
     virtual void renderTile( const WaveTile & tile ) const;
 };

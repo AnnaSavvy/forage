@@ -2,6 +2,7 @@
 #include "resource.h"
 #include "unit_villager.h"
 #include "village.h"
+#include "wave_function.h"
 
 #include <chrono>
 #include <iostream>
@@ -31,6 +32,10 @@ void gameLoop()
 
 int main()
 {
+    WaveRenderer render;
+    WaveMap waveMap( 5 );
+    render.renderMap( waveMap );
+
     printIntroduction();
 
     bool menuIsRunning = true;
@@ -49,9 +54,11 @@ int main()
         case 2:
             printLine( "No saved games found, please start a new one!" );
             break;
-        case 3:
+        case 3: {
             printLine( "No one beaten our game yet!" );
-            break;
+            waveMap.waveIterate();
+            render.renderMap( waveMap );
+        } break;
         case 4:
             menuIsRunning = false;
             break;
