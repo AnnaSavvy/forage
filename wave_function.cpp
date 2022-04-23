@@ -116,7 +116,45 @@ std::vector<size_t> WaveMap::getAdjacent4( size_t index ) const
 
 std::vector<size_t> WaveMap::getAdjacent8( size_t index ) const
 {
-    return std::vector<size_t>();
+    std::vector<size_t> retval;
+    retval.reserve( 8 );
+
+    const size_t positionX = index % _rowSize;
+    const size_t xLimit = _rowSize - 1;
+
+    // TOP
+    if ( index > _rowSize && positionX > 0 ) {
+        retval.push_back( index - _rowSize - 1 );
+    }
+    if ( index >= _rowSize ) {
+        retval.push_back( index - _rowSize );
+        if ( positionX < xLimit ) {
+            retval.push_back( index - _rowSize + 1 );
+        }
+    }
+
+    // LEFT
+    if ( positionX > 0 ) {
+        retval.push_back( index - 1 );
+    }
+    // RIGHT
+    if ( positionX < xLimit ) {
+        retval.push_back( index + 1 );
+    }
+
+    // BOTTOM
+    if ( index + _rowSize < _map.size() ) {
+        if ( positionX > 0 ) {
+            retval.push_back( index + _rowSize - 1 );
+        }
+
+        retval.push_back( index + _rowSize );
+    }
+    if ( index + _rowSize + 1 < _map.size() ) {
+        retval.push_back( index + _rowSize + 1 );
+    }
+
+    return retval;
 }
 
 bool WaveMap::place( size_t index )
@@ -133,7 +171,7 @@ bool WaveMap::place( size_t index )
             }
             tile.type = tile.getPossibilities()[chosenOne - 1];
 
-            for ( size_t adjacent : getAdjacent4( index ) ) {
+            for ( size_t adjacent : getAdjacent8( index ) ) {
                 _map[adjacent].limit( tile.type );
             }
             return true;
@@ -151,6 +189,36 @@ bool WaveMap::waveIterate()
         }
     }
     return true;
+}
+
+bool WaveMap::waveSmallest()
+{
+    size_t lastIndex = findLeastPossibilities();
+    place( lastIndex );
+
+    size_t nextIndex = findLeastPossibilities();
+    while ( nextIndex != lastIndex ) {
+        place( nextIndex );
+        lastIndex = nextIndex;
+        nextIndex = findLeastPossibilities();
+    }
+    return true;
+}
+
+size_t WaveMap::findLeastPossibilities() const
+{
+    size_t bestIndex = _map.size() / 2;
+    int leastPossibilities = ALL;
+
+    for ( size_t index = 0; index < _map.size(); index++ ) {
+        int count = _map[index].countPossibilities();
+        if ( count < leastPossibilities && _map[index].type == NONE ) {
+            bestIndex = index;
+            leastPossibilities = count;
+        }
+    }
+
+    return bestIndex;
 }
 
 void WaveRenderer::renderMap( const WaveMap & map ) const

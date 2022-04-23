@@ -53,8 +53,8 @@ int main()
         case 3: {
             printLine( "No one beaten our game yet!" );
             WaveRenderer render;
-            WaveMap waveMap( 10 );
-            waveMap.waveIterate();
+            WaveMap waveMap( 20 );
+            waveMap.waveSmallest();
             render.renderMap( waveMap );
         } break;
         case 4:

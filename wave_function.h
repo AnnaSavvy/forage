@@ -45,7 +45,8 @@ public:
     bool place( size_t index );
 
     bool waveIterate();
-    // findSmallest
+    bool waveSmallest();
+    size_t findLeastPossibilities() const;
 };
 
 class WaveRenderer
