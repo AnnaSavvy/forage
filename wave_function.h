@@ -17,7 +17,7 @@ enum TileTypes
     // FOREST = 0x200,
     // FOREST = 0x400,
     // FOREST = 0x800,
-    ALL = 0xFFFF
+    ALL = 0x7F
 };
 
 struct WaveTile
@@ -38,7 +38,7 @@ class WaveMap
 public:
     WaveMap( size_t side );
 
-    size_t getSize() const;
+    size_t getRowSize() const;
     const WaveTile & getTile( size_t index ) const;
     std::vector<size_t> getAdjacent4( size_t index ) const;
     std::vector<size_t> getAdjacent8( size_t index ) const;

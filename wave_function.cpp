@@ -24,7 +24,7 @@ std::vector<int> WaveTile::getPossibilities() const
     std::vector<int> retval;
 
     int typeCheck = 0x1;
-    while ( typeCheck < TileTypes::ALL ) {
+    while ( typeCheck <= TileTypes::ALL ) {
         if ( typeCheck & possible ) {
             retval.push_back( typeCheck );
         }
@@ -48,7 +48,7 @@ void WaveTile::limit( int fromTileType )
         mask = TREES | GRASS | RIVER | LAKE1;
         break;
     case RIVER:
-        mask = RIVER | GRASS;
+        mask = RIVER | GRASS | TREES | LAKE1;
         break;
     case LAKE1:
         mask = RIVER | GRASS | LAKE1 | LAKE2;
@@ -75,9 +75,9 @@ WaveMap::WaveMap( size_t side )
     }
 }
 
-size_t WaveMap::getSize() const
+size_t WaveMap::getRowSize() const
 {
-    return _map.size();
+    return _rowSize;
 }
 
 const WaveTile & WaveMap::getTile( size_t index ) const
@@ -156,14 +156,43 @@ bool WaveMap::waveIterate()
 void WaveRenderer::renderMap( const WaveMap & map ) const
 {
     std::cout << "======== MAP =========" << std::endl;
-    for ( size_t i = 0; i < map.getSize(); i++ ) {
-        renderTile( map.getTile( i ) );
-        // TODO: fix columns
+
+    const size_t rowSize = map.getRowSize();
+    for ( size_t x = 0; x < rowSize; x++ ) {
+        for ( size_t y = 0; y < rowSize; y++ ) {
+            renderTile( map.getTile( y * rowSize + x ) );
+        }
+        std::cout << std::endl;
     }
     std::cout << "======================" << std::endl;
 }
 
 void WaveRenderer::renderTile( const WaveTile & tile ) const
 {
-    std::cout << " " << tile.type << std::endl;
+    switch ( tile.type ) {
+    case FOREST:
+        std::cout << " FD";
+        break;
+    case TREES:
+        std::cout << " FS";
+        break;
+    case GRASS:
+        std::cout << " GR";
+        break;
+    case RIVER:
+        std::cout << " RI";
+        break;
+    case LAKE1:
+        std::cout << " L1";
+        break;
+    case LAKE2:
+        std::cout << " L2";
+        break;
+    case DEEP_WATER:
+        std::cout << " DW";
+        break;
+    default:
+        std::cout << "   ";
+        break;
+    }
 }

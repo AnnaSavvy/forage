@@ -32,10 +32,6 @@ void gameLoop()
 
 int main()
 {
-    WaveRenderer render;
-    WaveMap waveMap( 5 );
-    render.renderMap( waveMap );
-
     printIntroduction();
 
     bool menuIsRunning = true;
@@ -56,6 +52,8 @@ int main()
             break;
         case 3: {
             printLine( "No one beaten our game yet!" );
+            WaveRenderer render;
+            WaveMap waveMap( 10 );
             waveMap.waveIterate();
             render.renderMap( waveMap );
         } break;
