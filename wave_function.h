@@ -27,7 +27,7 @@ struct WaveTile
 
     int countPossibilities() const;
     std::vector<int> getPossibilities() const;
-    void limit( int fromTileType );
+    void limit( int fromTileType, bool isDiagonal = false );
 };
 
 class WaveMap
@@ -41,8 +41,8 @@ public:
     size_t getRowSize() const;
     const WaveTile & getTile( size_t index ) const;
     std::vector<size_t> getAdjacent4( size_t index ) const;
-    std::vector<size_t> getAdjacent8( size_t index ) const;
-    bool place( size_t index );
+    std::vector<std::pair<size_t, bool> > getAdjacent8( size_t index ) const;
+    bool place( size_t index, int type = NONE );
 
     bool waveIterate();
     bool waveSmallest();

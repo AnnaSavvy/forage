@@ -33,7 +33,7 @@ std::vector<int> WaveTile::getPossibilities() const
     return retval;
 }
 
-void WaveTile::limit( int fromTileType )
+void WaveTile::limit( int fromTileType, bool isDiagonal )
 {
     int mask = 0;
     // Rules!
@@ -42,16 +42,16 @@ void WaveTile::limit( int fromTileType )
         mask = FOREST | TREES;
         break;
     case TREES:
-        mask = FOREST | TREES | GRASS | RIVER;
+        mask = FOREST | TREES | GRASS;
         break;
     case GRASS:
-        mask = TREES | GRASS | RIVER | LAKE1;
+        mask = TREES | GRASS | RIVER;
         break;
     case RIVER:
-        mask = RIVER | GRASS | TREES | LAKE1;
+        mask = GRASS | RIVER | LAKE1;
         break;
     case LAKE1:
-        mask = RIVER | GRASS | LAKE1 | LAKE2;
+        mask = RIVER | LAKE1 | LAKE2;
         break;
     case LAKE2:
         mask = LAKE1 | LAKE2 | DEEP_WATER;
@@ -114,9 +114,9 @@ std::vector<size_t> WaveMap::getAdjacent4( size_t index ) const
     return retval;
 }
 
-std::vector<size_t> WaveMap::getAdjacent8( size_t index ) const
+std::vector<std::pair<size_t, bool> > WaveMap::getAdjacent8( size_t index ) const
 {
-    std::vector<size_t> retval;
+    std::vector<std::pair<size_t, bool> > retval;
     retval.reserve( 8 );
 
     const size_t positionX = index % _rowSize;
@@ -124,58 +124,67 @@ std::vector<size_t> WaveMap::getAdjacent8( size_t index ) const
 
     // TOP
     if ( index > _rowSize && positionX > 0 ) {
-        retval.push_back( index - _rowSize - 1 );
+        retval.emplace_back( index - _rowSize - 1, true );
     }
     if ( index >= _rowSize ) {
-        retval.push_back( index - _rowSize );
+        retval.emplace_back( index - _rowSize, false );
         if ( positionX < xLimit ) {
-            retval.push_back( index - _rowSize + 1 );
+            retval.emplace_back( index - _rowSize + 1, true );
         }
     }
 
     // LEFT
     if ( positionX > 0 ) {
-        retval.push_back( index - 1 );
+        retval.emplace_back( index - 1, false );
     }
     // RIGHT
     if ( positionX < xLimit ) {
-        retval.push_back( index + 1 );
+        retval.emplace_back( index + 1, false );
     }
 
     // BOTTOM
     if ( index + _rowSize < _map.size() ) {
         if ( positionX > 0 ) {
-            retval.push_back( index + _rowSize - 1 );
+            retval.emplace_back( index + _rowSize - 1, true );
         }
 
-        retval.push_back( index + _rowSize );
+        retval.emplace_back( index + _rowSize, false );
     }
     if ( index + _rowSize + 1 < _map.size() ) {
-        retval.push_back( index + _rowSize + 1 );
+        retval.emplace_back( index + _rowSize + 1, true );
     }
 
     return retval;
 }
 
-bool WaveMap::place( size_t index )
+bool WaveMap::place( size_t index, int type )
 {
     if ( index < _map.size() ) {
         WaveTile & tile = _map[index];
-        const int possible = tile.countPossibilities();
-        if ( possible ) {
-            int chosenOne = possible;
-            if ( possible > 1 ) {
-                std::uniform_int_distribution<std::mt19937::result_type> distribution( 1, possible );
 
-                chosenOne = distribution( rng );
-            }
-            tile.type = tile.getPossibilities()[chosenOne - 1];
+        if ( type == NONE ) {
+            const int possible = tile.countPossibilities();
+            if ( possible ) {
+                int chosenOne = possible;
+                if ( possible > 1 ) {
+                    std::uniform_int_distribution<std::mt19937::result_type> distribution( 1, possible );
 
-            for ( size_t adjacent : getAdjacent8( index ) ) {
-                _map[adjacent].limit( tile.type );
+                    chosenOne = distribution( rng );
+                }
+                type = tile.getPossibilities()[chosenOne - 1];
+
+                // for ( std::pair<size_t, bool> adjacent : getAdjacent8( index ) ) {
+                //    _map[adjacent.first].limit( tile.type, adjacent.second );
+                //}
             }
-            return true;
         }
+        tile.type = type;
+
+        for ( size_t adjacent : getAdjacent4( index ) ) {
+            _map[adjacent].limit( tile.type );
+        }
+
+        return true;
     }
     return false;
 }
@@ -194,7 +203,7 @@ bool WaveMap::waveIterate()
 bool WaveMap::waveSmallest()
 {
     size_t lastIndex = findLeastPossibilities();
-    place( lastIndex );
+    place( lastIndex, GRASS );
 
     size_t nextIndex = findLeastPossibilities();
     while ( nextIndex != lastIndex ) {
