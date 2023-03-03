@@ -9,10 +9,14 @@ class ModeBattle : public GameMode
 {
     Label _title;
     Button _bExit;
-    RPG::Arena arena;
+    RPG::Arena _arena;
+
+    float _animTimer = 0;
+
+    void renderForce( const RPG::Force & target, bool mirror );
 
 public:
-    ModeBattle( GameState state );
+    ModeBattle( GameState & state );
     virtual GameModeName handleEvents() override;
     virtual void update( float deltaTime ) override;
     virtual void render() override;

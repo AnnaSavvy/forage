@@ -21,15 +21,14 @@ namespace RPG
 
     class BattleUnit : public Character
     {
-
-
     public:
         BattleUnit( CharacterRef unit ) {}
 
         Action getAction() const;
 
-        inline std::string getSprite() const {
-            return "char_orc.png";
+        inline std::string getSprite() const
+        {
+            return "assets/char_druid.png";
         }
     };
 
@@ -40,11 +39,11 @@ namespace RPG
     {
     public:
         /*
-        *     D2/KB
-        *   5 2  2 5   DD 5 4 2 1   1 2 4 5
-        *   4 1  1 4
-        *   6 3  3 6   
-        */
+         *     D2/KB
+         *   5 2  2 5   DD 5 4 2 1   1 2 4 5
+         *   4 1  1 4
+         *   6 3  3 6
+         */
 
         enum Position
         {
@@ -57,7 +56,6 @@ namespace RPG
         };
 
     private:
-
         std::vector<std::pair<Position, BattleUnit> > units;
 
     public:

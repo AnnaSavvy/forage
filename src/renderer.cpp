@@ -70,7 +70,7 @@ RenderEngine & RenderEngine::Get()
     return engine;
 }
 
-bool RenderEngine::Draw( const std::string & image, const Rect & target )
+bool RenderEngine::Draw( const std::string & image, const Rect & target, bool flipped )
 {
     SDL_Texture * texture = engine._assets.loadTexture( image );
     if ( !texture ) {
@@ -79,7 +79,11 @@ bool RenderEngine::Draw( const std::string & image, const Rect & target )
 
     SDL_Rect rect = convertRect( target );
 
-    return SDL_RenderCopy( engine._renderer, texture, NULL, &rect ) == 0;
+    if ( !flipped ) {
+        return SDL_RenderCopy( engine._renderer, texture, NULL, &rect ) == 0;
+    }
+
+    return SDL_RenderCopyEx( engine._renderer, texture, NULL, &rect, 0, NULL, SDL_FLIP_HORIZONTAL ) == 0;
 }
 
 bool RenderEngine::DrawRect( const Rect & target, StandardColor color )
