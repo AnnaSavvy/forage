@@ -80,4 +80,11 @@ void Villager::update()
         home->_resources[key] += value;
     }
     morale -= taskEntry["energyCost"].get<int>();
+
+    if ( morale < 50 ) {
+        task = Villager::Task::Resting;
+    }
+    else if ( morale > 100 ) {
+        task = Villager::Task::None;
+    }
 }
