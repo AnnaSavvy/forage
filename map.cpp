@@ -4,9 +4,106 @@
 #include <algorithm>
 
 
-bool HexMapManager::isValid( int index )
+bool MapBase::isValid( int index )
 {
-    return index >= 0 && index < width * height;
+    return index >= 0 && index < _width * _height;
+}
+
+size_t MapBase::getWidth() const
+{
+    return _width;
+}
+
+size_t MapBase::getHeight() const
+{
+    return _height;
+}
+
+
+
+HexMapManager::HexMapManager( int size )
+    : MapBase( size, size )
+{
+    _tiles.resize( _width );
+    for ( int i = 0; i < _width; i++ ) {
+        _tiles[i].resize( _height );
+    }
+}
+
+HexMapManager::~HexMapManager() {}
+
+void HexMapManager::generateMap()
+{
+    // TODO: generate hexagonal map layout
+}
+
+bool HexMapManager::isOnMap( int x, int y )
+{
+    return ( x >= 0 && x < _width && y >= 0 && y < _height && y <= x + _width - 1 && y >= x - _height + 1 );
+}
+
+bool HexMapManager::isOccupied( int x, int y )
+{
+    if ( !isOnMap( x, y ) ) {
+        return true;
+    }
+    return _tiles[x][y];
+}
+
+void HexMapManager::setOccupied( int x, int y, bool occupied )
+{
+    if ( !isOnMap( x, y ) ) {
+        return;
+    }
+    // map[x][y] = occupied;
+}
+
+std::vector<MapTile *> HexMapManager::getNeighbors( MapTile * tile )
+{
+    std::vector<MapTile *> neighbors;
+    const int x = tile->x;
+    const int y = tile->y;
+
+    // Clockwise order starting from the right neighbor
+    MapTile * rightNeighbor = getTileAt( x + 1, y );
+    MapTile * topRightNeighbor = getTileAt( x, y - 1 );
+    MapTile * topLeftNeighbor = getTileAt( x - 1, y - 1 );
+    MapTile * leftNeighbor = getTileAt( x - 1, y );
+    MapTile * bottomLeftNeighbor = getTileAt( x, y + 1 );
+    MapTile * bottomRightNeighbor = getTileAt( x + 1, y + 1 );
+
+    // Only add non-null neighbors
+    if ( rightNeighbor != nullptr ) {
+        neighbors.push_back( rightNeighbor );
+    }
+    if ( topRightNeighbor != nullptr ) {
+        neighbors.push_back( topRightNeighbor );
+    }
+    if ( topLeftNeighbor != nullptr ) {
+        neighbors.push_back( topLeftNeighbor );
+    }
+    if ( leftNeighbor != nullptr ) {
+        neighbors.push_back( leftNeighbor );
+    }
+    if ( bottomLeftNeighbor != nullptr ) {
+        neighbors.push_back( bottomLeftNeighbor );
+    }
+    if ( bottomRightNeighbor != nullptr ) {
+        neighbors.push_back( bottomRightNeighbor );
+    }
+
+    return neighbors;
+}
+
+MapTile * HexMapManager::getTileAt( int x, int y )
+{
+    // Check if the tile is out of bounds
+    if ( x < 0 || x >= _width || y < 0 || y >= _height ) {
+        return nullptr;
+    }
+
+    // Use a 2D array to store the hex tiles for easy lookup
+    return _tiles[x][y];
 }
 
 int HexMapManager::getDistance( MapTile * left, MapTile * right )
@@ -28,11 +125,11 @@ int HexMapManager::getDistance( MapTile * left, MapTile * right )
 int HexMapManager::getDistance( int index1, int index2 )
 {
     if ( isValid( index1 ) && isValid( index2 ) ) {
-        const int32_t x1 = index1 % width;
-        const int32_t y1 = index1 / width;
+        const int32_t x1 = index1 % _width;
+        const int32_t y1 = index1 / _width;
 
-        const int32_t x2 = index2 % width;
-        const int32_t y2 = index2 / width;
+        const int32_t x2 = index2 % _width;
+        const int32_t y2 = index2 / _width;
 
         const int32_t du = y2 - y1;
         const int32_t dv = ( x2 + y2 / 2 ) - ( x1 + y1 / 2 );

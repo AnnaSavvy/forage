@@ -146,10 +146,11 @@
   <ItemGroup>
     <ClCompile Include="asset_loader.cpp" />
     <ClCompile Include="game.cpp" />
-    <ClCompile Include="gpt.cpp" />
     <ClCompile Include="logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="map.cpp" />
+    <ClCompile Include="mapview.cpp" />
+    <ClCompile Include="renderer.cpp" />
     <ClCompile Include="static.cpp" />
     <ClCompile Include="tournament.cpp" />
     <ClCompile Include="ui.cpp" />
@@ -166,7 +167,9 @@
     <ClInclude Include="json.hpp" />
     <ClInclude Include="logger.h" />
     <ClInclude Include="map.h" />
+    <ClInclude Include="mapview.h" />
     <ClInclude Include="object.h" />
+    <ClInclude Include="renderer.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="static.h" />
     <ClInclude Include="tournament.h" />

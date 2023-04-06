@@ -1,34 +1,16 @@
 #include "game.h"
 #include "asset_loader.h"
+#include "renderer.h"
+
+#include <SDL.h>
 
 #define TILESIZE 64
 #define MAPSIZE 16
 
 bool Game::init()
 {
-    // Initialize SDL2 and create window/renderer
-    if ( SDL_Init( SDL_INIT_VIDEO ) != 0 ) {
-        std::cerr << "SDL_Init error: " << SDL_GetError() << std::endl;
-        return false;
-    }
-
-    _window = SDL_CreateWindow( "Card Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1024, 1024, SDL_WINDOW_SHOWN );
-    if ( !_window ) {
-        std::cerr << "SDL_CreateWindow error: " << SDL_GetError() << std::endl;
-        SDL_Quit();
-        return false;
-    }
-
-    _renderer = SDL_CreateRenderer( _window, -1, SDL_RENDERER_ACCELERATED );
-    if ( !_renderer ) {
-        std::cerr << "SDL_CreateRenderer error: " << SDL_GetError() << std::endl;
-        SDL_DestroyWindow( _window );
-        SDL_Quit();
-        return false;
-    }
-
     // Initialize any additional game state variables or components here
-    _assets.initRenderer( _renderer );
+    RenderEngine::Get().Initialize();
     _map.updateMap();
 
     return true;
@@ -67,8 +49,9 @@ void Game::update( float deltaTime )
 
 void Game::render()
 {
-    SDL_SetRenderDrawColor( _renderer, 0, 0, 0, 0 );
-    SDL_RenderClear( _renderer );
+    SDL_Renderer * renderer = RenderEngine::Get().GetRenderer();
+    SDL_SetRenderDrawColor( renderer, 0, 0, 0, 0 );
+    SDL_RenderClear( renderer );
 
     // Render game objects here
     SDL_Rect target;
@@ -78,12 +61,6 @@ void Game::render()
     target.h = TILESIZE;
     target.w = TILESIZE;
 
-    SDL_Texture * water = _assets.loadTexture( "assets/water.png" );
-    SDL_Texture * plains = _assets.loadTexture( "assets/plains.png" );
-    SDL_Texture * forest = _assets.loadTexture( "assets/forest.png" );
-    SDL_Texture * mountain = _assets.loadTexture( "assets/mountain.png" );
-    SDL_Texture * swamp = _assets.loadTexture( "assets/swamp.png" );
-
     for ( int y = 0; y < MAPSIZE; y++ ) {
         for ( int x = 0; x < MAPSIZE; x++ ) {
             const int offset = ( x % 2 ) ? TILESIZE / 2 : 0;
@@ -92,32 +69,32 @@ void Game::render()
             target.y = y * TILESIZE + offset;
 
             auto & tile = _map.getTile( y * MAPSIZE + x );
-            SDL_Texture * texture = water;
+            std::string texture = "assets/water.png";
             switch ( tile.type ) {
             case FOREST:
-                texture = mountain;
+                texture = "assets/mountain.png";
                 break;
             case TREES:
-                texture = forest;
+                texture = "assets/forest.png";
                 break;
             case GRASS:
-                texture = plains;
+                texture = "assets/plains.png";
                 break;
             case SAND:
-                texture = swamp;
+                texture = "assets/swamp.png";
                 break;
             case LAKE:
-                texture = water;
+                texture = "assets/water.png";
                 break;
             default:
-                texture = water;
+                texture = "assets/water.png";
                 break;
             }
-            SDL_RenderCopy( _renderer, texture, NULL, &target );
+            RenderEngine::Draw( texture, target );
         }
     }
 
-    SDL_RenderPresent( _renderer );
+    SDL_RenderPresent( renderer );
 }
 
 void Game::realtimeLoop()
@@ -146,7 +123,7 @@ void Game::realtimeLoop()
 
 void Game::cleanup()
 {
-    SDL_DestroyRenderer( _renderer );
-    SDL_DestroyWindow( _window );
+    //SDL_DestroyRenderer( _renderer );
+    //SDL_DestroyWindow( _window );
     SDL_Quit();
 }

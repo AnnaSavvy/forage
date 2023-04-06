@@ -30,9 +30,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="static.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="unit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -48,9 +45,6 @@
     <ClCompile Include="tournament.cpp">
       <Filter>Source Files\test</Filter>
     </ClCompile>
-    <ClCompile Include="gpt.cpp">
-      <Filter>Source Files\test</Filter>
-    </ClCompile>
     <ClCompile Include="logger.cpp">
       <Filter>Source Files\engine</Filter>
     </ClCompile>
@@ -62,6 +56,15 @@
     </ClCompile>
     <ClCompile Include="map.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mapview.cpp">
+      <Filter>Source Files\test</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="static.cpp">
+      <Filter>Source Files\engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +118,12 @@
     </ClInclude>
     <ClInclude Include="map.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mapview.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer.h">
+      <Filter>Header Files\engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

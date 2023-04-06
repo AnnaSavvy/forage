@@ -47,19 +47,14 @@ void WaveTile::limit( int fromTileType )
 }
 
 WaveMap::WaveMap( size_t side )
+    : MapBase(side, side)
 {
     _map.reserve(side*side);
-    _width = side;
     for ( size_t i = 0; i < side * side; i++ ) {
         _map.emplace_back();
     }
     _map.begin()->possible = LAKE;
     place( 0 );
-}
-
-size_t WaveMap::getWidth() const
-{
-    return _width;
 }
 
 const WaveTile & WaveMap::getTile( size_t index ) const

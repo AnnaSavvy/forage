@@ -2,6 +2,8 @@
 #include <bitset>
 #include <vector>
 
+#include "map.h"
+
 enum TileTypes
 {
     NONE = 0,
@@ -22,15 +24,13 @@ struct WaveTile
     void limit( int fromTileType );
 };
 
-class WaveMap
+class WaveMap : public MapBase
 {
     std::vector<WaveTile> _map;
-    size_t _width = 1;
 
 public:
     WaveMap( size_t side );
 
-    size_t getWidth() const;
     const WaveTile & getTile( size_t index ) const;
     std::vector<size_t> getAdjacent4( size_t index ) const;
     std::vector<size_t> getAdjacent6( size_t index ) const;
