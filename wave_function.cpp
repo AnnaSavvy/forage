@@ -26,7 +26,7 @@ void WaveTile::limit( int fromTileType )
     int mask = 0;
     switch ( fromTileType ) {
     case FOREST:
-        mask = FOREST | TREES;
+        mask = FOREST | TREES | LAKE;
         break;
     case TREES:
         mask = FOREST | TREES | GRASS;
@@ -35,10 +35,10 @@ void WaveTile::limit( int fromTileType )
         mask = TREES | GRASS | SAND;
         break;
     case SAND:
-        mask = GRASS | SAND | LAKE;
+        mask = GRASS | LAKE;
         break;
     case LAKE:
-        mask = SAND | LAKE;
+        mask = GRASS | SAND | LAKE;
         break;
     default:
         break;
@@ -53,6 +53,8 @@ WaveMap::WaveMap( size_t side )
     for ( size_t i = 0; i < side * side; i++ ) {
         _map.emplace_back();
     }
+    _map.begin()->possible = LAKE;
+    place( 0 );
 }
 
 size_t WaveMap::getWidth() const
@@ -93,6 +95,40 @@ std::vector<size_t> WaveMap::getAdjacent4( size_t index ) const
     return retval;
 }
 
+std::vector<size_t> WaveMap::getAdjacent6( size_t index ) const
+{
+    std::vector<size_t> retval;
+
+    // TOP
+    if ( index >= _width ) {
+        retval.push_back( index - _width );
+    }
+
+    const size_t xPosition = index % _width;
+    // LEFT
+    if ( xPosition > 0 ) {
+        retval.push_back( index - 1 );
+        if ( index + _width < _map.size() ) {
+            retval.push_back( index + _width - 1 );
+        }
+    }
+
+    // RIGHT
+    if ( xPosition < _width - 1 ) {
+        retval.push_back( index + 1 );
+        if ( index + _width < _map.size() ) {
+            retval.push_back( index + _width + 1 );
+        }
+    }
+
+    // BOTTOM
+    if ( index + _width < _map.size() ) {
+        retval.push_back( index + _width );
+    }
+
+    return retval;
+}
+
 std::vector<size_t> WaveMap::getAdjacent8( size_t index ) const
 {
     return std::vector<size_t>();
@@ -113,7 +149,7 @@ bool WaveMap::place( size_t index )
         tile.type = possible[distribution( dev ) - 1];
     }
 
-    for ( size_t adjacent : getAdjacent4( index ) ) {
+    for ( size_t adjacent : getAdjacent6( index ) ) {
         _map[adjacent].limit( tile.type );
     }
     return true;

@@ -13,65 +13,107 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\engine">
+      <UniqueIdentifier>{04ad7818-f02d-4cd3-ad68-d1a7d35b349a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\engine">
+      <UniqueIdentifier>{aba65797-1eb6-4fcf-89c6-c6ae9e33764e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\experimental">
+      <UniqueIdentifier>{dab54e06-9b5b-484c-aab8-269418dc15e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\test">
+      <UniqueIdentifier>{275f88ef-defc-47e2-99b4-1959c996f870}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="logger.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="static.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="village.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="unit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="wave_function.cpp">
+    <ClCompile Include="game.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="wave_function.cpp">
+      <Filter>Source Files\test</Filter>
+    </ClCompile>
+    <ClCompile Include="village.cpp">
+      <Filter>Source Files\test</Filter>
     </ClCompile>
     <ClCompile Include="tournament.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\test</Filter>
     </ClCompile>
-    <ClCompile Include="game.cpp">
+    <ClCompile Include="gpt.cpp">
+      <Filter>Source Files\test</Filter>
+    </ClCompile>
+    <ClCompile Include="logger.cpp">
+      <Filter>Source Files\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="ui.cpp">
+      <Filter>Source Files\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="asset_loader.cpp">
+      <Filter>Source Files\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="logger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="unit.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="unit_villager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="village.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="json.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="static.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="wave_function.h">
+    <ClInclude Include="game.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ui.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="base_game.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="asset_loader.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="gamemode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="json.hpp">
+      <Filter>Header Files\engine</Filter>
     </ClInclude>
     <ClInclude Include="tournament.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\experimental</Filter>
     </ClInclude>
-    <ClInclude Include="game.h">
+    <ClInclude Include="unit_villager.h">
+      <Filter>Header Files\experimental</Filter>
+    </ClInclude>
+    <ClInclude Include="village.h">
+      <Filter>Header Files\experimental</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files\experimental</Filter>
+    </ClInclude>
+    <ClInclude Include="wave_function.h">
+      <Filter>Header Files\experimental</Filter>
+    </ClInclude>
+    <ClInclude Include="logger.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="audio_manager.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

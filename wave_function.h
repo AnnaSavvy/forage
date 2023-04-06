@@ -33,6 +33,7 @@ public:
     size_t getWidth() const;
     const WaveTile & getTile( size_t index ) const;
     std::vector<size_t> getAdjacent4( size_t index ) const;
+    std::vector<size_t> getAdjacent6( size_t index ) const;
     std::vector<size_t> getAdjacent8( size_t index ) const;
     bool place( size_t index );
 
