@@ -1,16 +1,16 @@
 #pragma once
 
-class WaveMap;
+class MapBase;
 
 class MapView
 {
     int cameraX = 0;
     int cameraY = 0;
 
-    const WaveMap * _map = nullptr;
+    const MapBase * _map = nullptr;
 
 public:
-    void setMap( const WaveMap * map );
+    void setMap( const MapBase * map );
     void moveCamera( int x, int y );
     void render() const;
 };

@@ -1,10 +1,23 @@
 #pragma once
 #include <vector>
 
+enum TileTypes
+{
+    NONE = 0,
+    FOREST = 0x1,
+    TREES = 0x2,
+    GRASS = 0x4,
+    SAND = 0x8,
+    LAKE = 0x10,
+    ALL = 0x1F
+};
+
 struct MapTile
 {
     int x;
     int y;
+
+    virtual ~MapTile() {}
 };
 
 class MapBase
@@ -21,7 +34,8 @@ protected:
 public:
     size_t getWidth() const;
     size_t getHeight() const;
-    bool isValid( int index );
+    bool isValid( int index ) const;
+    virtual const MapTile & getTile( size_t index ) const = 0;
 };
 
 class HexMapManager : public MapBase

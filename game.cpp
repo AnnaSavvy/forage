@@ -1,6 +1,7 @@
 #include "game.h"
 #include "asset_loader.h"
 #include "renderer.h"
+#include "map.h"
 
 #include <SDL.h>
 
@@ -12,6 +13,8 @@ bool Game::init()
     // Initialize any additional game state variables or components here
     RenderEngine::Get().Initialize();
     _map.updateMap();
+
+    _mapView.setMap( &_map );
 
     return true;
 }
@@ -27,6 +30,18 @@ void Game::handleEvents()
         case SDL_KEYDOWN:
             // Handle any key press events here
             std::cout << event.key.keysym.sym << std::endl;
+            if (event.key.keysym.sym == SDLK_DOWN) {
+                _mapView.moveCamera( 0, -8 );
+            }
+            else if ( event.key.keysym.sym == SDLK_UP ) {
+                _mapView.moveCamera( 0, 8 );
+            }
+            else if ( event.key.keysym.sym == SDLK_LEFT ) {
+                _mapView.moveCamera( 8, 0 );
+            }
+            else if ( event.key.keysym.sym == SDLK_RIGHT ) {
+                _mapView.moveCamera( -8, 0 );
+            }
             break;
         case SDL_MOUSEBUTTONDOWN:
             // Handle any mouse button click events here
@@ -45,6 +60,7 @@ void Game::run() {
 void Game::update( float deltaTime )
 {
     // Update the game state here
+    _mapView.moveCamera( -1, -1 );
 }
 
 void Game::render()
@@ -54,45 +70,7 @@ void Game::render()
     SDL_RenderClear( renderer );
 
     // Render game objects here
-    SDL_Rect target;
-
-    target.x = 0;
-    target.y = 0;
-    target.h = TILESIZE;
-    target.w = TILESIZE;
-
-    for ( int y = 0; y < MAPSIZE; y++ ) {
-        for ( int x = 0; x < MAPSIZE; x++ ) {
-            const int offset = ( x % 2 ) ? TILESIZE / 2 : 0;
-
-            target.x = x * TILESIZE;
-            target.y = y * TILESIZE + offset;
-
-            auto & tile = _map.getTile( y * MAPSIZE + x );
-            std::string texture = "assets/water.png";
-            switch ( tile.type ) {
-            case FOREST:
-                texture = "assets/mountain.png";
-                break;
-            case TREES:
-                texture = "assets/forest.png";
-                break;
-            case GRASS:
-                texture = "assets/plains.png";
-                break;
-            case SAND:
-                texture = "assets/swamp.png";
-                break;
-            case LAKE:
-                texture = "assets/water.png";
-                break;
-            default:
-                texture = "assets/water.png";
-                break;
-            }
-            RenderEngine::Draw( texture, target );
-        }
-    }
+    _mapView.render();
 
     SDL_RenderPresent( renderer );
 }

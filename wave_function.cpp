@@ -57,7 +57,7 @@ WaveMap::WaveMap( size_t side )
     place( 0 );
 }
 
-const WaveTile & WaveMap::getTile( size_t index ) const
+const MapTile & WaveMap::getTile( size_t index ) const
 {
     return _map[index];
 }
@@ -156,20 +156,6 @@ bool WaveMap::updateMap()
         place( i );
     }
     return true;
-}
-
-void WaveRenderer::renderMap( const WaveMap & map ) const
-{
-    std::cout << "=== OUR MAP: ===" << std::endl;
-    size_t mapSize = map.getWidth();
-    for ( size_t x = 0; x < mapSize; x++ ) {
-        for ( size_t y = 0; y < mapSize; y++ ) {
-            renderTile( map.getTile( x * mapSize + y ) );
-            std::cout << " ";
-        }
-        std::cout << std::endl;
-    }
-    std::cout << "=== END MAP: ===" << std::endl;
 }
 
 void WaveRenderer::renderTile( const WaveTile & tile ) const 

@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "base_game.h"
+#include "mapview.h"
 #include "wave_function.h"
 
 class Game : public BaseGame
@@ -11,10 +12,11 @@ class Game : public BaseGame
 
     // Add any additional game state variables or components here
     WaveMap _map;
+    MapView _mapView;
 
 public:
     Game()
-        : _map( 16 )
+        : _map( 32 )
     {}
     ~Game() {
         cleanup();
