@@ -9,14 +9,5 @@ int main(int argc, char* argv[]) {
     game.init();
     game.run();
 
-    //Village mainVillage;
-
-    //while ( gameIsRunning ) {
-    //    printLine( "" );
-    //    mainVillage.printStatus();
-    //    printLine( "" );
-    //    mainVillage.update();
-    //}
-
     return 0;
 }

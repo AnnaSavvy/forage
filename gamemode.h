@@ -16,5 +16,6 @@ class GameMode
 {
     GameModeName name = GameModeName::CANCEL;
 
+public:
     virtual GameModeName run() = 0;
 };

@@ -5,9 +5,6 @@
 
 #include <SDL.h>
 
-#define TILESIZE 64
-#define MAPSIZE 16
-
 bool Game::init()
 {
     // Initialize any additional game state variables or components here
@@ -31,16 +28,30 @@ void Game::handleEvents()
             // Handle any key press events here
             std::cout << event.key.keysym.sym << std::endl;
             if (event.key.keysym.sym == SDLK_DOWN) {
-                _mapView.moveCamera( 0, -8 );
+                _scrollingDown = true;
             }
             else if ( event.key.keysym.sym == SDLK_UP ) {
-                _mapView.moveCamera( 0, 8 );
+                _scrollingUp = true;
             }
             else if ( event.key.keysym.sym == SDLK_LEFT ) {
-                _mapView.moveCamera( 8, 0 );
+                _scrollingLeft = true;
             }
             else if ( event.key.keysym.sym == SDLK_RIGHT ) {
-                _mapView.moveCamera( -8, 0 );
+                _scrollingRight = true;
+            }
+            break;
+        case SDL_KEYUP:
+            if ( event.key.keysym.sym == SDLK_DOWN ) {
+                _scrollingDown = false;
+            }
+            else if ( event.key.keysym.sym == SDLK_UP ) {
+                _scrollingUp = false;
+            }
+            else if ( event.key.keysym.sym == SDLK_LEFT ) {
+                _scrollingLeft = false;
+            }
+            else if ( event.key.keysym.sym == SDLK_RIGHT ) {
+                _scrollingRight = false;
             }
             break;
         case SDL_MOUSEBUTTONDOWN:
@@ -53,32 +64,10 @@ void Game::handleEvents()
     }
 }
 
-void Game::run() {
-    realtimeLoop();
-}
-
-void Game::update( float deltaTime )
-{
-    // Update the game state here
-    _mapView.moveCamera( -1, -1 );
-}
-
-void Game::render()
-{
-    SDL_Renderer * renderer = RenderEngine::Get().GetRenderer();
-    SDL_SetRenderDrawColor( renderer, 0, 0, 0, 0 );
-    SDL_RenderClear( renderer );
-
-    // Render game objects here
-    _mapView.render();
-
-    SDL_RenderPresent( renderer );
-}
-
-void Game::realtimeLoop()
+void Game::run()
 {
     _isRunning = true;
-    const int frameRate = 60;
+    const int frameRate = 100;
     const float frameTime = 1000.0f / frameRate;
 
     Uint32 previousTime = SDL_GetTicks();
@@ -97,6 +86,36 @@ void Game::realtimeLoop()
             SDL_Delay( static_cast<Uint32>( frameTime - frameTimeMs ) );
         }
     }
+}
+
+void Game::update( float deltaTime )
+{
+    // Camera update
+    int xMove = _scrollingRight ? -2 : _scrollingLeft ? 2 : 0;
+    int yMove = _scrollingDown ? -2 : _scrollingUp ? 2 : 0;
+    int cameraSpeed = 2;
+    if ( xMove != 0 || yMove != 0 ) {
+        _scrollTimer += deltaTime;
+        if ( _scrollTimer > 1.5 ) {
+            cameraSpeed = ( _scrollTimer > 3 ) ? 4 : 3;
+        }
+    }
+    else {
+        _scrollTimer = 0.0f;
+    }
+    _mapView.moveCamera( xMove * cameraSpeed, yMove * cameraSpeed );
+}
+
+void Game::render()
+{
+    SDL_Renderer * renderer = RenderEngine::Get().GetRenderer();
+    SDL_SetRenderDrawColor( renderer, 0, 0, 0, 0 );
+    SDL_RenderClear( renderer );
+
+    // Render game objects here
+    _mapView.render();
+
+    SDL_RenderPresent( renderer );
 }
 
 void Game::cleanup()
