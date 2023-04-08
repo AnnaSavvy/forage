@@ -1,98 +1,107 @@
 #pragma once
-#include <SDL.h>
 
 #include <memory>
 #include <string>
 #include <vector>
 #include <unordered_map>
 
+class Event
+{
+public:
+    virtual ~Event() {}
+};
+
+class ButtonClickEvent : public Event
+{
+public:
+    ButtonClickEvent( int id )
+        : _id( id )
+    {}
+    int getId() const
+    {
+        return _id;
+    }
+
+private:
+    int _id;
+};
+
+class EventListener
+{
+public:
+    virtual ~EventListener() {}
+    virtual void onEvent( const Event & event ) = 0;
+};
+
 class UIComponent
 {
+protected:
+    int _x = 0;
+    int _y = 0;
+    int _width = 0;
+    int _height = 0;
+
 public:
     virtual ~UIComponent() = default;
 
-    virtual void handleEvent( const SDL_Event & event ) = 0;
+    virtual void handleEvent() = 0;
     virtual void update( float deltaTime ) = 0;
-    virtual void render( SDL_Renderer * renderer ) = 0;
+    virtual void render() = 0;
 
     void setX( int x )
     {
-        m_x = x;
+        _x = x;
     }
     void setY( int y )
     {
-        m_y = y;
+        _y = y;
     }
     void setWidth( int width )
     {
-        m_width = width;
+        _width = width;
     }
     void setHeight( int height )
     {
-        m_height = height;
+        _height = height;
     }
     int getX() const
     {
-        return m_x;
+        return _x;
     }
     int getY() const
     {
-        return m_y;
+        return _y;
     }
     int getWidth() const
     {
-        return m_width;
+        return _width;
     }
     int getHeight() const
     {
-        return m_height;
+        return _height;
     }
-
-protected:
-    int m_x;
-    int m_y;
-    int m_width;
-    int m_height;
 };
 
 class Button : public UIComponent
 {
+    int _id;
+    std::vector<std::shared_ptr<EventListener> > _listeners;
+    std::string _label;
+    bool _isHovered;
+
 public:
-    Button();
+    Button() = default;
     Button( int x, int y, int width, int height, const std::string & label );
     virtual ~Button() = default;
 
-    void handleEvent( const SDL_Event & event ) override;
+    void handleEvent() override;
     void update( float deltaTime ) override;
-    void render( SDL_Renderer * renderer ) override;
+    void render() override;
 
-    void setLabel( const std::string & label )
-    {
-        m_label = label;
-    }
-
-    void addEventListener( std::shared_ptr<EventListener> listener )
-    {
-        m_listeners.push_back( listener );
-    }
-    void removeEventListener( std::shared_ptr<EventListener> listener )
-    {
-        m_listeners.erase( std::remove( m_listeners.begin(), m_listeners.end(), listener ), m_listeners.end() );
-    }
-    void handleClickEvent()
-    {
-        const ButtonClickEvent event( m_id );
-        for ( const auto & listener : m_listeners ) {
-            listener->onEvent( event );
-        }
-    }
-
-private:
-    int m_id;
-    std::shared_ptr<Window> m_parent;
-    std::vector<std::shared_ptr<EventListener> > m_listeners;
-    std::string m_label;
-    bool m_isHovered;
+    void setLabel( const std::string & label );
+    void addEventListener( std::shared_ptr<EventListener> listener );
+    void removeEventListener( std::shared_ptr<EventListener> listener );
+    void handleClickEvent();
 };
 
 class Window
@@ -101,11 +110,11 @@ public:
     Window( int width, int height, const std::string & title );
     ~Window();
 
-    void handleEvent( const SDL_Event & event );
+    void handleEvent();
     void update( float deltaTime );
     void addComponent( std::shared_ptr<UIComponent> component )
     {
-        m_components.push_back( component );
+        _components.push_back( component );
     }
 
     void addNeighbor( Window * neighbor )
@@ -113,20 +122,15 @@ public:
         neighbors.push_back( neighbor );
     }
 
-    void render( SDL_Renderer * renderer )
+    void render()
     {
-        for ( auto component : m_components ) {
-            component->render( renderer );
+        for ( auto component : _components ) {
+            component->render();
         }
     }
 
     bool containsPoint( int x, int y )
     {
-        for ( auto component : m_components ) {
-            if ( component->containsPoint( x, y ) ) {
-                return true;
-            }
-        }
         return false;
     }
 
@@ -139,39 +143,9 @@ public:
     }
 
 private:
-    int m_width;
-    int m_height;
-    std::string m_title;
-    SDL_Window * m_window;
-    SDL_Renderer * m_renderer;
-    std::vector<std::shared_ptr<UIComponent> > m_components;
+    int _width;
+    int _height;
+    std::string _title;
+    std::vector<std::shared_ptr<UIComponent> > _components;
     std::vector<Window *> neighbors;
-};
-
-class Event
-{
-public:
-    virtual ~Event() {}
-};
-
-class ButtonClickEvent : public Event
-{
-public:
-    ButtonClickEvent( int id )
-        : m_id( id )
-    {}
-    int getId() const
-    {
-        return m_id;
-    }
-
-private:
-    int m_id;
-};
-
-class EventListener
-{
-public:
-    virtual ~EventListener() {}
-    virtual void onEvent( const Event & event ) = 0;
 };

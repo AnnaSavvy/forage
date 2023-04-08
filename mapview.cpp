@@ -1,9 +1,7 @@
 #include "mapview.h"
-#include "asset_loader.h"
 #include "renderer.h"
 #include "wave_function.h"
-
-#include <SDL.h>
+#include "types.h"
 
 #define TILESIZE 64
 
@@ -25,11 +23,11 @@ void MapView::render() const
     if ( !_map )
         return;
 
-    SDL_Rect target;
+    Rect target;
     target.x = 0;
     target.y = 0;
-    target.h = TILESIZE;
-    target.w = TILESIZE;
+    target.height = TILESIZE;
+    target.width = TILESIZE;
 
     for ( int y = 0; y < _map->getHeight(); y++ ) {
         for ( int x = 0; x < _map->getWidth(); x++ ) {
@@ -64,4 +62,7 @@ void MapView::render() const
             RenderEngine::Draw( texture, target );
         }
     }
+
+    RenderEngine::DrawRect( { 300, 300, 300, 90 }, {} );
+    RenderEngine::DrawText( "Welcome!", { 340, 330, 400, 100 } );
 }
