@@ -1,5 +1,10 @@
 #pragma once
 
+enum class InputEvent : int
+{
+    NO_EVENT = 0,
+    QUIT_GAME
+};
 
 class InputHandler
 {
@@ -20,7 +25,7 @@ public:
 
     int getModes() const;
     bool isSet( InputToggle mode ) const;
-    void handleEvent();
+    bool handleEvent();
 
     static InputHandler & Get();
 

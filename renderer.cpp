@@ -12,12 +12,7 @@ namespace
 
 SDL_Rect convertRect( const Rect & rect )
 {
-    SDL_Rect sdlRect;
-    sdlRect.x = rect.x;
-    sdlRect.y = rect.y;
-    sdlRect.w = rect.width;
-    sdlRect.h = rect.height;
-    return sdlRect;
+    return { rect.pos.x, rect.pos.y, rect.size.x, rect.size.y };
 }
 
 bool RenderEngine::Initialize()
@@ -78,6 +73,7 @@ bool RenderEngine::Draw( const std::string & image, const Rect & target )
     }
 
     SDL_Rect rect = convertRect( target );
+
     return SDL_RenderCopy( engine._renderer, texture, NULL, &rect ) == 0;
 }
 
@@ -99,6 +95,6 @@ bool RenderEngine::DrawText( const std::string & text, const Rect & target )
     SDL_Surface * textSurface = TTF_RenderText_Solid( font, text.c_str(), textColor );
     SDL_Texture * textTexture = SDL_CreateTextureFromSurface( engine._renderer, textSurface );
 
-    SDL_Rect textRect = { target.x, target.y, textSurface->w, textSurface->h };
+    SDL_Rect textRect = { target.pos.x, target.pos.y, textSurface->w, textSurface->h };
     return SDL_RenderCopy( engine._renderer, textTexture, NULL, &textRect ) == 0;
 }

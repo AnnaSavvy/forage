@@ -69,6 +69,9 @@
     <ClCompile Include="mapview.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="point.cpp">
+      <Filter>Source Files\engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="unit.h">
@@ -132,6 +135,12 @@
       <Filter>Header Files\engine</Filter>
     </ClInclude>
     <ClInclude Include="types.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="point.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="utils.h">
       <Filter>Header Files\engine</Filter>
     </ClInclude>
   </ItemGroup>

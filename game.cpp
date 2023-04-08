@@ -18,7 +18,9 @@ bool Game::init()
 
 void Game::handleEvents()
 {
-    InputHandler::Get().handleEvent();
+    if ( !InputHandler::Get().handleEvent() ) {
+        _isRunning = false;
+    }
 }
 
 void Game::run()

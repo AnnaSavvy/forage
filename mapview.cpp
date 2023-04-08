@@ -23,18 +23,14 @@ void MapView::render() const
     if ( !_map )
         return;
 
-    Rect target;
-    target.x = 0;
-    target.y = 0;
-    target.height = TILESIZE;
-    target.width = TILESIZE;
+    Rect target = { 0, 0, TILESIZE, TILESIZE };
 
     for ( int y = 0; y < _map->getHeight(); y++ ) {
         for ( int x = 0; x < _map->getWidth(); x++ ) {
             const int offset = ( x % 2 ) ? TILESIZE / 2 : 0;
 
-            target.x = x * TILESIZE + cameraX;
-            target.y = y * TILESIZE + offset + cameraY;
+            target.pos.x = x * TILESIZE + cameraX;
+            target.pos.y = y * TILESIZE + offset + cameraY;
 
             const MapTile & ref = _map->getTile( y * _map->getWidth() + x );
             const WaveTile & tile = dynamic_cast<const WaveTile &>( ref );

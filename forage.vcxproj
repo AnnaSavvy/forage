@@ -150,6 +150,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="map.cpp" />
     <ClCompile Include="mapview.cpp" />
+    <ClCompile Include="point.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="static.cpp" />
@@ -171,6 +172,7 @@
     <ClInclude Include="map.h" />
     <ClInclude Include="mapview.h" />
     <ClInclude Include="object.h" />
+    <ClInclude Include="point.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="static.h" />
@@ -179,6 +181,7 @@
     <ClInclude Include="ui.h" />
     <ClInclude Include="unit.h" />
     <ClInclude Include="unit_villager.h" />
+    <ClInclude Include="utils.h" />
     <ClInclude Include="village.h" />
     <ClInclude Include="wave_function.h" />
   </ItemGroup>

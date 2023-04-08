@@ -1,10 +1,18 @@
 #pragma once
 #include <string>
 #include "asset_loader.h"
-#include "types.h"
+#include "point.h"
 
 struct SDL_Window;
 struct SDL_Renderer;
+
+struct Color
+{
+    uint8_t red = 0;
+    uint8_t green = 0;
+    uint8_t blue = 0;
+    uint8_t alpha = 0;
+};
 
 class RenderEngine
 {
