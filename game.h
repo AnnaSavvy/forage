@@ -7,6 +7,8 @@
 #include "mapview.h"
 #include "wave_function.h"
 
+class GameMode;
+
 class Game : public BaseGame
 {
     bool _isRunning = false;
@@ -16,6 +18,7 @@ class Game : public BaseGame
     // Add any additional game state variables or components here
     WaveMap _map;
     MapView _mapView;
+    GameMode * _currentMode = nullptr;
 
 public:
     Game()

@@ -10,7 +10,7 @@ class MapView
     const MapBase * _map = nullptr;
 
 public:
-    void setMap( const MapBase * map );
+    void setMap( const MapBase & map );
     void moveCamera( int x, int y );
     void render() const;
 };

@@ -146,6 +146,7 @@
   <ItemGroup>
     <ClCompile Include="asset_loader.cpp" />
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="game_mainmenu.cpp" />
     <ClCompile Include="logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="map.cpp" />

@@ -1,7 +1,8 @@
 #include "game.h"
 #include "asset_loader.h"
-#include "renderer.h"
+#include "gamemode.h"
 #include "map.h"
+#include "renderer.h"
 
 #include <SDL.h>
 
@@ -11,14 +12,14 @@ bool Game::init()
     RenderEngine::Get().Initialize();
     _map.updateMap();
 
-    _mapView.setMap( &_map );
+    _mapView.setMap( _map );
 
     return true;
 }
 
 void Game::handleEvents()
 {
-    if ( !InputHandler::Get().handleEvent() ) {
+    if ( _currentMode->handleEvents() == GameModeName::QUIT_GAME ) {
         _isRunning = false;
     }
 }
@@ -30,6 +31,9 @@ void Game::run()
     const float frameTime = 1000.0f / frameRate;
 
     Uint32 previousTime = SDL_GetTicks();
+
+    ModeMainMenu mode;
+    _currentMode = &mode;
 
     while ( _isRunning ) {
         Uint32 currentTime = SDL_GetTicks();
@@ -65,6 +69,8 @@ void Game::update( float deltaTime )
         _scrollTimer = 0.0f;
     }
     _mapView.moveCamera( xMove * cameraSpeed, yMove * cameraSpeed );
+
+    _currentMode->update( deltaTime );
 }
 
 void Game::render()
@@ -74,7 +80,8 @@ void Game::render()
     SDL_RenderClear( renderer );
 
     // Render game objects here
-    _mapView.render();
+    // _mapView.render();
+    _currentMode->render();
 
     SDL_RenderPresent( renderer );
 }

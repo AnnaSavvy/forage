@@ -5,9 +5,9 @@
 
 #define TILESIZE 64
 
-void MapView::setMap( const MapBase * map )
+void MapView::setMap( const MapBase & map )
 {
-    _map = map;
+    _map = &map;
     cameraX = 0;
     cameraY = 0;
 }
@@ -29,8 +29,8 @@ void MapView::render() const
         for ( int x = 0; x < _map->getWidth(); x++ ) {
             const int offset = ( x % 2 ) ? TILESIZE / 2 : 0;
 
-            target.pos.x = x * TILESIZE + cameraX;
-            target.pos.y = y * TILESIZE + offset + cameraY;
+            target.pos.x = x * TILESIZE - cameraX;
+            target.pos.y = y * TILESIZE + offset - cameraY;
 
             const MapTile & ref = _map->getTile( y * _map->getWidth() + x );
             const WaveTile & tile = dynamic_cast<const WaveTile &>( ref );
@@ -58,7 +58,4 @@ void MapView::render() const
             RenderEngine::Draw( texture, target );
         }
     }
-
-    RenderEngine::DrawRect( { 300, 300, 300, 90 }, {} );
-    RenderEngine::DrawText( "Welcome!", { 340, 330, 400, 100 } );
 }
