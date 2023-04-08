@@ -151,6 +151,7 @@
     <ClCompile Include="map.cpp" />
     <ClCompile Include="mapview.cpp" />
     <ClCompile Include="renderer.cpp" />
+    <ClCompile Include="input.cpp" />
     <ClCompile Include="static.cpp" />
     <ClCompile Include="tournament.cpp" />
     <ClCompile Include="ui.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="base_game.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="gamemode.h" />
+    <ClInclude Include="input.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="logger.h" />
     <ClInclude Include="map.h" />

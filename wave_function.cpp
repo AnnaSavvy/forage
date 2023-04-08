@@ -53,7 +53,7 @@ WaveMap::WaveMap( size_t side )
     for ( size_t i = 0; i < side * side; i++ ) {
         _map.emplace_back();
     }
-    _map.begin()->possible = LAKE;
+    _map.begin()->possible = WaveTile::LAKE;
     place( 0 );
 }
 
@@ -161,19 +161,19 @@ bool WaveMap::updateMap()
 void WaveRenderer::renderTile( const WaveTile & tile ) const 
 {
     switch ( tile.type ) {
-    case FOREST:
+    case WaveTile::FOREST:
         std::cout << "F";
         break;
-    case TREES:
+    case WaveTile::TREES:
         std::cout << "T";
         break;
-    case GRASS:
+    case WaveTile::GRASS:
         std::cout << "G";
         break;
-    case SAND:
+    case WaveTile::SAND:
         std::cout << "S";
         break;
-    case LAKE:
+    case WaveTile::LAKE:
         std::cout << "L";
         break;
     default:

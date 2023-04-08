@@ -42,19 +42,19 @@ void MapView::render() const
             const WaveTile & tile = dynamic_cast<const WaveTile &>( ref );
             std::string texture = "assets/water.png";
             switch ( tile.type ) {
-            case FOREST:
+            case WaveTile::FOREST:
                 texture = "assets/mountain.png";
                 break;
-            case TREES:
+            case WaveTile::TREES:
                 texture = "assets/forest.png";
                 break;
-            case GRASS:
+            case WaveTile::GRASS:
                 texture = "assets/plains.png";
                 break;
-            case SAND:
+            case WaveTile::SAND:
                 texture = "assets/swamp.png";
                 break;
-            case LAKE:
+            case WaveTile::LAKE:
                 texture = "assets/water.png";
                 break;
             default:

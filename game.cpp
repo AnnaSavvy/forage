@@ -18,50 +18,7 @@ bool Game::init()
 
 void Game::handleEvents()
 {
-    SDL_Event event;
-    while ( SDL_PollEvent( &event ) ) {
-        switch ( event.type ) {
-        case SDL_QUIT:
-            _isRunning = false;
-            break;
-        case SDL_KEYDOWN:
-            // Handle any key press events here
-            std::cout << event.key.keysym.sym << std::endl;
-            if (event.key.keysym.sym == SDLK_DOWN) {
-                _scrollingDown = true;
-            }
-            else if ( event.key.keysym.sym == SDLK_UP ) {
-                _scrollingUp = true;
-            }
-            else if ( event.key.keysym.sym == SDLK_LEFT ) {
-                _scrollingLeft = true;
-            }
-            else if ( event.key.keysym.sym == SDLK_RIGHT ) {
-                _scrollingRight = true;
-            }
-            break;
-        case SDL_KEYUP:
-            if ( event.key.keysym.sym == SDLK_DOWN ) {
-                _scrollingDown = false;
-            }
-            else if ( event.key.keysym.sym == SDLK_UP ) {
-                _scrollingUp = false;
-            }
-            else if ( event.key.keysym.sym == SDLK_LEFT ) {
-                _scrollingLeft = false;
-            }
-            else if ( event.key.keysym.sym == SDLK_RIGHT ) {
-                _scrollingRight = false;
-            }
-            break;
-        case SDL_MOUSEBUTTONDOWN:
-            // Handle any mouse button click events here
-            std::cout << event.button.x << "," << event.button.y << std::endl;
-            break;
-        default:
-            break;
-        }
-    }
+    InputHandler::Get().handleEvent();
 }
 
 void Game::run()
@@ -90,9 +47,11 @@ void Game::run()
 
 void Game::update( float deltaTime )
 {
+    InputHandler & input = InputHandler::Get();
+
     // Camera update
-    int xMove = _scrollingRight ? -2 : _scrollingLeft ? 2 : 0;
-    int yMove = _scrollingDown ? -2 : _scrollingUp ? 2 : 0;
+    int xMove = input.isSet( InputHandler::RIGHT ) ? -2 : input.isSet( InputHandler::LEFT ) ? 2 : 0;
+    int yMove = input.isSet( InputHandler::DOWN ) ? -2 : input.isSet( InputHandler::UP ) ? 2 : 0;
     int cameraSpeed = 2;
     if ( xMove != 0 || yMove != 0 ) {
         _scrollTimer += deltaTime;

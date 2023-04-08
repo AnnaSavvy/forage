@@ -6,6 +6,17 @@
 
 struct WaveTile : public MapTile
 {
+    enum TileTypes
+    {
+        NONE = 0,
+        FOREST = 0x1,
+        TREES = 0x2,
+        GRASS = 0x4,
+        SAND = 0x8,
+        LAKE = 0x10,
+        ALL = 0x1F
+    };
+
     int type = NONE;
     int possible = ALL;
 
