@@ -75,6 +75,9 @@
     <ClCompile Include="game_mainmenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ui_style.cpp">
+      <Filter>Source Files\engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="unit.h">
@@ -144,6 +147,9 @@
       <Filter>Header Files\engine</Filter>
     </ClInclude>
     <ClInclude Include="utils.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="ui_style.h">
       <Filter>Header Files\engine</Filter>
     </ClInclude>
   </ItemGroup>

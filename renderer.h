@@ -2,17 +2,10 @@
 #include <string>
 #include "asset_loader.h"
 #include "point.h"
+#include "ui_style.h"
 
 struct SDL_Window;
 struct SDL_Renderer;
-
-struct Color
-{
-    uint8_t red = 0;
-    uint8_t green = 0;
-    uint8_t blue = 0;
-    uint8_t alpha = 0;
-};
 
 class RenderEngine
 {
@@ -25,6 +18,6 @@ public:
     SDL_Renderer * GetRenderer();
     static RenderEngine & Get();
     static bool Draw( const std::string & image, const Rect & target );
-    static bool DrawRect( const Rect & target, const Color & color );
+    static bool DrawRect( const Rect & target, ColorPtr color );
     static bool DrawText( const std::string & text, const Rect & target );
 };

@@ -157,6 +157,7 @@
     <ClCompile Include="static.cpp" />
     <ClCompile Include="tournament.cpp" />
     <ClCompile Include="ui.cpp" />
+    <ClCompile Include="ui_style.cpp" />
     <ClCompile Include="unit.cpp" />
     <ClCompile Include="village.cpp" />
     <ClCompile Include="wave_function.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="tournament.h" />
     <ClInclude Include="types.h" />
     <ClInclude Include="ui.h" />
+    <ClInclude Include="ui_style.h" />
     <ClInclude Include="unit.h" />
     <ClInclude Include="unit_villager.h" />
     <ClInclude Include="utils.h" />

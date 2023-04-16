@@ -36,3 +36,5 @@ public:
     virtual void update( float deltaTime ) override;
     virtual void render() override;
 };
+
+GameModeName runMainMenu();

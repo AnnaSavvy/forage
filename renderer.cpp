@@ -4,10 +4,11 @@
 #include <SDL_ttf.h>
 #include <iostream>
 
+#include "ui_style.h"
+
 namespace
 {
     RenderEngine engine;
-    TTF_Font * font;
 }
 
 SDL_Rect convertRect( const Rect & rect )
@@ -38,14 +39,8 @@ bool RenderEngine::Initialize()
         return false;
     }
 
-    if ( TTF_Init() < 0 ) {
-        std::cout << "Error initializing SDL_ttf: " << TTF_GetError() << std::endl;
-        return false;
-    }
-
-    font = TTF_OpenFont( "arial.ttf", 24 );
-    if ( !font ) {
-        std::cout << "Failed to load font: " << TTF_GetError() << std::endl;
+    if ( !StandardStyles::loadAssets() ) {
+        std::cout << "Error initializing standard fonts and colors" << std::endl;
         return false;
     }
 
@@ -77,9 +72,14 @@ bool RenderEngine::Draw( const std::string & image, const Rect & target )
     return SDL_RenderCopy( engine._renderer, texture, NULL, &rect ) == 0;
 }
 
-bool RenderEngine::DrawRect( const Rect & target, const Color & color )
+bool RenderEngine::DrawRect( const Rect & target, ColorPtr color )
 {
-    if ( SDL_SetRenderDrawColor( engine._renderer, color.red, color.green, color.blue, color.alpha ) ) {
+    SDL_Color * sdlColor = static_cast<SDL_Color *>( color );
+    if ( !sdlColor ) {
+        return false;
+    }
+
+    if ( SDL_SetRenderDrawColor( engine._renderer, sdlColor->r, sdlColor->g, sdlColor->b, sdlColor->a ) ) {
         return false;
     }
 
@@ -90,11 +90,23 @@ bool RenderEngine::DrawRect( const Rect & target, const Color & color )
 
 bool RenderEngine::DrawText( const std::string & text, const Rect & target )
 {
-    SDL_Color textColor = { 255,255,255 };
+    SDL_Color * textColor = static_cast<SDL_Color *>( StandardStyles::getColor( StandardColor::HIGHLIGHT_RED ) );
+    if ( !textColor ) {
+        return false;
+    }
 
-    SDL_Surface * textSurface = TTF_RenderText_Solid( font, text.c_str(), textColor );
+    TTF_Font * font = static_cast<TTF_Font *>( StandardStyles::getFont( StandardFont::REGULAR ) );
+    if ( !font ) {
+        return false;
+    }
+
+    SDL_Surface * textSurface = TTF_RenderText_Solid( font, text.c_str(), *textColor );
     SDL_Texture * textTexture = SDL_CreateTextureFromSurface( engine._renderer, textSurface );
 
     SDL_Rect textRect = { target.pos.x, target.pos.y, textSurface->w, textSurface->h };
-    return SDL_RenderCopy( engine._renderer, textTexture, NULL, &textRect ) == 0;
+    const bool success = SDL_RenderCopy( engine._renderer, textTexture, NULL, &textRect ) == 0;
+    SDL_FreeSurface( textSurface );
+    SDL_DestroyTexture( textTexture );
+
+    return success;
 }
