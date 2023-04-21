@@ -2,8 +2,11 @@
 
 #include <memory>
 #include <string>
-#include <vector>
 #include <unordered_map>
+#include <vector>
+
+#include "point.h"
+#include "ui_style.h"
 
 class Event
 {
@@ -36,10 +39,7 @@ public:
 class UIComponent
 {
 protected:
-    int _x = 0;
-    int _y = 0;
-    int _width = 0;
-    int _height = 0;
+    Rect rect;
 
 public:
     virtual ~UIComponent() = default;
@@ -48,46 +48,68 @@ public:
     virtual void update( float deltaTime ) = 0;
     virtual void render() = 0;
 
+    const Rect & getRect() const
+    {
+        return rect;
+    }
+
     void setX( int x )
     {
-        _x = x;
+        rect._pos._x = x;
     }
     void setY( int y )
     {
-        _y = y;
+        rect._pos._y = y;
     }
     void setWidth( int width )
     {
-        _width = width;
+        rect._size._x = width;
     }
     void setHeight( int height )
     {
-        _height = height;
+        rect._size._y = height;
     }
     int getX() const
     {
-        return _x;
+        return rect._pos._x;
     }
     int getY() const
     {
-        return _y;
+        return rect._pos._y;
     }
     int getWidth() const
     {
-        return _width;
+        return rect._size._x;
     }
     int getHeight() const
     {
-        return _height;
+        return rect._size._y;
     }
+};
+
+// A basic text label element
+class Label : public UIComponent
+{
+public:
+    Label( const std::string & text, Rect area );
+
+    void setText( const std::string & text );
+    void setPosition( int x, int y );
+    void setSize( int w, int h );
+
+    virtual void render() override;
+    virtual void handleEvent() override {}
+
+private:
+    std::string _text;
 };
 
 class Button : public UIComponent
 {
-    int _id;
     std::vector<std::shared_ptr<EventListener> > _listeners;
     std::string _label;
-    bool _isHovered;
+    bool _isHovered = false;
+    bool _isPressed = false;
 
 public:
     Button() = default;
@@ -102,6 +124,22 @@ public:
     void addEventListener( std::shared_ptr<EventListener> listener );
     void removeEventListener( std::shared_ptr<EventListener> listener );
     void handleClickEvent();
+};
+
+// A basic menu element
+class Menu : public UIComponent
+{
+public:
+    Menu();
+
+    void addElement( UIComponent * element );
+
+    virtual void render();
+    virtual void handleEvent();
+
+private:
+    std::vector<UIComponent *> _elements;
+    Point _spacing;
 };
 
 class Window
@@ -138,7 +176,7 @@ public:
     {
         for ( auto neighbor : neighbors ) {
             // simulate event by rendering neighbor window
-            //neighbor->handleEvent();
+            // neighbor->handleEvent();
         }
     }
 

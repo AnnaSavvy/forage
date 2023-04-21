@@ -1,15 +1,16 @@
 #include "asset_loader.h"
 
-#include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <iostream>
 
 AssetLoader::~AssetLoader()
 {
     clear();
 }
 
-void AssetLoader::initRenderer( SDL_Renderer * renderer ) {
+void AssetLoader::initRenderer( SDL_Renderer * renderer )
+{
     if ( renderer != _renderer ) {
         clear();
         _renderer = renderer;

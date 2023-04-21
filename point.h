@@ -4,8 +4,8 @@
 struct Rect;
 
 struct Point {
-	int x = 0;
-	int y = 0;
+	int _x = 0;
+	int _y = 0;
 
 	Point();
 	Point(int);
@@ -63,8 +63,8 @@ struct Point {
 };
 
 struct Rect {
-    Point pos;
-    Point size;
+    Point _pos;
+    Point _size;
 
 	Rect() = default;
     Rect( const Point &, const Point & );
@@ -77,10 +77,9 @@ struct Rect {
 	bool iterate(std::function<bool(const Point&)>& action, bool defaultVal, int step = 1);
 };
 
-
 struct cmpPointsStrict {
 	bool operator()(const Point& a, const Point& b) const {
-		if (a.x != b.x) return a.x < b.x;
-		return a.y < b.y;
+		if (a._x != b._x) return a._x < b._x;
+		return a._y < b._y;
 	}
 };

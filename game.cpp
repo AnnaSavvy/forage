@@ -88,7 +88,7 @@ void Game::render()
 
 void Game::cleanup()
 {
-    //SDL_DestroyRenderer( _renderer );
-    //SDL_DestroyWindow( _window );
+    // SDL_DestroyRenderer( _renderer );
+    // SDL_DestroyWindow( _window );
     SDL_Quit();
 }

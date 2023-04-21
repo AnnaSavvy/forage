@@ -1,6 +1,7 @@
 #pragma once
 
 #include "mapview.h"
+#include "ui.h"
 #include "wave_function.h"
 
 enum class GameModeName : int
@@ -29,6 +30,7 @@ class ModeMainMenu : public GameMode
 {
     WaveMap _map;
     MapView _mapView;
+    Button _but;
 
 public:
     ModeMainMenu();

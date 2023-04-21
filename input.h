@@ -1,4 +1,5 @@
 #pragma once
+#include "point.h"
 
 enum class InputEvent : int
 {
@@ -12,23 +13,29 @@ public:
     enum InputToggle : int
     {
         NONE = 0,
-        BACKSPACE = 0x1,
-        SHIFT = 0x2,
-        CONTROL = 0x4,
-        ALT = 0x8,
-        UP = 0x10,
-        DOWN = 0x20,
-        LEFT = 0x40,
-        RIGHT = 0x80,
-        ALL = 0xFF
+        KEY_PRESSED = 0x1,
+        MOUSE_CLICKED = 0x2,
+        MOUSE_MOVED = 0x4,
+        MOUSE_WHEEL = 0x8,
+        BACKSPACE = 0x10,
+        SHIFT = 0x20,
+        CONTROL = 0x40,
+        ALT = 0x80,
+        UP = 0x100,
+        DOWN = 0x200,
+        LEFT = 0x400,
+        RIGHT = 0x800,
+        ALL = 0xFFF
     };
 
     int getModes() const;
     bool isSet( InputToggle mode ) const;
+    const Point & getClickPosition() const;
     bool handleEvent();
 
     static InputHandler & Get();
 
 private:
     int _modes = InputToggle::NONE;
+    Point _mouseClick;
 };
