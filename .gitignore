@@ -46,4 +46,6 @@
 .vs
 
 # build directory
+assets
 build
+x64
