@@ -4,7 +4,7 @@
 
 ModeMainMenu::ModeMainMenu()
     : _backgroundMap( 100 )
-    , _but( 400, 300, 300, 100, "New Game" )
+    , _but( 400, 300, 270, 80, "New Game" )
 {
     _backgroundMap.updateMap();
     _mapView.setMap( _backgroundMap );
@@ -12,7 +12,8 @@ ModeMainMenu::ModeMainMenu()
     Style buttonStyle;
     buttonStyle.font = StandardFont::REGULAR_BOLD;
     buttonStyle.textColor = StandardColor::HIGHLIGHT_RED;
-    buttonStyle.padding = 15;
+    buttonStyle.borderColor = StandardColor::DARK_GREY;
+    buttonStyle.borderWidth = 5;
     _but.setStyle( buttonStyle );
 }
 

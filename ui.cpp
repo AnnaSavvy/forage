@@ -1,6 +1,7 @@
 #include "ui.h"
 
 #include "renderer.h"
+#include <SDL.h>
 
 UIComponent::UIComponent( const Rect & dimensions )
     : rect( dimensions )
@@ -29,11 +30,30 @@ void Button::update( float deltaTime ) {}
 
 void Button::render()
 {
-    Point target = rect._pos;
-    target.modAdd( _style.padding, _style.padding );
+    if ( _style.borderWidth && ( _style.borderColor != _style.backgroundColor ) ) {
+        RenderEngine::DrawRect( rect, _style.borderColor );
 
-    RenderEngine::DrawRect( rect, _style.backgroundColor );
-    RenderEngine::DrawText( _label, target, _style.font, _style.textColor );
+        Rect innerArea = rect;
+        innerArea._pos._x += _style.borderWidth;
+        innerArea._pos._y += _style.borderWidth;
+        innerArea._size._x -= _style.borderWidth * 2;
+        innerArea._size._y -= _style.borderWidth * 2;
+        RenderEngine::DrawRect( innerArea, _style.backgroundColor );
+    }
+    else {
+        RenderEngine::DrawRect( rect, _style.backgroundColor );
+    }
+
+    SDL_Surface * surface = RenderEngine::GetTextSurface( _label, _style.font, _style.textColor );
+    if ( surface ) {
+        Rect textRect = rect;
+        textRect._pos._x += ( rect._size._x - surface->w ) / 2;
+        textRect._pos._y += ( rect._size._y - surface->h ) / 2;
+        textRect._size._x = surface->w;
+        textRect._size._y = surface->h;
+
+        RenderEngine::DrawDestroySurface( surface, textRect );
+    }
 }
 
 void Button::setLabel( const std::string & label )

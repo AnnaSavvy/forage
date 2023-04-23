@@ -116,22 +116,47 @@ bool RenderEngine::DrawText( const std::string & text, const Point & target, Sta
 
 bool RenderEngine::DrawText( const std::string & text, const Point & target, StandardFont font, StandardColor color )
 {
-    SDL_Color * textColor = static_cast<SDL_Color *>( StandardStyles::getColor( color ) );
-    if ( !textColor ) {
+    SDL_Surface * textSurface = GetTextSurface( text, font, color );
+    if ( !textSurface ) {
         return false;
     }
 
-    TTF_Font * fontPtr = static_cast<TTF_Font *>( StandardStyles::getFont( font ) );
-    if ( !fontPtr ) {
-        return false;
-    }
-
-    SDL_Surface * textSurface = TTF_RenderText_Solid( fontPtr, text.c_str(), *textColor );
     SDL_Texture * textTexture = SDL_CreateTextureFromSurface( engine._renderer, textSurface );
 
     SDL_Rect textRect = { target._x, target._y, textSurface->w, textSurface->h };
     const bool success = SDL_RenderCopy( engine._renderer, textTexture, NULL, &textRect ) == 0;
     SDL_FreeSurface( textSurface );
+    SDL_DestroyTexture( textTexture );
+
+    return success;
+}
+
+SDL_Surface * RenderEngine::GetTextSurface( const std::string & text, StandardFont font, StandardColor color )
+{
+    SDL_Color * textColor = static_cast<SDL_Color *>( StandardStyles::getColor( color ) );
+    if ( !textColor ) {
+        return nullptr;
+    }
+
+    TTF_Font * fontPtr = static_cast<TTF_Font *>( StandardStyles::getFont( font ) );
+    if ( !fontPtr ) {
+        return nullptr;
+    }
+
+    return TTF_RenderText_Solid( fontPtr, text.c_str(), *textColor );
+}
+
+bool RenderEngine::DrawDestroySurface( SDL_Surface * surface, const Rect & target )
+{
+    if ( !surface ) {
+        return false;
+    }
+
+    SDL_Texture * textTexture = SDL_CreateTextureFromSurface( engine._renderer, surface );
+
+    SDL_Rect textRect = { target._pos._x, target._pos._y, target._size._x, target._size._y };
+    const bool success = SDL_RenderCopy( engine._renderer, textTexture, NULL, &textRect ) == 0;
+    SDL_FreeSurface( surface );
     SDL_DestroyTexture( textTexture );
 
     return success;

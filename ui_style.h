@@ -15,6 +15,7 @@ enum class StandardColor : int
 {
     WHITE = 0,
     BLACK,
+    DARK_GREY,
     DARK_RED,
     DARK_BLUE,
     HIGHLIGHT_RED,
@@ -26,7 +27,9 @@ struct Style
     StandardFont font = StandardFont::REGULAR;
     StandardColor textColor = StandardColor::WHITE;
     StandardColor backgroundColor = StandardColor::BLACK;
-    int padding = 0;
+    StandardColor borderColor = StandardColor::BLACK;
+    int paddingX = 0;
+    int paddingY = 0;
     int borderWidth = 0;
     int borderRadius = 0;
 };
