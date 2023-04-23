@@ -23,12 +23,12 @@ enum class StandardColor : int
 
 struct Style
 {
-    FontPtr font = nullptr;
-    ColorPtr textColor = nullptr;
-    ColorPtr backgroundColor = nullptr;
-    int padding;
-    int borderWidth;
-    int borderRadius;
+    StandardFont font = StandardFont::REGULAR;
+    StandardColor textColor = StandardColor::WHITE;
+    StandardColor backgroundColor = StandardColor::BLACK;
+    int padding = 0;
+    int borderWidth = 0;
+    int borderRadius = 0;
 };
 
 namespace StandardStyles

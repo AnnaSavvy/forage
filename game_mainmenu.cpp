@@ -1,17 +1,19 @@
-#include "gamemode.h"
+#include "game_mainmenu.h"
 #include "input.h"
 #include "renderer.h"
 
 ModeMainMenu::ModeMainMenu()
-    : _map( 40 )
+    : _backgroundMap( 100 )
+    , _but( 400, 300, 300, 100, "New Game" )
 {
-    _but.setWidth( 300 );
-    _but.setHeight( 100 );
-    _but.setX( 400 );
-    _but.setY( 300 );
-    _but.setLabel( "New Game" );
-    _map.updateMap();
-    _mapView.setMap( _map );
+    _backgroundMap.updateMap();
+    _mapView.setMap( _backgroundMap );
+
+    Style buttonStyle;
+    buttonStyle.font = StandardFont::REGULAR_BOLD;
+    buttonStyle.textColor = StandardColor::HIGHLIGHT_RED;
+    buttonStyle.padding = 15;
+    _but.setStyle( buttonStyle );
 }
 
 GameModeName ModeMainMenu::handleEvents()
@@ -21,7 +23,7 @@ GameModeName ModeMainMenu::handleEvents()
     if ( input.handleEvent() ) {
         if ( input.isSet( InputHandler::MOUSE_CLICKED ) ) {
             if ( _but.getRect().contains( input.getClickPosition() ) ) {
-                _but.setX( _but.getX() + 10 );
+                return GameModeName::NEW_GAME;
             }
         }
         return GameModeName::MAIN_MENU;

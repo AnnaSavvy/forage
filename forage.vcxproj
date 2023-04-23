@@ -168,6 +168,10 @@
     <ClInclude Include="base_game.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="gamemode.h" />
+    <ClInclude Include="game_battle.h" />
+    <ClInclude Include="game_campaign.h" />
+    <ClInclude Include="game_mainmenu.h" />
+    <ClInclude Include="game_strategic.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="logger.h" />

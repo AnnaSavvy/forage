@@ -1,9 +1,5 @@
 #pragma once
 
-#include "mapview.h"
-#include "ui.h"
-#include "wave_function.h"
-
 enum class GameModeName : int
 {
     CANCEL = 0,
@@ -15,28 +11,3 @@ enum class GameModeName : int
     CREDITS,
     GAME_ONGOING
 };
-
-class GameMode
-{
-    GameModeName name = GameModeName::CANCEL;
-
-public:
-    virtual GameModeName handleEvents() = 0;
-    virtual void update( float deltaTime ) = 0;
-    virtual void render() = 0;
-};
-
-class ModeMainMenu : public GameMode
-{
-    WaveMap _map;
-    MapView _mapView;
-    Button _but;
-
-public:
-    ModeMainMenu();
-    virtual GameModeName handleEvents() override;
-    virtual void update( float deltaTime ) override;
-    virtual void render() override;
-};
-
-GameModeName runMainMenu();

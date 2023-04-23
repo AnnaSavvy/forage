@@ -42,6 +42,7 @@ protected:
     Rect rect;
 
 public:
+    UIComponent( const Rect & dimensions );
     virtual ~UIComponent() = default;
 
     virtual void handleEvent() = 0;
@@ -108,18 +109,23 @@ class Button : public UIComponent
 {
     std::vector<std::shared_ptr<EventListener> > _listeners;
     std::string _label;
+    Style _style;
     bool _isHovered = false;
     bool _isPressed = false;
 
 public:
     Button() = default;
     Button( int x, int y, int width, int height, const std::string & label );
+    Button( const Rect & dimensions, const std::string & label, const Style & style );
     virtual ~Button() = default;
 
     void handleEvent() override;
     void update( float deltaTime ) override;
     void render() override;
 
+    void setStyle(const Style& style) {
+        _style = style;
+    }
     void setLabel( const std::string & label );
     void addEventListener( std::shared_ptr<EventListener> listener );
     void removeEventListener( std::shared_ptr<EventListener> listener );

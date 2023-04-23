@@ -1,6 +1,6 @@
 #include "game.h"
 #include "asset_loader.h"
-#include "gamemode.h"
+#include "game_mainmenu.h"
 #include "map.h"
 #include "renderer.h"
 

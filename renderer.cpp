@@ -72,9 +72,9 @@ bool RenderEngine::Draw( const std::string & image, const Rect & target )
     return SDL_RenderCopy( engine._renderer, texture, NULL, &rect ) == 0;
 }
 
-bool RenderEngine::DrawRect( const Rect & target, ColorPtr color )
+bool RenderEngine::DrawRect( const Rect & target, StandardColor color )
 {
-    SDL_Color * sdlColor = static_cast<SDL_Color *>( color );
+    SDL_Color * sdlColor = static_cast<SDL_Color *>( StandardStyles::getColor( color ) );
     if ( !sdlColor ) {
         return false;
     }
@@ -88,22 +88,48 @@ bool RenderEngine::DrawRect( const Rect & target, ColorPtr color )
     return SDL_RenderFillRect( engine._renderer, &rect ) == 0;
 }
 
-bool RenderEngine::DrawText( const std::string & text, const Rect & target )
+bool RenderEngine::DrawStyledRect( const Rect & target, const Style & style )
 {
-    SDL_Color * textColor = static_cast<SDL_Color *>( StandardStyles::getColor( StandardColor::HIGHLIGHT_RED ) );
+    SDL_Color * sdlColor = static_cast<SDL_Color *>( StandardStyles::getColor( style.backgroundColor ) );
+    if ( !sdlColor ) {
+        return false;
+    }
+
+    if ( SDL_SetRenderDrawColor( engine._renderer, sdlColor->r, sdlColor->g, sdlColor->b, sdlColor->a ) ) {
+        return false;
+    }
+
+    SDL_Rect rect = convertRect( target );
+
+    return SDL_RenderFillRect( engine._renderer, &rect ) == 0;
+}
+
+bool RenderEngine::DrawText( const std::string & text, const Point & target )
+{
+    return DrawText( text, target, StandardFont::REGULAR, StandardColor::WHITE );
+}
+
+bool RenderEngine::DrawText( const std::string & text, const Point & target, StandardFont font )
+{
+    return DrawText( text, target, font, StandardColor::WHITE );
+}
+
+bool RenderEngine::DrawText( const std::string & text, const Point & target, StandardFont font, StandardColor color )
+{
+    SDL_Color * textColor = static_cast<SDL_Color *>( StandardStyles::getColor( color ) );
     if ( !textColor ) {
         return false;
     }
 
-    TTF_Font * font = static_cast<TTF_Font *>( StandardStyles::getFont( StandardFont::REGULAR ) );
-    if ( !font ) {
+    TTF_Font * fontPtr = static_cast<TTF_Font *>( StandardStyles::getFont( font ) );
+    if ( !fontPtr ) {
         return false;
     }
 
-    SDL_Surface * textSurface = TTF_RenderText_Solid( font, text.c_str(), *textColor );
+    SDL_Surface * textSurface = TTF_RenderText_Solid( fontPtr, text.c_str(), *textColor );
     SDL_Texture * textTexture = SDL_CreateTextureFromSurface( engine._renderer, textSurface );
 
-    SDL_Rect textRect = { target._pos._x, target._pos._y, textSurface->w, textSurface->h };
+    SDL_Rect textRect = { target._x, target._y, textSurface->w, textSurface->h };
     const bool success = SDL_RenderCopy( engine._renderer, textTexture, NULL, &textRect ) == 0;
     SDL_FreeSurface( textSurface );
     SDL_DestroyTexture( textTexture );

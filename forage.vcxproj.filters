@@ -152,6 +152,18 @@
     <ClInclude Include="ui_style.h">
       <Filter>Header Files\engine</Filter>
     </ClInclude>
+    <ClInclude Include="game_mainmenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game_strategic.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game_campaign.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game_battle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="data.json">
