@@ -57,6 +57,13 @@ namespace StandardStyles
         fonts[static_cast<int>( StandardFont::REGULAR )] = font;
         fonts[static_cast<int>( StandardFont::REGULAR_BOLD )] = font;
 
+        font = TTF_OpenFont( "Deutsch Gothic.ttf", 72 );
+        if ( !font ) {
+            std::cout << "Failed to load font: " << TTF_GetError() << std::endl;
+            return false;
+        }
+        fonts[static_cast<int>( StandardFont::MENU_HUGE_TITLE )] = font;
+
         colors[static_cast<int>( StandardColor::WHITE )] = { 255, 255, 255 };
         colors[static_cast<int>( StandardColor::BLACK )] = { 0, 0, 0 };
         colors[static_cast<int>( StandardColor::DARK_GREY )] = { 50, 47, 50 };

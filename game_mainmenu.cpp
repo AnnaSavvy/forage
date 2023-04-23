@@ -4,7 +4,11 @@
 
 ModeMainMenu::ModeMainMenu()
     : _backgroundMap( 100 )
-    , _but( 400, 300, 270, 80, "New Game" )
+    , _title( { 200, 150, 1, 1 }, "Best Damn Game", StandardFont::MENU_HUGE_TITLE, StandardColor::WHITE )
+    , _bNewGame( 400, 500, 270, 80, "New Game" )
+    , _bLoadGame( 400, 600, 270, 80, "Load Game" )
+    , _bOptions( 400, 700, 270, 80, "Options" )
+    , _bQuitGame( 400, 800, 270, 80, "Quit Game" )
 {
     _backgroundMap.updateMap();
     _mapView.setMap( _backgroundMap );
@@ -14,7 +18,10 @@ ModeMainMenu::ModeMainMenu()
     buttonStyle.textColor = StandardColor::HIGHLIGHT_RED;
     buttonStyle.borderColor = StandardColor::DARK_GREY;
     buttonStyle.borderWidth = 5;
-    _but.setStyle( buttonStyle );
+    _bNewGame.setStyle( buttonStyle );
+    _bLoadGame.setStyle( buttonStyle );
+    _bOptions.setStyle( buttonStyle );
+    _bQuitGame.setStyle( buttonStyle );
 }
 
 GameModeName ModeMainMenu::handleEvents()
@@ -23,8 +30,18 @@ GameModeName ModeMainMenu::handleEvents()
 
     if ( input.handleEvent() ) {
         if ( input.isSet( InputHandler::MOUSE_CLICKED ) ) {
-            if ( _but.getRect().contains( input.getClickPosition() ) ) {
+            const Point & mouseClick = input.getClickPosition();
+            if ( _bNewGame.getRect().contains( mouseClick ) ) {
                 return GameModeName::NEW_GAME;
+            }
+            else if ( _bLoadGame.getRect().contains( mouseClick ) ) {
+                return GameModeName::LOAD_GAME;
+            }
+            else if ( _bOptions.getRect().contains( mouseClick ) ) {
+                return GameModeName::OPTIONS_SCREEN;
+            }
+            else if ( _bQuitGame.getRect().contains( mouseClick ) ) {
+                return GameModeName::QUIT_GAME;
             }
         }
         return GameModeName::MAIN_MENU;
@@ -40,20 +57,10 @@ void ModeMainMenu::update( float deltaTime )
 void ModeMainMenu::render()
 {
     _mapView.render();
-    _but.render();
-}
+    _title.render();
 
-GameModeName runMainMenu()
-{
-    InputHandler input = InputHandler::Get();
-    WaveMap map( 40 );
-    MapView mapView;
-    map.updateMap();
-    mapView.setMap( map );
-
-    while ( input.handleEvent() ) {
-        mapView.moveCamera( 1, 1 );
-        mapView.render();
-    }
-    return GameModeName::QUIT_GAME;
+    _bNewGame.render();
+    _bLoadGame.render();
+    _bOptions.render();
+    _bQuitGame.render();
 }

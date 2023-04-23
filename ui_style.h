@@ -8,6 +8,7 @@ enum class StandardFont : int
     INVALID = 0,
     REGULAR,
     REGULAR_BOLD,
+    MENU_HUGE_TITLE,
     END,
 };
 

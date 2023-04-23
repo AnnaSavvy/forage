@@ -56,25 +56,39 @@ void Button::render()
     }
 }
 
+void Button::setStyle( const Style & style )
+{
+    _style = style;
+}
+
 void Button::setLabel( const std::string & label )
 {
     _label = label;
 }
 
-void Button::addEventListener( std::shared_ptr<EventListener> listener )
+Label::Label( const Point & position, const std::string & text )
+    : UIComponent( { position, { 0, 0 } } )
+    , _text( text )
+{}
+
+Label::Label( const Point & position, const std::string & text, StandardFont font, StandardColor color )
+    : UIComponent( { position, { 0, 0 } } )
+    , _text( text )
+    , _font( font )
+    , _color( color )
+{}
+
+void Label::setText( const std::string & text )
 {
-    _listeners.push_back( listener );
+    _text = text;
 }
 
-void Button::removeEventListener( std::shared_ptr<EventListener> listener )
+void Label::setColor( StandardColor color )
 {
-    _listeners.erase( std::remove( _listeners.begin(), _listeners.end(), listener ), _listeners.end() );
+    _color = color;
 }
 
-void Button::handleClickEvent()
+void Label::render()
 {
-    const ButtonClickEvent event( 0 );
-    for ( const auto & listener : _listeners ) {
-        listener->onEvent( event );
-    }
+    RenderEngine::DrawText( _text, rect._pos, _font, _color );
 }

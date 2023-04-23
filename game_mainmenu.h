@@ -19,7 +19,12 @@ class ModeMainMenu : public GameMode
 {
     WaveMap _backgroundMap;
     MapView _mapView;
-    Button _but;
+
+    Label _title;
+    Button _bNewGame;
+    Button _bLoadGame;
+    Button _bOptions;
+    Button _bQuitGame;
 
 public:
     ModeMainMenu();

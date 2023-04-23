@@ -92,17 +92,20 @@ public:
 class Label : public UIComponent
 {
 public:
-    Label( const std::string & text, Rect area );
+    Label( const Point & position, const std::string & text );
+    Label( const Point & position, const std::string & text, StandardFont font, StandardColor color );
 
     void setText( const std::string & text );
-    void setPosition( int x, int y );
-    void setSize( int w, int h );
+    void setColor( StandardColor color );
 
     virtual void render() override;
     virtual void handleEvent() override {}
+    virtual void update( float deltaTime ) override {}
 
 private:
     std::string _text;
+    StandardFont _font = StandardFont::REGULAR;
+    StandardColor _color = StandardColor::WHITE;
 };
 
 class Button : public UIComponent
@@ -114,7 +117,6 @@ class Button : public UIComponent
     bool _isPressed = false;
 
 public:
-    Button() = default;
     Button( int x, int y, int width, int height, const std::string & label );
     Button( const Rect & dimensions, const std::string & label, const Style & style );
     virtual ~Button() = default;
@@ -123,13 +125,8 @@ public:
     void update( float deltaTime ) override;
     void render() override;
 
-    void setStyle(const Style& style) {
-        _style = style;
-    }
+    void setStyle( const Style & style );
     void setLabel( const std::string & label );
-    void addEventListener( std::shared_ptr<EventListener> listener );
-    void removeEventListener( std::shared_ptr<EventListener> listener );
-    void handleClickEvent();
 };
 
 // A basic menu element

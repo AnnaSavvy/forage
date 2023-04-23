@@ -7,6 +7,7 @@ enum class GameModeName : int
     MAIN_MENU,
     NEW_GAME,
     LOAD_GAME,
+    OPTIONS_SCREEN,
     HIGHSCORES,
     CREDITS,
     GAME_ONGOING
