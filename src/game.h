@@ -13,20 +13,13 @@ class Game : public BaseGame
 {
     bool _isRunning = false;
 
-    float _scrollTimer = 0.0f;
-
     // Add any additional game state variables or components here
     WaveMap _map;
-    MapView _mapView;
-    GameMode * _currentMode = nullptr;
+    std::shared_ptr<GameMode> _currentMode = nullptr;
 
 public:
-    Game()
-        : _map( 32 )
-    {}
-    ~Game() {
-        cleanup();
-    }
+    Game();
+    virtual ~Game();
 
     bool init();
     void handleEvents();

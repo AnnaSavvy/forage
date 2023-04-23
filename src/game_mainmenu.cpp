@@ -2,14 +2,18 @@
 #include "input.h"
 #include "renderer.h"
 
+#include <iostream>
+
 ModeMainMenu::ModeMainMenu()
     : _backgroundMap( 100 )
-    , _title( { 200, 150, 1, 1 }, "Best Damn Game", StandardFont::MENU_HUGE_TITLE, StandardColor::WHITE )
+    , _title( { 200, 150 }, "Best Damn Game", StandardFont::MENU_HUGE_TITLE, StandardColor::WHITE )
     , _bNewGame( 400, 500, 270, 80, "New Game" )
     , _bLoadGame( 400, 600, 270, 80, "Load Game" )
     , _bOptions( 400, 700, 270, 80, "Options" )
     , _bQuitGame( 400, 800, 270, 80, "Quit Game" )
 {
+    name = GameModeName::MAIN_MENU;
+
     _backgroundMap.updateMap();
     _mapView.setMap( _backgroundMap );
 
@@ -26,7 +30,7 @@ ModeMainMenu::ModeMainMenu()
 
 GameModeName ModeMainMenu::handleEvents()
 {
-    InputHandler input = InputHandler::Get();
+    InputHandler & input = InputHandler::Get();
 
     if ( input.handleEvent() ) {
         if ( input.isSet( InputHandler::MOUSE_CLICKED ) ) {
@@ -44,7 +48,7 @@ GameModeName ModeMainMenu::handleEvents()
                 return GameModeName::QUIT_GAME;
             }
         }
-        return GameModeName::MAIN_MENU;
+        return name;
     }
     return GameModeName::QUIT_GAME;
 }
@@ -63,4 +67,9 @@ void ModeMainMenu::render()
     _bLoadGame.render();
     _bOptions.render();
     _bQuitGame.render();
+}
+
+GameModeName GameMode::getName() const
+{
+    return name;
 }

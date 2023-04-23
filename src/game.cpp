@@ -1,10 +1,20 @@
 #include "game.h"
 #include "asset_loader.h"
 #include "game_mainmenu.h"
+#include "game_strategic.h"
 #include "map.h"
 #include "renderer.h"
 
 #include <SDL.h>
+
+Game::Game()
+    : _map( 32 )
+{}
+
+Game::~Game()
+{
+    cleanup();
+}
 
 bool Game::init()
 {
@@ -12,15 +22,43 @@ bool Game::init()
     RenderEngine::Get().Initialize();
     _map.updateMap();
 
-    _mapView.setMap( _map );
-
     return true;
 }
 
 void Game::handleEvents()
 {
-    if ( _currentMode->handleEvents() == GameModeName::QUIT_GAME ) {
+    const GameModeName next = _currentMode->handleEvents();
+    if ( next == _currentMode->getName() ) {
+        return;
+    }
+
+    switch ( next ) {
+    case GameModeName::CANCEL:
+        // pop the stack?
+        break;
+    case GameModeName::QUIT_GAME:
         _isRunning = false;
+        break;
+    case GameModeName::MAIN_MENU:
+        _currentMode.reset();
+        _currentMode = std::make_shared<ModeMainMenu>();
+        break;
+    case GameModeName::NEW_GAME:
+        _currentMode.reset();
+        _currentMode = std::make_shared<ModeStrategicView>();
+        break;
+    case GameModeName::LOAD_GAME:
+        break;
+    case GameModeName::OPTIONS_SCREEN:
+        break;
+    case GameModeName::HIGHSCORES:
+        break;
+    case GameModeName::CREDITS:
+        break;
+    case GameModeName::GAME_ONGOING:
+        break;
+    default:
+        break;
     }
 }
 
@@ -32,8 +70,7 @@ void Game::run()
 
     Uint32 previousTime = SDL_GetTicks();
 
-    ModeMainMenu mode;
-    _currentMode = &mode;
+    _currentMode = std::make_shared<ModeMainMenu>();
 
     while ( _isRunning ) {
         Uint32 currentTime = SDL_GetTicks();
@@ -53,23 +90,6 @@ void Game::run()
 
 void Game::update( float deltaTime )
 {
-    InputHandler & input = InputHandler::Get();
-
-    // Camera update
-    int xMove = input.isSet( InputHandler::RIGHT ) ? -2 : input.isSet( InputHandler::LEFT ) ? 2 : 0;
-    int yMove = input.isSet( InputHandler::DOWN ) ? -2 : input.isSet( InputHandler::UP ) ? 2 : 0;
-    int cameraSpeed = 2;
-    if ( xMove != 0 || yMove != 0 ) {
-        _scrollTimer += deltaTime;
-        if ( _scrollTimer > 1.5 ) {
-            cameraSpeed = ( _scrollTimer > 3 ) ? 4 : 3;
-        }
-    }
-    else {
-        _scrollTimer = 0.0f;
-    }
-    _mapView.moveCamera( xMove * cameraSpeed, yMove * cameraSpeed );
-
     _currentMode->update( deltaTime );
 }
 
@@ -80,7 +100,6 @@ void Game::render()
     SDL_RenderClear( renderer );
 
     // Render game objects here
-    // _mapView.render();
     _currentMode->render();
 
     SDL_RenderPresent( renderer );

@@ -12,3 +12,16 @@ enum class GameModeName : int
     CREDITS,
     GAME_ONGOING
 };
+
+class GameMode
+{
+protected:
+    GameModeName name = GameModeName::CANCEL;
+
+public:
+    GameModeName getName() const;
+
+    virtual GameModeName handleEvents() = 0;
+    virtual void update( float deltaTime ) = 0;
+    virtual void render() = 0;
+};

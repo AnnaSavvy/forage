@@ -27,6 +27,9 @@ public:
         RIGHT = 0x800,
         ALL = 0xFFF
     };
+    InputHandler();
+    InputHandler( const InputHandler & ) = delete;
+    InputHandler & operator=( const InputHandler & ) = delete;
 
     int getModes() const;
     bool isSet( InputToggle mode ) const;

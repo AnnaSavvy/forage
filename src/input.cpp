@@ -3,6 +3,8 @@
 #include <SDL.h>
 #include <iostream>
 
+InputHandler::InputHandler() {}
+
 int InputHandler::getModes() const
 {
     return _modes;
@@ -18,7 +20,8 @@ const Point & InputHandler::getClickPosition() const
     return _mouseClick;
 }
 
-bool InputHandler::handleEvent() {
+bool InputHandler::handleEvent()
+{
     static int modesToReset = KEY_PRESSED | MOUSE_CLICKED | MOUSE_MOVED | MOUSE_WHEEL;
     _modes &= ~modesToReset;
 

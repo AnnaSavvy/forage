@@ -5,16 +5,6 @@
 #include "ui.h"
 #include "wave_function.h"
 
-class GameMode
-{
-    GameModeName name = GameModeName::CANCEL;
-
-public:
-    virtual GameModeName handleEvents() = 0;
-    virtual void update( float deltaTime ) = 0;
-    virtual void render() = 0;
-};
-
 class ModeMainMenu : public GameMode
 {
     WaveMap _backgroundMap;

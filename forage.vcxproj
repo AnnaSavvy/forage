@@ -147,6 +147,7 @@
     <ClCompile Include="src\asset_loader.cpp" />
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\game_mainmenu.cpp" />
+    <ClCompile Include="src\game_strategic.cpp" />
     <ClCompile Include="src\logger.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\map.cpp" />
