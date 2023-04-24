@@ -15,6 +15,7 @@ class ModeStrategicView : public GameMode
     Label _lResources;
     Button _bOpenMenu;
     Button _bEndTurn;
+    Window _menuPopup;
 
 public:
     ModeStrategicView();

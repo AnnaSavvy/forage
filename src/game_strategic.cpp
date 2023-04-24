@@ -5,13 +5,16 @@
 ModeStrategicView::ModeStrategicView()
     : _map( 40 )
     , _lResources( { 50, 10 }, "Food: 0, Tools: 0, Gold: 0" )
-    , _bOpenMenu( 824, 10, 200, 80, "Menu" )
+    , _bOpenMenu( 824, 0, 200, 80, "Menu" )
     , _bEndTurn( 824, 944, 200, 80, "End Turn" )
+    , _menuPopup( { 312, 262, 400, 500 }, "Menu" )
 {
     name = GameModeName::NEW_GAME;
 
     _map.updateMap();
     _mapView.setMap( _map );
+
+    _menuPopup.setHidden( true );
 
     Style buttonStyle;
     buttonStyle.font = StandardFont::REGULAR_BOLD;
@@ -30,8 +33,7 @@ GameModeName ModeStrategicView::handleEvents()
         if ( input.isSet( InputHandler::MOUSE_CLICKED ) ) {
             const Point & mouseClick = input.getClickPosition();
             if ( _bOpenMenu.getRect().contains( mouseClick ) ) {
-                return GameModeName::MAIN_MENU;
-                // pop up menu Window
+                _menuPopup.setHidden( !_menuPopup.isHidden() );
             }
             else if ( _bEndTurn.getRect().contains( mouseClick ) ) {
                 // trigger update
@@ -69,4 +71,6 @@ void ModeStrategicView::render()
 
     _bOpenMenu.render();
     _bEndTurn.render();
+
+    _menuPopup.render();
 }

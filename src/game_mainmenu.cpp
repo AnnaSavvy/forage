@@ -2,8 +2,6 @@
 #include "input.h"
 #include "renderer.h"
 
-#include <iostream>
-
 ModeMainMenu::ModeMainMenu()
     : _backgroundMap( 100 )
     , _title( { 200, 150 }, "Best Damn Game", StandardFont::MENU_HUGE_TITLE, StandardColor::WHITE )

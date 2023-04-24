@@ -4,16 +4,12 @@
 #include <SDL.h>
 
 UIComponent::UIComponent( const Rect & dimensions )
-    : rect( dimensions )
+    : _rect( dimensions )
 {}
 
 Button::Button( int x, int y, int width, int height, const std::string & label )
     : UIComponent( { x, y, width, height } )
 {
-    rect._pos._x = x;
-    rect._pos._y = y;
-    rect._size._x = width;
-    rect._size._y = height;
     _label = label;
 }
 
@@ -24,16 +20,18 @@ Button::Button( const Rect & dimensions, const std::string & label, const Style 
     _label = label;
 }
 
-void Button::handleEvent() {}
-
 void Button::update( float deltaTime ) {}
 
 void Button::render()
 {
-    if ( _style.borderWidth && ( _style.borderColor != _style.backgroundColor ) ) {
-        RenderEngine::DrawRect( rect, _style.borderColor );
+    if ( _hidden ) {
+        return;
+    }
 
-        Rect innerArea = rect;
+    if ( _style.borderWidth && ( _style.borderColor != _style.backgroundColor ) ) {
+        RenderEngine::DrawRect( _rect, _style.borderColor );
+
+        Rect innerArea = _rect;
         innerArea._pos._x += _style.borderWidth;
         innerArea._pos._y += _style.borderWidth;
         innerArea._size._x -= _style.borderWidth * 2;
@@ -41,19 +39,29 @@ void Button::render()
         RenderEngine::DrawRect( innerArea, _style.backgroundColor );
     }
     else {
-        RenderEngine::DrawRect( rect, _style.backgroundColor );
+        RenderEngine::DrawRect( _rect, _style.backgroundColor );
     }
 
     SDL_Surface * surface = RenderEngine::GetTextSurface( _label, _style.font, _style.textColor );
     if ( surface ) {
-        Rect textRect = rect;
-        textRect._pos._x += ( rect._size._x - surface->w ) / 2;
-        textRect._pos._y += ( rect._size._y - surface->h ) / 2;
+        Rect textRect = _rect;
+        textRect._pos._x += ( _rect._size._x - surface->w ) / 2;
+        textRect._pos._y += ( _rect._size._y - surface->h ) / 2;
         textRect._size._x = surface->w;
         textRect._size._y = surface->h;
 
         RenderEngine::DrawDestroySurface( surface, textRect );
     }
+}
+
+void Button::setPressed( bool value )
+{
+    _isPressed = value;
+}
+
+void Button::setHovered( bool value )
+{
+    _isPressed = value;
 }
 
 void Button::setStyle( const Style & style )
@@ -90,5 +98,81 @@ void Label::setColor( StandardColor color )
 
 void Label::render()
 {
-    RenderEngine::DrawText( _text, rect._pos, _font, _color );
+    if ( _hidden ) {
+        return;
+    }
+
+    RenderEngine::DrawText( _text, _rect._pos, _font, _color );
+}
+
+Window::Window( Rect rect, const std::string & title )
+    : UIComponent( rect )
+    , _title( title )
+{}
+
+Window::~Window() {}
+
+void Window::update( float deltaTime )
+{
+    for ( auto component : _components ) {
+        component->update( deltaTime );
+    }
+}
+
+void Window::render()
+{
+    if ( _hidden ) {
+        return;
+    }
+
+    if ( _style.borderWidth && ( _style.borderColor != _style.backgroundColor ) ) {
+        RenderEngine::DrawRect( _rect, _style.borderColor );
+
+        Rect innerArea = _rect;
+        innerArea._pos._x += _style.borderWidth;
+        innerArea._pos._y += _style.borderWidth;
+        innerArea._size._x -= _style.borderWidth * 2;
+        innerArea._size._y -= _style.borderWidth * 2;
+        RenderEngine::DrawRect( innerArea, _style.backgroundColor );
+    }
+    else {
+        RenderEngine::DrawRect( _rect, _style.backgroundColor );
+    }
+
+    SDL_Surface * surface = RenderEngine::GetTextSurface( _title, _style.font, _style.textColor );
+    if ( surface ) {
+        Rect textRect = _rect;
+        textRect._pos._x += ( _rect._size._x - surface->w ) / 2;
+        textRect._pos._y += _style.paddingY;
+        textRect._size._x = surface->w;
+        textRect._size._y = surface->h;
+
+        RenderEngine::DrawDestroySurface( surface, textRect );
+    }
+
+    for ( auto component : _components ) {
+        component->render();
+    }
+}
+
+void Window::setStyle( const Style & style )
+{
+    _style = style;
+}
+
+void Window::addComponent( std::shared_ptr<UIComponent> component )
+{
+    _components.push_back( component );
+}
+
+std::shared_ptr<UIComponent> Window::processClickEvent( const Point & click )
+{
+    if ( _rect.contains( click ) ) {
+        for ( auto component : _components ) {
+            if ( component->getRect().contains( click ) ) {
+                return component;
+            }
+        }
+    }
+    return nullptr;
 }

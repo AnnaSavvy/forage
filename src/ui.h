@@ -8,83 +8,32 @@
 #include "point.h"
 #include "ui_style.h"
 
-class Event
-{
-public:
-    virtual ~Event() {}
-};
-
-class ButtonClickEvent : public Event
-{
-public:
-    ButtonClickEvent( int id )
-        : _id( id )
-    {}
-    int getId() const
-    {
-        return _id;
-    }
-
-private:
-    int _id;
-};
-
-class EventListener
-{
-public:
-    virtual ~EventListener() {}
-    virtual void onEvent( const Event & event ) = 0;
-};
-
 class UIComponent
 {
 protected:
-    Rect rect;
+    Rect _rect;
+    bool _hidden = false;
 
 public:
     UIComponent( const Rect & dimensions );
     virtual ~UIComponent() = default;
 
-    virtual void handleEvent() = 0;
     virtual void update( float deltaTime ) = 0;
     virtual void render() = 0;
 
-    const Rect & getRect() const
+    bool isHidden() const
     {
-        return rect;
+        return _hidden;
     }
 
-    void setX( int x )
+    void setHidden( bool isHidden )
     {
-        rect._pos._x = x;
+        _hidden = isHidden;
     }
-    void setY( int y )
+
+    const Rect & getRect() const
     {
-        rect._pos._y = y;
-    }
-    void setWidth( int width )
-    {
-        rect._size._x = width;
-    }
-    void setHeight( int height )
-    {
-        rect._size._y = height;
-    }
-    int getX() const
-    {
-        return rect._pos._x;
-    }
-    int getY() const
-    {
-        return rect._pos._y;
-    }
-    int getWidth() const
-    {
-        return rect._size._x;
-    }
-    int getHeight() const
-    {
-        return rect._size._y;
+        return _rect;
     }
 };
 
@@ -98,9 +47,8 @@ public:
     void setText( const std::string & text );
     void setColor( StandardColor color );
 
-    virtual void render() override;
-    virtual void handleEvent() override {}
     virtual void update( float deltaTime ) override {}
+    virtual void render() override;
 
 private:
     std::string _text;
@@ -110,7 +58,6 @@ private:
 
 class Button : public UIComponent
 {
-    std::vector<std::shared_ptr<EventListener> > _listeners;
     std::string _label;
     Style _style;
     bool _isHovered = false;
@@ -121,10 +68,11 @@ public:
     Button( const Rect & dimensions, const std::string & label, const Style & style );
     virtual ~Button() = default;
 
-    void handleEvent() override;
     void update( float deltaTime ) override;
     void render() override;
 
+    void setPressed( bool value );
+    void setHovered( bool value );
     void setStyle( const Style & style );
     void setLabel( const std::string & label );
 };
@@ -138,55 +86,28 @@ public:
     void addElement( UIComponent * element );
 
     virtual void render();
-    virtual void handleEvent();
 
 private:
     std::vector<UIComponent *> _elements;
     Point _spacing;
 };
 
-class Window
+class Window : public UIComponent
 {
 public:
-    Window( int width, int height, const std::string & title );
+    Window( Rect rect, const std::string & title );
     ~Window();
 
-    void handleEvent();
     void update( float deltaTime );
-    void addComponent( std::shared_ptr<UIComponent> component )
-    {
-        _components.push_back( component );
-    }
+    void render();
 
-    void addNeighbor( Window * neighbor )
-    {
-        neighbors.push_back( neighbor );
-    }
+    void setStyle( const Style & style );
+    void addComponent( std::shared_ptr<UIComponent> component );
 
-    void render()
-    {
-        for ( auto component : _components ) {
-            component->render();
-        }
-    }
-
-    bool containsPoint( int x, int y )
-    {
-        return false;
-    }
-
-    void onButtonClicked()
-    {
-        for ( auto neighbor : neighbors ) {
-            // simulate event by rendering neighbor window
-            // neighbor->handleEvent();
-        }
-    }
+    std::shared_ptr<UIComponent> processClickEvent( const Point & click );
 
 private:
-    int _width;
-    int _height;
+    Style _style;
     std::string _title;
     std::vector<std::shared_ptr<UIComponent> > _components;
-    std::vector<Window *> neighbors;
 };

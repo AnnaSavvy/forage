@@ -48,16 +48,21 @@ namespace StandardStyles
         colors.clear();
         colors.resize( static_cast<int>( StandardColor::END ) );
 
-        TTF_Font * font = TTF_OpenFont( "Deutsch Gothic.ttf", 32 );
+        TTF_Font * font = TTF_OpenFont( "assets/font/Roboto-Bold.ttf", 24 );
         if ( !font ) {
             std::cout << "Failed to load font: " << TTF_GetError() << std::endl;
             return false;
         }
-
         fonts[static_cast<int>( StandardFont::REGULAR )] = font;
+
+        font = TTF_OpenFont( "assets/font/Deutsch Gothic.ttf", 32 );
+        if ( !font ) {
+            std::cout << "Failed to load font: " << TTF_GetError() << std::endl;
+            return false;
+        }
         fonts[static_cast<int>( StandardFont::REGULAR_BOLD )] = font;
 
-        font = TTF_OpenFont( "Deutsch Gothic.ttf", 72 );
+        font = TTF_OpenFont( "assets/font/Deutsch Gothic.ttf", 72 );
         if ( !font ) {
             std::cout << "Failed to load font: " << TTF_GetError() << std::endl;
             return false;
