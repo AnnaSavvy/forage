@@ -174,4 +174,17 @@ namespace Genetics
 
         return ( acid & ~mask ) | newValue;
     }
+
+    uint16_t EncodeBinary( uint8_t binaryValue )
+    {
+        const uint16_t left = ( binaryValue << 8 ) & 0xF00;
+        const uint16_t right = ( binaryValue >> 4 ) & 0xF;
+        return left | right;
+    }
+
+    uint8_t DecodeBinary( uint16_t twoAcids )
+    {
+        const uint8_t left = ( twoAcids >> 4 ) & 0xF0;
+        return left | ( twoAcids & 0xF );
+    }
 }

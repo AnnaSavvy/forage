@@ -31,6 +31,12 @@
     <Filter Include="Source Files\gamemodes">
       <UniqueIdentifier>{c5b4ca24-6d44-4aea-b139-cdb582683fd1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\genetics">
+      <UniqueIdentifier>{34cbe77f-0a58-437a-a590-22ce0add8a57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\genetics">
+      <UniqueIdentifier>{e9630e48-7695-413b-a615-9b05585c6a00}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -83,6 +89,18 @@
     </ClCompile>
     <ClCompile Include="src\game_mainmenu.cpp">
       <Filter>Source Files\gamemodes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game_strategic.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\genetics.cpp">
+      <Filter>Source Files\genetics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\genetics_protein.cpp">
+      <Filter>Source Files\genetics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\genetics_chromosome.cpp">
+      <Filter>Source Files\genetics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -169,6 +187,21 @@
     </ClInclude>
     <ClInclude Include="src\gamemode.h">
       <Filter>Header Files\gamemodes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gene.h">
+      <Filter>Header Files\genetics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\genetics.h">
+      <Filter>Header Files\genetics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\genetics_chromosome.h">
+      <Filter>Header Files\genetics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\genetics_protein.h">
+      <Filter>Header Files\genetics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\genome.h">
+      <Filter>Header Files\genetics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

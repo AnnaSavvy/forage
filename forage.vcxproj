@@ -149,6 +149,8 @@
     <ClCompile Include="src\game_mainmenu.cpp" />
     <ClCompile Include="src\game_strategic.cpp" />
     <ClCompile Include="src\genetics.cpp" />
+    <ClCompile Include="src\genetics_chromosome.cpp" />
+    <ClCompile Include="src\genetics_protein.cpp" />
     <ClCompile Include="src\logger.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\map.cpp" />

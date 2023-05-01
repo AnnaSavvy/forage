@@ -1,6 +1,8 @@
 #pragma once
 #include "genetics.h"
 
+#include <vector>
+
 namespace Genetics
 {
     enum class Proteome
@@ -18,7 +20,14 @@ namespace Genetics
         NONE
     };
 
-    // Not including splicing variants
+    // Not supporting splicing variants
     class Protein
-    {};
+    {
+        Proteome type = Proteome::INVALID_PROTEIN;
+        ProteinFunction function = ProteinFunction::NONE;
+        std::vector<AminoAcid> sequence;
+
+    public:
+        Protein( const std::vector<GeneticCode> mRNA, GeneticCode ignore );
+    };
 }

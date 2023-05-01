@@ -145,4 +145,6 @@ namespace Genetics
     uint8_t EncodeAminoAcid( AminoAcid acid );
     uint8_t ExtractNucleotide( uint8_t acid, uint8_t position );
     uint8_t ChangeNucleotide( uint8_t acid, uint8_t position, Nucleotide value );
+    uint16_t EncodeBinary( uint8_t binaryValue );
+    uint8_t DecodeBinary( uint16_t twoAcids );
 };
