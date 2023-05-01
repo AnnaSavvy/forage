@@ -148,6 +148,7 @@
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\game_mainmenu.cpp" />
     <ClCompile Include="src\game_strategic.cpp" />
+    <ClCompile Include="src\genetics.cpp" />
     <ClCompile Include="src\logger.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\map.cpp" />
@@ -173,6 +174,11 @@
     <ClInclude Include="src\game_campaign.h" />
     <ClInclude Include="src\game_mainmenu.h" />
     <ClInclude Include="src\game_strategic.h" />
+    <ClInclude Include="src\genetics.h" />
+    <ClInclude Include="src\gene.h" />
+    <ClInclude Include="src\genetics_chromosome.h" />
+    <ClInclude Include="src\genetics_protein.h" />
+    <ClInclude Include="src\genome.h" />
     <ClInclude Include="src\input.h" />
     <ClInclude Include="src\json.hpp" />
     <ClInclude Include="src\logger.h" />
