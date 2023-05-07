@@ -1,6 +1,8 @@
 #include "genetics.h"
 
+#include <array>
 #include <cassert>
+#include <utility>
 
 namespace Genetics
 {
@@ -186,5 +188,41 @@ namespace Genetics
     {
         const uint8_t left = ( twoAcids >> 4 ) & 0xF0;
         return left | ( twoAcids & 0xF );
+    }
+
+    const AminoAcidProperties & GetAminoAcidProperties( AminoAcid acid )
+    {
+        static std::array<AminoAcidProperties, std::to_underlying( AminoAcid::NON_GENETIC_ACID )> library = { {
+            { ChemicalCompound::Aliphatic, ChemicalPolarity::NONPOLAR, 89, 1.8 }, // Alanine
+            { ChemicalCompound::Thiol, ChemicalPolarity::BASE, 121, 2.5 }, // Cysteine
+            { ChemicalCompound::Anion, ChemicalPolarity::ACID, 133, -3.5 }, // Aspartate
+            { ChemicalCompound::Anion, ChemicalPolarity::ACID, 147, -3.5 }, // Glutamate
+            { ChemicalCompound::Aromatic, ChemicalPolarity::NONPOLAR, 165, 2.8 }, // Phenylalanine
+            { ChemicalCompound::Aliphatic, ChemicalPolarity::NONPOLAR, 75, -0.4 }, // Glycine
+            { ChemicalCompound::Aromatic, ChemicalPolarity::BASE, 155, -3.2 }, // Histidine, can be considered acidic/cation sometimes
+            { ChemicalCompound::Aliphatic, ChemicalPolarity::NONPOLAR, 131, 4.5 }, // Isoleucine
+            { ChemicalCompound::Cation, ChemicalPolarity::BASE, 146, -3.9 }, // Lysine
+            { ChemicalCompound::Aliphatic, ChemicalPolarity::NONPOLAR, 131, 3.8 }, // Leucine
+            { ChemicalCompound::Thioether, ChemicalPolarity::NONPOLAR, 149, 1.9 }, // Methionine
+            { ChemicalCompound::Amide, ChemicalPolarity::POLAR, 132, -3.5 }, // Asparagine
+            { ChemicalCompound::Cation, ChemicalPolarity::BASE, 255, -3.5 }, // Pyrrolysine, non-essential rare; similar to Lysine
+            { ChemicalCompound::Cyclic, ChemicalPolarity::NONPOLAR, 115, -1.6 }, // Proline
+            { ChemicalCompound::Amide, ChemicalPolarity::POLAR, 146, -3.5 }, // Glutamine
+            { ChemicalCompound::Cation, ChemicalPolarity::BASE, 174, -4.5 }, // Arginine
+            { ChemicalCompound::Hydroxylic, ChemicalPolarity::POLAR, 105, -0.8 }, // Serine
+            { ChemicalCompound::Hydroxylic, ChemicalPolarity::POLAR, 119, -0.7 }, // Threonine
+            { ChemicalCompound::Thiol, ChemicalPolarity::ACID, 168, 2.1 }, // Selenocysteine, rare but stronger than Cysteine
+            { ChemicalCompound::Aliphatic, ChemicalPolarity::NONPOLAR, 117, 4.2 }, // Valine
+            { ChemicalCompound::Aromatic, ChemicalPolarity::NONPOLAR, 204, -0.9 }, // Tryptophan
+            { ChemicalCompound::Aromatic, ChemicalPolarity::BASE, 181, -1.3 }, // Tyrosine
+            { ChemicalCompound::Anion, ChemicalPolarity::ACID, 147, -3.5 } // STOP_Ochre, Glutamate again
+        } };
+
+        const uint8_t index = std::to_underlying( acid );
+        if ( index < library.size() ) {
+            return library[index];
+        }
+
+        return AminoAcidProperties();
     }
 }

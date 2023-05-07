@@ -25,6 +25,28 @@
  *
  */
 
+enum class ChemicalPolarity
+{
+    NONPOLAR = 0,
+    POLAR,
+    BASE,
+    ACID,
+};
+
+enum class ChemicalCompound
+{
+    Aliphatic = 0,
+    Amide,
+    Anion,
+    Aromatic,
+    Cation,
+    Cyclic,
+    Hydroxylic,
+    Thioether,
+    Thiol,
+    Unknown
+};
+
 namespace Genetics
 {
 
@@ -45,8 +67,8 @@ namespace Genetics
         Glutamate, // E,
         Phenylalanine, // F
         Glycine, // G
-        Isoleucine, // I
         Histidine, // H
+        Isoleucine, // I
         Lysine, // K
         Leucine, // L
         Methionine, // M, sequence start
@@ -64,6 +86,14 @@ namespace Genetics
         STOP_Ochre, // E, not an amino acid, can be turned into Glutamate
 
         NON_GENETIC_ACID
+    };
+
+    struct AminoAcidProperties
+    {
+        ChemicalCompound type = ChemicalCompound::Unknown;
+        ChemicalPolarity polarity = ChemicalPolarity::NONPOLAR;
+        uint32_t molecularMass = 100;
+        double hydropathy = 0.0;
     };
 
     enum GeneticCode : uint8_t
@@ -147,4 +177,5 @@ namespace Genetics
     uint8_t ChangeNucleotide( uint8_t acid, uint8_t position, Nucleotide value );
     uint16_t EncodeBinary( uint8_t binaryValue );
     uint8_t DecodeBinary( uint16_t twoAcids );
+    const AminoAcidProperties & GetAminoAcidProperties( AminoAcid acid );
 };
