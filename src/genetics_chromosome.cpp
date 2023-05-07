@@ -69,7 +69,7 @@ namespace Genetics
         gametes[0].crossingOver( gametes[1] );
         gametes[2].crossingOver( gametes[3] );
 
-        std::uniform_int_distribution<std::mt19937::result_type> distribution( 1, 4 );
+        std::uniform_int_distribution<std::mt19937::result_type> distribution( 0, 3 );
         const uint32_t choice = distribution( dev );
 
         return gametes[choice];
