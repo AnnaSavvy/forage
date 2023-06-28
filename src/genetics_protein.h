@@ -68,6 +68,7 @@ namespace Genetics
         INVALID_PROTEIN
     };
 
+    // Depends on tertiary structure or how protein folds (two Cysteine AA connecting)
     enum class ProteinFunction
     {
         SYNTHESIS,
@@ -77,6 +78,16 @@ namespace Genetics
         STRUCTURE,
         DAMAGE,
         NONE
+    };
+
+    enum class ProteinSecondaryStructure
+    {
+
+        HELIX, // methionine, alanine, leucine, glutamate and lysine
+        BETA_STRAND, // large aromatic residues (tryptophan, tyrosine and phenylalanine) and Cb-branched amino acids (isoleucine, valine, and threonine)
+        BEND, // Proline and glycine
+        HAIRPIN,
+        LOOP,
     };
 
     // Not supporting splicing variants
