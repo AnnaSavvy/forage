@@ -159,6 +159,7 @@
     <ClCompile Include="src\point.cpp" />
     <ClCompile Include="src\renderer.cpp" />
     <ClCompile Include="src\input.cpp" />
+    <ClCompile Include="src\spell.cpp" />
     <ClCompile Include="src\static.cpp" />
     <ClCompile Include="src\tournament.cpp" />
     <ClCompile Include="src\ui.cpp" />
@@ -171,6 +172,7 @@
     <ClInclude Include="src\asset_loader.h" />
     <ClInclude Include="src\audio_manager.h" />
     <ClInclude Include="src\base_game.h" />
+    <ClInclude Include="src\character.h" />
     <ClInclude Include="src\game.h" />
     <ClInclude Include="src\gamemode.h" />
     <ClInclude Include="src\game_battle.h" />
@@ -191,6 +193,7 @@
     <ClInclude Include="src\point.h" />
     <ClInclude Include="src\renderer.h" />
     <ClInclude Include="src\resource.h" />
+    <ClInclude Include="src\spell.h" />
     <ClInclude Include="src\static.h" />
     <ClInclude Include="src\tournament.h" />
     <ClInclude Include="src\types.h" />
