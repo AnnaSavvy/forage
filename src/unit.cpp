@@ -61,7 +61,7 @@ const std::string & Villager::getName() const
 
 void Villager::update()
 {
-    const auto & tasksData = getStaticData()["tasks"];
+    const auto & tasksData = GetStaticData( DataFileName::GENERIC_DATA )["tasks"];
     const size_t taskID = static_cast<size_t>( task );
 
     if ( taskID >= tasksData.size() ) {
