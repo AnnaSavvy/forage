@@ -1,12 +1,7 @@
 #include "wave_function.h"
-#include <random>
 #include <iostream>
 
-namespace
-{
-    std::random_device dev;
-    std::mt19937 rng( dev() );
-}
+#include "rng.h"
 
 std::vector<int> WaveTile::getPossibilities() const
 {
@@ -140,8 +135,8 @@ bool WaveMap::place( size_t index )
         tile.type = possible[0];
     }
     else {
-        std::uniform_int_distribution<std::mt19937::result_type> distribution( 1, possible.size() );
-        tile.type = possible[distribution( dev ) - 1];
+        const uint32_t id = RandomGenerator::Get().next( 0, possible.size() - 1 );
+        tile.type = possible[id];
     }
 
     for ( size_t adjacent : getAdjacent6( index ) ) {

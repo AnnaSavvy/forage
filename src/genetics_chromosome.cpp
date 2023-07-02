@@ -1,18 +1,12 @@
 #include "genetics_chromosome.h"
-
-#include <random>
-
-namespace
-{
-    std::random_device dev;
-    std::mt19937 rng( dev() );
-}
+#include "rng.h"
 
 namespace Genetics
 {
     void Chromosome::crossingOver( Chromosome & other )
     {
-        std::uniform_int_distribution<std::mt19937::result_type> where( 0, 1 );
+        const uint32_t where = RandomGenerator::Get().next( 0, 1 );
+
         size_t totalLength = genes.size();
         if ( totalLength == other.genes.size() ) {
             auto itFrom = genes.begin();
@@ -25,8 +19,7 @@ namespace Genetics
                     break;
                 }
 
-                std::uniform_int_distribution<std::mt19937::result_type> distribution( 0, leftoverLength );
-                const size_t chunkLength = distribution( dev );
+                const size_t chunkLength = RandomGenerator::Get().next( 0, leftoverLength );
                 if ( chunkLength == 0 ) {
                     continue;
                 }
@@ -69,8 +62,7 @@ namespace Genetics
         gametes[0].crossingOver( gametes[1] );
         gametes[2].crossingOver( gametes[3] );
 
-        std::uniform_int_distribution<std::mt19937::result_type> distribution( 0, 3 );
-        const uint32_t choice = distribution( dev );
+        const uint32_t choice = RandomGenerator::Get().next( 0, 3 );
 
         return gametes[choice];
     }
