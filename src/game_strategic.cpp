@@ -37,6 +37,7 @@ GameModeName ModeStrategicView::handleEvents()
             }
             else if ( _bEndTurn.getRect().contains( mouseClick ) ) {
                 // trigger update
+                return GameModeName::CANCEL;
             }
         }
         return name;

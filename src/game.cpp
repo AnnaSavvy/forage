@@ -27,25 +27,25 @@ bool Game::init()
 
 void Game::handleEvents()
 {
-    const GameModeName next = _currentMode->handleEvents();
-    if ( next == _currentMode->getName() ) {
+    auto currentMode = _modeStack.top();
+    const GameModeName next = currentMode->handleEvents();
+    if ( next == currentMode->getName() ) {
         return;
     }
 
     switch ( next ) {
     case GameModeName::CANCEL:
-        // pop the stack?
+        _modeStack.pop();
         break;
     case GameModeName::QUIT_GAME:
         _isRunning = false;
         break;
     case GameModeName::MAIN_MENU:
-        _currentMode.reset();
-        _currentMode = std::make_shared<ModeMainMenu>();
+        _modeStack = {}; // clear
+        _modeStack.push( std::make_shared<ModeMainMenu>());
         break;
     case GameModeName::NEW_GAME:
-        _currentMode.reset();
-        _currentMode = std::make_shared<ModeStrategicView>();
+        _modeStack.push( std::make_shared<ModeStrategicView>() );
         break;
     case GameModeName::LOAD_GAME:
         break;
@@ -70,7 +70,7 @@ void Game::run()
 
     Uint32 previousTime = SDL_GetTicks();
 
-    _currentMode = std::make_shared<ModeMainMenu>();
+    _modeStack.push( std::make_shared<ModeMainMenu>() );
 
     while ( _isRunning ) {
         Uint32 currentTime = SDL_GetTicks();
@@ -90,7 +90,7 @@ void Game::run()
 
 void Game::update( float deltaTime )
 {
-    _currentMode->update( deltaTime );
+    _modeStack.top()->update( deltaTime );
 }
 
 void Game::render()
@@ -100,7 +100,7 @@ void Game::render()
     SDL_RenderClear( renderer );
 
     // Render game objects here
-    _currentMode->render();
+    _modeStack.top()->render();
 
     SDL_RenderPresent( renderer );
 }

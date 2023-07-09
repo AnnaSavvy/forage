@@ -7,6 +7,8 @@
 #include "mapview.h"
 #include "wave_function.h"
 
+#include <stack>
+
 class GameMode;
 
 class Game : public BaseGame
@@ -15,7 +17,7 @@ class Game : public BaseGame
 
     // Add any additional game state variables or components here
     WaveMap _map;
-    std::shared_ptr<GameMode> _currentMode = nullptr;
+    std::stack<std::shared_ptr<GameMode> > _modeStack;
 
 public:
     Game();
