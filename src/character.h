@@ -1,6 +1,7 @@
 #pragma once
 #include "point.h"
 #include "spell.h"
+#include <cassert>
 
 namespace RPG
 {
@@ -25,7 +26,6 @@ namespace RPG
     {
         Point position;
         int currentHealth = 0;
-        int maxHealth = 0;
     };
 
     class Character : protected Unit
@@ -46,16 +46,16 @@ namespace RPG
             MAGIC_MENTAL,
             MAGIC_DIVINITY,
 
-            INVALID
+            INVALID_SKILL
         };
 
         Stats stats;
-        int skills[INVALID] = {0};
+        int skills[INVALID_SKILL] = { 0 };
         int level = 0;
 
         int getSpeed() const
         {
-            return 100 + stats.agility + stats.dexterity;
+            return 100 + ( stats.agility + stats.dexterity ) / 2;
         }
 
         int getAttackCount( bool isRanged ) const
@@ -76,8 +76,11 @@ namespace RPG
             return 1 + ( stats.intelligence + stats.perception ) / 20;
         }
 
-        double calcMagicSuccessChance( Spell skill, int power ) const {
-
+        double calcMagicSuccessChance( Spell spell, int power ) const
+        {
+            const int difficulty = spell.level * 20 + power * 10;
+            const int skill = skills[WIZARDRY] + getRealmSkill( spell.realm );
+            return skill / difficulty;
         }
 
         int getCurrentHealth() const
@@ -90,8 +93,15 @@ namespace RPG
             return 1 + ( stats.vitality / 6 + 1 ) * level;
         }
 
-        bool isDead() const {
+        bool isDead() const
+        {
             return currentHealth <= 0;
+        }
+
+        int getRealmSkill( Spell::Realm realm ) const
+        {
+            assert( MAGIC_FIRE + realm < INVALID_SKILL );
+            return skills[MAGIC_FIRE + realm];
         }
 
         bool recieveDamage( AttackSource source, int damage )

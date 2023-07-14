@@ -114,6 +114,9 @@
     <ClCompile Include="src\rng.cpp">
       <Filter>Source Files\engine</Filter>
     </ClCompile>
+    <ClCompile Include="src\rpg_generation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\unit.h">
@@ -223,6 +226,9 @@
     </ClInclude>
     <ClInclude Include="src\rng.h">
       <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rpg_generation.h">
+      <Filter>Header Files\rpg</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

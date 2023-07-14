@@ -135,8 +135,7 @@ bool WaveMap::place( size_t index )
         tile.type = possible[0];
     }
     else {
-        const uint32_t id = RandomGenerator::Get().next( 0, possible.size() - 1 );
-        tile.type = possible[id];
+        tile.type = RandomGenerator::Get().randomElement( possible );
     }
 
     for ( size_t adjacent : getAdjacent6( index ) ) {
