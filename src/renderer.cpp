@@ -55,6 +55,11 @@ SDL_Renderer * RenderEngine::GetRenderer()
     return _renderer;
 }
 
+Point RenderEngine::GetScreenSize()
+{
+    return Point( 1024, 1024 );
+}
+
 RenderEngine & RenderEngine::Get()
 {
     return engine;

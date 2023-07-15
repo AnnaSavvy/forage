@@ -17,6 +17,7 @@ class RenderEngine
 public:
     bool Initialize();
     SDL_Renderer * GetRenderer();
+    static Point GetScreenSize();
     static RenderEngine & Get();
 
     static bool Draw( const std::string & image, const Rect & target );

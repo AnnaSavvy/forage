@@ -2,8 +2,12 @@
 #include "input.h"
 #include "renderer.h"
 
+#include "rpg_generation.h"
+#include <iostream>
+
 ModeMainMenu::ModeMainMenu()
-    : _backgroundMap( 100 )
+    : _backgroundMap( 30 )
+    , _mapView( true )
     , _title( { 200, 150 }, "Best Damn Game", StandardFont::MENU_HUGE_TITLE, StandardColor::WHITE )
     , _bNewGame( 400, 500, 270, 80, "New Game" )
     , _bLoadGame( 400, 600, 270, 80, "Load Game" )
@@ -37,6 +41,7 @@ GameModeName ModeMainMenu::handleEvents()
                 return GameModeName::NEW_GAME;
             }
             else if ( _bLoadGame.getRect().contains( mouseClick ) ) {
+                std::cout << RPG::Generator::GetCharacterName() << std::endl;
                 return GameModeName::LOAD_GAME;
             }
             else if ( _bOptions.getRect().contains( mouseClick ) ) {
