@@ -1,5 +1,7 @@
 #include "game.h"
 #include "asset_loader.h"
+#include "game_battle.h"
+#include "game_build_calc.h"
 #include "game_mainmenu.h"
 #include "game_strategic.h"
 #include "map.h"
@@ -48,6 +50,12 @@ void Game::handleEvents()
         _modeStack.push( std::make_shared<ModeStrategicView>() );
         break;
     case GameModeName::LOAD_GAME:
+        break;
+    case GameModeName::BATTLE:
+        _modeStack.push( std::make_shared<ModeBattle>() );
+        break;
+    case GameModeName::BUILD_CALCULATOR:
+        _modeStack.push( std::make_shared<ModeBuildCalculator>() );
         break;
     case GameModeName::OPTIONS_SCREEN:
         break;
