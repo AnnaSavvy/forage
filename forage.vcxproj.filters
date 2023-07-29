@@ -123,6 +123,9 @@
     <ClCompile Include="src\unit.cpp">
       <Filter>Source Files\test</Filter>
     </ClCompile>
+    <ClCompile Include="src\rpg_arena.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\object.h">
@@ -241,6 +244,9 @@
     </ClInclude>
     <ClInclude Include="src\unit.h">
       <Filter>Header Files\experimental</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rpg_arena.h">
+      <Filter>Header Files\rpg</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

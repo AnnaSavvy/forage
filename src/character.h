@@ -24,6 +24,7 @@ namespace RPG
 
     struct Unit
     {
+        int id = 0;
         Point position;
         int currentHealth = 0;
     };
@@ -52,6 +53,12 @@ namespace RPG
         Stats stats;
         int skills[INVALID_SKILL] = { 0 };
         int level = 0;
+
+    public:
+
+        int getId() const {
+            return id;
+        }
 
         int getSpeed() const
         {
@@ -125,4 +132,6 @@ namespace RPG
             return false;
         }
     };
+
+    using CharacterRef = std::reference_wrapper<Character>;
 }
