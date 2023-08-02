@@ -31,6 +31,7 @@ namespace RPG
 
     class Character : protected Unit
     {
+    public:
         enum Skills
         {
             CLOSE_COMBAT,
@@ -50,6 +51,8 @@ namespace RPG
             INVALID_SKILL
         };
 
+    private:
+
         Stats stats;
         int skills[INVALID_SKILL] = { 0 };
         int level = 0;
@@ -60,7 +63,7 @@ namespace RPG
             return id;
         }
 
-        int getSpeed() const
+        int getInitiative() const
         {
             return 100 + ( stats.agility + stats.dexterity ) / 2;
         }
