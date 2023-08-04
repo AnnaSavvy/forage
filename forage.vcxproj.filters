@@ -124,7 +124,7 @@
       <Filter>Source Files\test</Filter>
     </ClCompile>
     <ClCompile Include="src\rpg_arena.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\rpg</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

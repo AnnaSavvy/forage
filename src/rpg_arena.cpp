@@ -7,13 +7,13 @@ namespace RPG
 {
     bool Force::add( CharacterRef character, Position pos )
     {
-        chars.emplace_back( pos, character );
+        units.emplace_back( pos, character );
         return true;
     }
 
     bool Force::switchPosition( const CharacterRef character, Position to )
     {
-        for ( auto & [position, unit] : chars ) {
+        for ( auto & [position, unit] : units ) {
             if ( unit.getId() == character.get().getId() ) {
                 position = to;
                 return true;
@@ -22,12 +22,33 @@ namespace RPG
         return false;
     }
 
-    std::vector<BattleUnitRef> Force::getCharacters( Position pos )
+    bool Force::isAnyAlive() const
+    {
+        for ( auto & [position, unit] : units ) {
+            if ( !unit.isDead() ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    std::vector<BattleUnitRef> Force::modifyCharacters( Position pos )
     {
         std::vector<BattleUnitRef> retval;
-        for ( auto & [position, character] : chars ) {
+        for ( auto & [position, character] : units ) {
             if ( pos == Force::ALL || pos == position ) {
                 retval.push_back( character );
+            }
+        }
+        return retval;
+    }
+
+    std::vector<std::reference_wrapper<const BattleUnit> > Force::getCharacters( Position pos ) const
+    {
+        std::vector<std::reference_wrapper<const BattleUnit> > retval;
+        for ( auto & [position, character] : units ) {
+            if ( pos == Force::ALL || pos == position ) {
+                retval.emplace_back( character );
             }
         }
         return retval;
@@ -79,10 +100,10 @@ namespace RPG
         auto compare = []( BattleUnitRef a, BattleUnitRef b ) { return a.get().getInitiative() < b.get().getInitiative(); };
         std::priority_queue<BattleUnitRef, std::vector<BattleUnitRef>, decltype( compare )> initiativeList( compare );
 
-        for ( BattleUnitRef atk : attackers.getCharacters( Force::ALL ) ) {
+        for ( BattleUnitRef atk : attackers.modifyCharacters( Force::ALL ) ) {
             initiativeList.push( atk );
         }
-        for ( BattleUnitRef atk : defenders.getCharacters( Force::ALL ) ) {
+        for ( BattleUnitRef atk : defenders.modifyCharacters( Force::ALL ) ) {
             initiativeList.push( atk );
         }
 
@@ -96,6 +117,11 @@ namespace RPG
 
     bool Arena::checkIfCombatEnded() const
     {
-        return false;
+        return attackers.isAnyAlive() && defenders.isAnyAlive();
+    }
+
+    Action BattleUnit::getAction() const
+    {
+        return Action();
     }
 }

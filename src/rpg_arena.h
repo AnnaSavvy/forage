@@ -44,12 +44,14 @@ namespace RPG
 
     private:
 
-        std::vector<std::pair<Position, BattleUnit> > chars;
+        std::vector<std::pair<Position, BattleUnit> > units;
 
     public:
         bool add( CharacterRef character, Position pos = FRONT );
         bool switchPosition( const CharacterRef character, Position to = FRONT );
-        std::vector<BattleUnitRef> getCharacters( Position pos );
+        bool isAnyAlive() const;
+        std::vector<BattleUnitRef> modifyCharacters( Position pos );
+        std::vector<std::reference_wrapper<const BattleUnit>> getCharacters( Position pos ) const;
     };
 
     class Arena
