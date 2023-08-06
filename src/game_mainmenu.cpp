@@ -41,7 +41,7 @@ GameModeName ModeMainMenu::handleEvents()
                 return GameModeName::LOAD_GAME;
             }
             else if ( _bOptions.getRect().contains( mouseClick ) ) {
-                return GameModeName::BUILD_CALCULATOR;
+                return GameModeName::BATTLE;
             }
             else if ( _bQuitGame.getRect().contains( mouseClick ) ) {
                 return GameModeName::QUIT_GAME;

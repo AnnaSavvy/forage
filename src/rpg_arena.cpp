@@ -57,10 +57,15 @@ namespace RPG
     bool Arena::executeTurn()
     {
         auto list = getInitiativeList();
-        if ( list.empty() )
+        if ( list.empty() ) {
             return false;
+        }
 
-        return executeAction( list[0].get().getAction() );
+        for ( BattleUnitRef unit : list ) {
+            executeAction( unit.get().getAction() );
+        }
+
+        return true;
     }
 
     bool Arena::executeAction( Action action )
