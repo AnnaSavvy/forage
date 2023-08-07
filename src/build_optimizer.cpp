@@ -21,21 +21,36 @@ namespace BuildOrder
         case BuildOrder::Builders:
         case BuildOrder::Library:
             return 60;
+        case BuildOrder::Stables:
+        case BuildOrder::Armory:
+            return 80;
         case BuildOrder::Sawmill:
         case BuildOrder::Marketplace:
         case BuildOrder::Farmers:
+        case BuildOrder::Shrine:
             return 100;
         case BuildOrder::Sages:
             return 120;
         case BuildOrder::Foresters:
+        case BuildOrder::Temple:
+        case BuildOrder::Figthers:
             return 200;
         case BuildOrder::Bank:
+        case BuildOrder::Alchemists:
             return 250;
         case BuildOrder::Miners:
         case BuildOrder::University:
+        case BuildOrder::Animists:
             return 300;
+        case BuildOrder::Parthenon:
+        case BuildOrder::Armorers:
+            return 400;
         case BuildOrder::Mechanicians:
             return 600;
+        case BuildOrder::Cathedral:
+            return 800;
+        case BuildOrder::Wizards:
+            return 1000;
         default:
             break;
         }
@@ -50,22 +65,89 @@ namespace BuildOrder
         case BuildOrder::Builders:
         case BuildOrder::Library:
         case BuildOrder::Marketplace:
+        case BuildOrder::Shrine:
             return 1;
         case BuildOrder::Sawmill:
         case BuildOrder::Farmers:
         case BuildOrder::Sages:
         case BuildOrder::Foresters:
+        case BuildOrder::Temple:
+        case BuildOrder::Stables:
+        case BuildOrder::Armory:
             return 2;
         case BuildOrder::Bank:
         case BuildOrder::Miners:
         case BuildOrder::University:
+        case BuildOrder::Parthenon:
+        case BuildOrder::Alchemists:
+        case BuildOrder::Figthers:
             return 3;
+        case BuildOrder::Cathedral:
+        case BuildOrder::Armorers:
+            return 4;
         case BuildOrder::Mechanicians:
+        case BuildOrder::Wizards:
+        case BuildOrder::Animists:
             return 5;
         default:
             break;
         }
         return 0;
+    }
+
+    std::string City::GetBuildingName( Building building )
+    {
+        switch ( building ) {
+        case BuildOrder::Sawmill:
+            return "Sawmill";
+        case BuildOrder::Foresters:
+            return "Foresters";
+        case BuildOrder::Smithy:
+            return "Smithy";
+        case BuildOrder::Marketplace:
+            return "Marketplace";
+        case BuildOrder::Builders:
+            return "Builders";
+        case BuildOrder::Miners:
+            return "Miners";
+        case BuildOrder::Granary:
+            return "Granary";
+        case BuildOrder::Farmers:
+            return "Farmers";
+        case BuildOrder::Library:
+            return "Library";
+        case BuildOrder::Sages:
+            return "Sages";
+        case BuildOrder::University:
+            return "University";
+        case BuildOrder::Mechanicians:
+            return "Mechanicians";
+        case BuildOrder::Bank:
+            return "Bank";
+        case BuildOrder::Shrine:
+            return "Shrine";
+        case BuildOrder::Temple:
+            return "Temple";
+        case BuildOrder::Parthenon:
+            return "Parthenon";
+        case BuildOrder::Cathedral:
+            return "Cathedral";
+        case BuildOrder::Alchemists:
+            return "Alchemists";
+        case BuildOrder::Wizards:
+            return "Wizards";
+        case BuildOrder::Stables:
+            return "Stables";
+        case BuildOrder::Animists:
+            return "Animists";
+        case BuildOrder::Armory:
+            return "Armory";
+        case BuildOrder::Figthers:
+            return "Figthers";
+        case BuildOrder::Armorers:
+            return "Armorers";
+        }
+        return "Unknown";
     }
 
     bool City::hasBuilding( Building requirement ) const
@@ -104,7 +186,7 @@ namespace BuildOrder
         if ( hasBuilding( Farmers ) ) {
             bonus += 3;
         }
-        return ( ceilDivision( getMaxPopulation() - population, 2 ) + bonus ) * 10;
+        return std::max( 0, ( ceilDivision( getMaxPopulation() - population, 2 ) + bonus ) * 10 );
     }
 
     int City::getProductionRate() const
@@ -120,7 +202,8 @@ namespace BuildOrder
             bonusFood += 2;
         }
         // subsistence farming only; can't be negative
-        const int farmers = ( bonusFood > population ) ? 0 : ceilDivision( population - bonusFood, 2 );
+        const int foodPerFarmer = hasBuilding( Animists ) ? 3 : 2;
+        const int farmers = ( bonusFood > population ) ? 0 : ceilDivision( population - bonusFood, foodPerFarmer );
         const int baseProduction = ceilDivision( farmers, 2 ) + ( population - farmers ) * 2;
 
         int modifier = 100 + landProduction;
@@ -172,6 +255,24 @@ namespace BuildOrder
         if ( hasBuilding( University ) ) {
             power += 5;
         }
+        if ( hasBuilding( Shrine ) ) {
+            power += 1;
+        }
+        if ( hasBuilding( Temple ) ) {
+            power += 2;
+        }
+        if ( hasBuilding( Parthenon ) ) {
+            power += 3;
+        }
+        if ( hasBuilding( Cathedral ) ) {
+            power += 4;
+        }
+        if ( hasBuilding( Alchemists ) ) {
+            power += 3;
+        }
+        if ( hasBuilding( Wizards ) ) {
+            power += 5;
+        }
         return power;
     }
 
@@ -197,6 +298,20 @@ namespace BuildOrder
     std::string HistoryRecord::toString() const
     {
         std::ostringstream os;
+        if ( buildCompleted ) {
+            os << "Building " << City::GetBuildingName( currentOrder ) << " complete!" << std::endl;
+        }
+        else {
+            os << "City growth event!" << std::endl;
+        }
+
+        os << "turn      : " << turn << std::endl
+           << "population: " << exactPopulation << " (+" << growthRate << ")" << std::endl
+           << "progress  : " << productionProgress << "/" << City::GetBuildingCost( currentOrder ) << std::endl
+           << "totalProd : " << totalProduction << " (+" << productionRate << ")" << std::endl
+           << "totalGold : " << totalIncome << " (" << income << ")" << std::endl
+           << "totalPower: " << totalPower << " (" << power << ")" << std::endl;
+
         return os.str();
     }
 

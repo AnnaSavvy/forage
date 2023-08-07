@@ -19,7 +19,18 @@ namespace BuildOrder
         Sages,
         University,
         Mechanicians,
-        Bank
+        Bank,
+        Shrine,
+        Temple,
+        Parthenon,
+        Cathedral,
+        Alchemists,
+        Wizards,
+        Stables,
+        Animists,
+        Armory,
+        Figthers,
+        Armorers,
     };
 
     struct City
@@ -48,6 +59,7 @@ namespace BuildOrder
 
         static int GetBuildingCost( Building building );
         static int GetBuildingMaintanence( Building building );
+        static std::string GetBuildingName( Building building );
     };
 
     struct HistoryRecord
