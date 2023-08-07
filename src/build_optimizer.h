@@ -21,6 +21,33 @@ namespace BuildOrder
         Bank
     };
 
+    struct City
+    {
+        std::vector<Building> buildings;
+
+        // based on starting conditions (land surveying)
+        int landPopulation = 20;
+        int landProduction = 0;
+        int landGold = 0;
+        int racialUnrest = 0; // percentage
+        int racialGrowth = 0;
+        int taxCollectionMode = 0; // gold per population / 2 with unrest
+
+        int population = 1; // in thousands
+        int overflowGrowth = 0; // 000s
+        int overflowProduction = 0;
+
+        bool hasBuilding( Building requirement ) const;
+        int getMaxPopulation() const;
+        int getGrowthRate() const;
+        int getProductionRate() const;
+        int getGoldIncome() const;
+        int getPowerIncome() const;
+
+        static int GetBuildingCost( Building building );
+        static int GetBuildingMaintanence( Building building );
+    };
+
     struct HistoryRecord
     {
         int turn = 1;
@@ -37,45 +64,21 @@ namespace BuildOrder
         int totalProduction = 0;
         int totalIncome = 0;
         int totalPower = 0;
-    };
 
-    struct City
-    {
-        std::vector<Building> buildings;
-
-        // based on starting conditions (land surveying)
-        int landPopulation = 20;
-        int landProduction = 0;
-        int landGold = 0;
-        int racialUnrest = 0; // percentage
-        int racialGrowth = 0;
-        int taxCollectionMode = 0; // gold per population / 2 with unrest
-
-        int population = 1; // in thousands
-        int popOverflow = 0; // 000s
-        int maintanence = 0;
-
-        bool hasBuilding( Building requirement ) const;
-        int getMaxPopulation() const;
-        int getGrowthRate() const;
-        int getProductionRate() const;
-        int getGoldIncome() const;
-
-        static int GetBuildingCost( Building building );
-        static int GetBuildingMaintanence( Building building );
+        HistoryRecord() = default;
+        HistoryRecord( const HistoryRecord & previous, City city );
     };
 
     class Optimizer
     {
         City city;
-        int currentTurn = 1;
 
     public:
         Optimizer( City target )
             : city( target )
         {}
 
-        HistoryRecord nextEvent( Building nextOrder );
+        HistoryRecord nextEvent( Building nextOrder, const HistoryRecord & previous );
         std::vector<HistoryRecord> executeBuildOrder( std::vector<Building> buildOrder );
     };
 }
