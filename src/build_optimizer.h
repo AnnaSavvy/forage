@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include <vector>
 
 namespace BuildOrder
@@ -39,6 +40,7 @@ namespace BuildOrder
 
         bool hasBuilding( Building requirement ) const;
         int getMaxPopulation() const;
+        int getExactPopulation() const;
         int getGrowthRate() const;
         int getProductionRate() const;
         int getGoldIncome() const;
@@ -53,9 +55,12 @@ namespace BuildOrder
         int turn = 1;
 
         // current state
-        Building completed = None;
-        int population = 1;
-        int production = 0;
+        bool buildCompleted = false;
+        Building currentOrder = None;
+        int exactPopulation = 1000;
+        int growthRate = 0;
+        int productionProgress = 0;
+        int productionRate = 0;
         int income = 0;
         int power = 0;
 
@@ -65,8 +70,11 @@ namespace BuildOrder
         int totalIncome = 0;
         int totalPower = 0;
 
-        HistoryRecord() = default;
-        HistoryRecord( const HistoryRecord & previous, City city );
+        HistoryRecord() = delete;
+        HistoryRecord( City city );
+        HistoryRecord( City city, const HistoryRecord & previous );
+
+        std::string toString() const;
     };
 
     class Optimizer

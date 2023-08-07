@@ -1,5 +1,7 @@
 #include "build_optimizer.h"
 
+#include <sstream>
+
 namespace BuildOrder
 {
     int ceilDivision( int dividend, int divisor )
@@ -88,6 +90,11 @@ namespace BuildOrder
         return max;
     }
 
+    int City::getExactPopulation() const
+    {
+        return population * 1000 + overflowGrowth;
+    }
+
     int City::getGrowthRate() const
     {
         int bonus = racialGrowth;
@@ -97,7 +104,7 @@ namespace BuildOrder
         if ( hasBuilding( Farmers ) ) {
             bonus += 3;
         }
-        return ceilDivision( getMaxPopulation() - population, 2 ) + bonus;
+        return ( ceilDivision( getMaxPopulation() - population, 2 ) + bonus ) * 10;
     }
 
     int City::getProductionRate() const
@@ -168,25 +175,38 @@ namespace BuildOrder
         return power;
     }
 
-    HistoryRecord::HistoryRecord( const HistoryRecord & previous, City city )
+    HistoryRecord::HistoryRecord( City city )
+    {
+        buildings = city.buildings;
+        exactPopulation = city.getExactPopulation();
+        growthRate = city.getGrowthRate();
+        productionRate = city.getProductionRate();
+        income = city.getGoldIncome();
+        power = city.getPowerIncome();
+    }
+
+    HistoryRecord::HistoryRecord( City city, const HistoryRecord & previous )
+        : HistoryRecord( city )
     {
         turn = previous.turn;
         totalProduction = previous.totalProduction;
         totalIncome = previous.totalIncome;
         totalPower = previous.totalPower;
+    }
 
-        buildings = city.buildings;
-        population = city.population;
-        production = city.getProductionRate();
-        income = city.getGoldIncome();
-        power = city.getPowerIncome();
+    std::string HistoryRecord::toString() const
+    {
+        std::ostringstream os;
+        return os.str();
     }
 
     HistoryRecord Optimizer::nextEvent( Building nextOrder, const HistoryRecord & previous )
     {
-        HistoryRecord record( previous, city );
+        HistoryRecord record( city, previous );
+        record.currentOrder = nextOrder;
+
         if ( city.hasBuilding( nextOrder ) ) {
-            record.completed = nextOrder;
+            record.buildCompleted = true;
             return record;
         }
 
@@ -194,7 +214,7 @@ namespace BuildOrder
         const int productivity = city.getProductionRate();
         const int turnsToCompletion = ceilDivision( buildingCost, productivity );
 
-        const int growth = city.getGrowthRate() * 10;
+        const int growth = city.getGrowthRate();
         const int popRequired = std::max( 0, 1000 - city.overflowGrowth );
         const int turnsToGrow = ceilDivision( popRequired, growth );
 
@@ -202,10 +222,10 @@ namespace BuildOrder
         const int produced = productivity * turnsPassed;
 
         // Save global statistics
-        record.turn += turnsToCompletion;
+        record.turn += turnsPassed;
         record.totalProduction += produced;
-        record.totalIncome = city.getGoldIncome() * turnsPassed;
-        record.totalPower = city.getPowerIncome() * turnsPassed;
+        record.totalIncome += city.getGoldIncome() * turnsPassed;
+        record.totalPower += city.getPowerIncome() * turnsPassed;
 
         city.overflowGrowth += turnsPassed * growth;
         // Check if city population increases
@@ -215,8 +235,8 @@ namespace BuildOrder
         }
 
         // Complete the building construction
-        if ( city.overflowProduction >= produced ) {
-            record.completed = nextOrder;
+        if ( produced >= buildingCost ) {
+            record.buildCompleted = true;
             record.buildings = city.buildings;
             city.buildings.emplace_back( nextOrder );
             // does not carry over to the next order
@@ -226,7 +246,10 @@ namespace BuildOrder
             city.overflowProduction += produced;
         }
 
-        record.production = city.getProductionRate();
+        record.exactPopulation = city.getExactPopulation();
+        record.growthRate = city.getGrowthRate();
+        record.productionProgress = city.overflowProduction;
+        record.productionRate = city.getProductionRate();
         record.income = city.getGoldIncome();
         record.power = city.getPowerIncome();
 
@@ -235,7 +258,8 @@ namespace BuildOrder
 
     std::vector<HistoryRecord> Optimizer::executeBuildOrder( std::vector<Building> buildOrder )
     {
-        HistoryRecord startEvent;
+        HistoryRecord startEvent( city );
+
         std::vector<HistoryRecord> history = { startEvent };
 
         auto currentOrder = buildOrder.begin();
@@ -243,7 +267,7 @@ namespace BuildOrder
             auto event = nextEvent( *currentOrder, history.back() );
             history.emplace_back( event );
 
-            if ( event.completed == *currentOrder ) {
+            if ( event.buildCompleted && event.currentOrder == *currentOrder ) {
                 currentOrder++;
             }
         }
