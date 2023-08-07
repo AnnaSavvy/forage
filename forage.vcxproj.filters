@@ -22,9 +22,6 @@
     <Filter Include="Header Files\experimental">
       <UniqueIdentifier>{dab54e06-9b5b-484c-aab8-269418dc15e9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\test">
-      <UniqueIdentifier>{275f88ef-defc-47e2-99b4-1959c996f870}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\gamemodes">
       <UniqueIdentifier>{9953dc1d-0653-441a-b18e-df2a73298160}</UniqueIdentifier>
     </Filter>
@@ -43,6 +40,9 @@
     <Filter Include="Source Files\rpg">
       <UniqueIdentifier>{59a048cd-e8bc-4a02-85d3-5370d59d987d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\experimental">
+      <UniqueIdentifier>{275f88ef-defc-47e2-99b4-1959c996f870}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -52,13 +52,13 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\wave_function.cpp">
-      <Filter>Source Files\test</Filter>
+      <Filter>Source Files\experimental</Filter>
     </ClCompile>
     <ClCompile Include="src\village.cpp">
-      <Filter>Source Files\test</Filter>
+      <Filter>Source Files\experimental</Filter>
     </ClCompile>
     <ClCompile Include="src\tournament.cpp">
-      <Filter>Source Files\test</Filter>
+      <Filter>Source Files\experimental</Filter>
     </ClCompile>
     <ClCompile Include="src\logger.cpp">
       <Filter>Source Files\engine</Filter>
@@ -121,10 +121,13 @@
       <Filter>Source Files\engine</Filter>
     </ClCompile>
     <ClCompile Include="src\unit.cpp">
-      <Filter>Source Files\test</Filter>
+      <Filter>Source Files\experimental</Filter>
     </ClCompile>
     <ClCompile Include="src\rpg_arena.cpp">
       <Filter>Source Files\rpg</Filter>
+    </ClCompile>
+    <ClCompile Include="src\build_optimizer.cpp">
+      <Filter>Source Files\experimental</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -247,6 +250,9 @@
     </ClInclude>
     <ClInclude Include="src\rpg_arena.h">
       <Filter>Header Files\rpg</Filter>
+    </ClInclude>
+    <ClInclude Include="src\build_optimizer.h">
+      <Filter>Header Files\experimental</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
