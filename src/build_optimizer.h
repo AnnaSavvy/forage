@@ -56,6 +56,7 @@ namespace BuildOrder
         int getProductionRate() const;
         int getGoldIncome() const;
         int getPowerIncome() const;
+        int getUnrest() const;
 
         static int GetBuildingCost( Building building );
         static int GetBuildingMaintanence( Building building );
@@ -75,6 +76,8 @@ namespace BuildOrder
         int productionRate = 0;
         int income = 0;
         int power = 0;
+        int unrest = 0;
+        int lostProduction = 0;
 
         // accumulated state
         std::vector<Building> buildings;
@@ -94,11 +97,20 @@ namespace BuildOrder
         City city;
 
     public:
-        Optimizer( City target )
+        Optimizer( const City & target )
             : city( target )
         {}
 
-        HistoryRecord nextEvent( Building nextOrder, const HistoryRecord & previous );
+        void reset( const City & newTarget )
+        {
+            city = newTarget;
+        }
+
+        HistoryRecord nextEvent( Building nextOrder, const HistoryRecord & previous, bool includePopGrowth = true );
         std::vector<HistoryRecord> executeBuildOrder( std::vector<Building> buildOrder );
+        std::vector<HistoryRecord> findBestBuild( std::vector<Building> buildOrder, const City & target );
+
+        static void PrintFullHistory( const std::vector<HistoryRecord> & history );
+        static void PrintResult( const std::vector<HistoryRecord> & history );
     };
 }

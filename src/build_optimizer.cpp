@@ -2,6 +2,8 @@
 
 #include <sstream>
 
+#include <iostream>
+
 namespace BuildOrder
 {
     int ceilDivision( int dividend, int divisor )
@@ -204,7 +206,8 @@ namespace BuildOrder
         // subsistence farming only; can't be negative
         const int foodPerFarmer = hasBuilding( Animists ) ? 3 : 2;
         const int farmers = ( bonusFood > population ) ? 0 : ceilDivision( population - bonusFood, foodPerFarmer );
-        const int baseProduction = ceilDivision( farmers, 2 ) + ( population - farmers ) * 2;
+        const int workers = std::max( 0, population - farmers - getUnrest() );
+        const int baseProduction = ceilDivision( farmers, 2 ) + workers * 2;
 
         int modifier = 100 + landProduction;
         if ( hasBuilding( Sawmill ) ) {
@@ -276,6 +279,34 @@ namespace BuildOrder
         return power;
     }
 
+    int City::getUnrest() const
+    {
+        int unrestReduction = 2; // garrison or spells
+        if ( hasBuilding( Shrine ) ) {
+            unrestReduction += 1;
+        }
+        if ( hasBuilding( Temple ) ) {
+            unrestReduction += 1;
+        }
+        if ( hasBuilding( Parthenon ) ) {
+            unrestReduction += 1;
+        }
+        if ( hasBuilding( Cathedral ) ) {
+            unrestReduction += 1;
+        }
+        if ( hasBuilding( Animists ) ) {
+            unrestReduction += 1;
+        }
+
+        int taxModifier = taxCollectionMode * 10;
+        if ( taxModifier > 3 ) {
+            taxModifier += ( taxCollectionMode - 3 ) * 5;
+        }
+        const int unrest = population * taxModifier / 100 - unrestReduction;
+
+        return std::max( 0, unrest );
+    }
+
     HistoryRecord::HistoryRecord( City city )
     {
         buildings = city.buildings;
@@ -293,6 +324,7 @@ namespace BuildOrder
         totalProduction = previous.totalProduction;
         totalIncome = previous.totalIncome;
         totalPower = previous.totalPower;
+        lostProduction = previous.lostProduction;
     }
 
     std::string HistoryRecord::toString() const
@@ -307,6 +339,7 @@ namespace BuildOrder
 
         os << "turn      : " << turn << std::endl
            << "population: " << exactPopulation << " (+" << growthRate << ")" << std::endl
+           << "unrest    : " << lostProduction << " (" << unrest << ")" << std::endl
            << "progress  : " << productionProgress << "/" << City::GetBuildingCost( currentOrder ) << std::endl
            << "totalProd : " << totalProduction << " (+" << productionRate << ")" << std::endl
            << "totalGold : " << totalIncome << " (" << income << ")" << std::endl
@@ -315,7 +348,7 @@ namespace BuildOrder
         return os.str();
     }
 
-    HistoryRecord Optimizer::nextEvent( Building nextOrder, const HistoryRecord & previous )
+    HistoryRecord Optimizer::nextEvent( Building nextOrder, const HistoryRecord & previous, bool includePopGrowth )
     {
         HistoryRecord record( city, previous );
         record.currentOrder = nextOrder;
@@ -333,12 +366,13 @@ namespace BuildOrder
         const int popRequired = std::max( 0, 1000 - city.overflowGrowth );
         const int turnsToGrow = ceilDivision( popRequired, growth );
 
-        const int turnsPassed = std::min( turnsToCompletion, turnsToGrow );
+        const int turnsPassed = includePopGrowth ? std::min( turnsToCompletion, turnsToGrow ) : turnsToCompletion;
         const int produced = productivity * turnsPassed;
 
         // Save global statistics
         record.turn += turnsPassed;
         record.totalProduction += produced;
+        record.lostProduction += city.getUnrest() * 2 * turnsPassed;
         record.totalIncome += city.getGoldIncome() * turnsPassed;
         record.totalPower += city.getPowerIncome() * turnsPassed;
 
@@ -367,6 +401,7 @@ namespace BuildOrder
         record.productionRate = city.getProductionRate();
         record.income = city.getGoldIncome();
         record.power = city.getPowerIncome();
+        record.unrest = city.getUnrest();
 
         return record;
     }
@@ -379,7 +414,7 @@ namespace BuildOrder
 
         auto currentOrder = buildOrder.begin();
         while ( currentOrder != buildOrder.end() ) {
-            auto event = nextEvent( *currentOrder, history.back() );
+            auto event = nextEvent( *currentOrder, history.back(), false );
             history.emplace_back( event );
 
             if ( event.buildCompleted && event.currentOrder == *currentOrder ) {
@@ -388,5 +423,23 @@ namespace BuildOrder
         }
 
         return history;
+    }
+
+    std::vector<HistoryRecord> Optimizer::findBestBuild( std::vector<Building> buildOrder, const City & target )
+    {
+        return std::vector<HistoryRecord>();
+    }
+
+    void Optimizer::PrintFullHistory( const std::vector<HistoryRecord> & history )
+    {
+        for ( auto record : history ) {
+            std::cout << "==================================" << std::endl;
+            std::cout << record.toString() << std::endl;
+        }
+    }
+
+    void Optimizer::PrintResult( const std::vector<HistoryRecord> & history )
+    {
+        std::cout << history.back().toString() << std::endl;
     }
 }
