@@ -94,20 +94,9 @@ namespace BuildOrder
 
     class Optimizer
     {
-        City city;
-
     public:
-        Optimizer( const City & target )
-            : city( target )
-        {}
-
-        void reset( const City & newTarget )
-        {
-            city = newTarget;
-        }
-
-        HistoryRecord nextEvent( Building nextOrder, const HistoryRecord & previous, bool includePopGrowth = true );
-        std::vector<HistoryRecord> executeBuildOrder( std::vector<Building> buildOrder );
+        HistoryRecord nextEvent( City & target, Building nextOrder, const HistoryRecord & previous );
+        std::vector<HistoryRecord> executeBuildOrder( const City & target, std::vector<Building> buildOrder );
         std::vector<HistoryRecord> findBestBuild( std::vector<Building> buildOrder, const City & target );
 
         static void PrintFullHistory( const std::vector<HistoryRecord> & history );

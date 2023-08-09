@@ -348,73 +348,74 @@ namespace BuildOrder
         return os.str();
     }
 
-    HistoryRecord Optimizer::nextEvent( Building nextOrder, const HistoryRecord & previous, bool includePopGrowth )
+    HistoryRecord Optimizer::nextEvent( City & target, Building nextOrder, const HistoryRecord & previous )
     {
-        HistoryRecord record( city, previous );
+        HistoryRecord record( target, previous );
         record.currentOrder = nextOrder;
 
-        if ( city.hasBuilding( nextOrder ) ) {
+        if ( target.hasBuilding( nextOrder ) ) {
             record.buildCompleted = true;
             return record;
         }
 
-        const int buildingCost = City::GetBuildingCost( nextOrder ) - city.overflowProduction;
-        const int productivity = city.getProductionRate();
+        const int buildingCost = City::GetBuildingCost( nextOrder ) - target.overflowProduction;
+        const int productivity = target.getProductionRate();
         const int turnsToCompletion = ceilDivision( buildingCost, productivity );
 
-        const int growth = city.getGrowthRate();
-        const int popRequired = std::max( 0, 1000 - city.overflowGrowth );
+        const int growth = target.getGrowthRate();
+        const int popRequired = std::max( 0, 1000 - target.overflowGrowth );
         const int turnsToGrow = ceilDivision( popRequired, growth );
 
-        const int turnsPassed = includePopGrowth ? std::min( turnsToCompletion, turnsToGrow ) : turnsToCompletion;
+        const int turnsPassed = std::min( turnsToCompletion, turnsToGrow );
         const int produced = productivity * turnsPassed;
 
         // Save global statistics
         record.turn += turnsPassed;
         record.totalProduction += produced;
-        record.lostProduction += city.getUnrest() * 2 * turnsPassed;
-        record.totalIncome += city.getGoldIncome() * turnsPassed;
-        record.totalPower += city.getPowerIncome() * turnsPassed;
+        record.lostProduction += target.getUnrest() * 2 * turnsPassed;
+        record.totalIncome += target.getGoldIncome() * turnsPassed;
+        record.totalPower += target.getPowerIncome() * turnsPassed;
 
-        city.overflowGrowth += turnsPassed * growth;
+        target.overflowGrowth += turnsPassed * growth;
         // Check if city population increases
-        while ( city.overflowGrowth >= 1000 ) {
-            city.overflowGrowth -= 1000;
-            city.population++;
+        while ( target.overflowGrowth >= 1000 ) {
+            target.overflowGrowth -= 1000;
+            target.population++;
         }
 
         // Complete the building construction
         if ( produced >= buildingCost ) {
             record.buildCompleted = true;
-            record.buildings = city.buildings;
-            city.buildings.emplace_back( nextOrder );
+            record.buildings = target.buildings;
+            target.buildings.emplace_back( nextOrder );
             // does not carry over to the next order
-            city.overflowProduction = 0;
+            target.overflowProduction = 0;
         }
         else {
-            city.overflowProduction += produced;
+            target.overflowProduction += produced;
         }
 
-        record.exactPopulation = city.getExactPopulation();
-        record.growthRate = city.getGrowthRate();
-        record.productionProgress = city.overflowProduction;
-        record.productionRate = city.getProductionRate();
-        record.income = city.getGoldIncome();
-        record.power = city.getPowerIncome();
-        record.unrest = city.getUnrest();
+        record.exactPopulation = target.getExactPopulation();
+        record.growthRate = target.getGrowthRate();
+        record.productionProgress = target.overflowProduction;
+        record.productionRate = target.getProductionRate();
+        record.income = target.getGoldIncome();
+        record.power = target.getPowerIncome();
+        record.unrest = target.getUnrest();
 
         return record;
     }
 
-    std::vector<HistoryRecord> Optimizer::executeBuildOrder( std::vector<Building> buildOrder )
+    std::vector<HistoryRecord> Optimizer::executeBuildOrder( const City & target, std::vector<Building> buildOrder )
     {
+        City city = target;
         HistoryRecord startEvent( city );
 
         std::vector<HistoryRecord> history = { startEvent };
 
         auto currentOrder = buildOrder.begin();
         while ( currentOrder != buildOrder.end() ) {
-            auto event = nextEvent( *currentOrder, history.back(), false );
+            auto event = nextEvent( city, *currentOrder, history.back() );
             history.emplace_back( event );
 
             if ( event.buildCompleted && event.currentOrder == *currentOrder ) {

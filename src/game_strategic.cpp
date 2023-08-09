@@ -51,14 +51,12 @@ ModeStrategicView::ModeStrategicView()
             BuildOrder::Temple,     BuildOrder::Mechanicians, BuildOrder::Bank,    BuildOrder::Parthenon, BuildOrder::Cathedral,
             BuildOrder::Alchemists, BuildOrder::Wizards,      BuildOrder::Armory,  BuildOrder::Stables,   BuildOrder::Animists };
 
-    BuildOrder::Optimizer optimizer( city );
-    optimizer.PrintResult( optimizer.executeBuildOrder( buildOrder1 ) );
+    BuildOrder::Optimizer optimizer;
+    optimizer.PrintResult( optimizer.executeBuildOrder( city, buildOrder1 ) );
 
-    optimizer.reset( city );
-    optimizer.PrintResult( optimizer.executeBuildOrder( buildOrder2 ) );
+    optimizer.PrintResult( optimizer.executeBuildOrder( city, buildOrder2 ) );
 
-    optimizer.reset( city );
-    optimizer.PrintFullHistory( optimizer.executeBuildOrder( buildOrder3 ) );
+    optimizer.PrintFullHistory( optimizer.executeBuildOrder( city, buildOrder3 ) );
 }
 
 GameModeName ModeStrategicView::handleEvents()
