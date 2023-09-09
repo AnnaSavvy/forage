@@ -43,6 +43,9 @@
     <Filter Include="Source Files\experimental">
       <UniqueIdentifier>{275f88ef-defc-47e2-99b4-1959c996f870}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\combat">
+      <UniqueIdentifier>{f1f14b46-9ccc-42ed-baa2-10ccafdb5c62}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -128,6 +131,9 @@
     </ClCompile>
     <ClCompile Include="src\build_optimizer.cpp">
       <Filter>Source Files\experimental</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL2_gfx.cpp">
+      <Filter>Source Files\engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -253,6 +259,12 @@
     </ClInclude>
     <ClInclude Include="src\build_optimizer.h">
       <Filter>Header Files\experimental</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rpg_base.h">
+      <Filter>Header Files\rpg</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SDL2_gfx.h">
+      <Filter>Header Files\engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
