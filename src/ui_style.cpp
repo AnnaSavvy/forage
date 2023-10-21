@@ -69,12 +69,12 @@ namespace StandardStyles
         }
         fonts[static_cast<int>( StandardFont::MENU_HUGE_TITLE )] = font;
 
-        colors[static_cast<int>( StandardColor::WHITE )] = { 255, 255, 255 };
-        colors[static_cast<int>( StandardColor::BLACK )] = { 0, 0, 0 };
-        colors[static_cast<int>( StandardColor::DARK_GREY )] = { 50, 47, 50 };
-        colors[static_cast<int>( StandardColor::DARK_RED )] = { 100, 0, 10 };
-        colors[static_cast<int>( StandardColor::DARK_BLUE )] = { 0, 20, 100 };
-        colors[static_cast<int>( StandardColor::HIGHLIGHT_RED )] = { 200, 40, 50 };
+        colors[static_cast<int>( StandardColor::WHITE )] = { 255, 255, 255, 255 };
+        colors[static_cast<int>( StandardColor::BLACK )] = { 0, 0, 0, 255 };
+        colors[static_cast<int>( StandardColor::DARK_GREY )] = { 50, 47, 50, 255 };
+        colors[static_cast<int>( StandardColor::DARK_RED )] = { 100, 0, 10, 255 };
+        colors[static_cast<int>( StandardColor::DARK_BLUE )] = { 0, 20, 100, 255 };
+        colors[static_cast<int>( StandardColor::HIGHLIGHT_RED )] = { 200, 40, 50, 255 };
 
         return true;
     }

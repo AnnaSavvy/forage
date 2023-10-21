@@ -193,8 +193,8 @@ namespace SDL
     int aaFilledEllipseRGBA( SDL_Renderer * renderer, float cx, float cy, float rx, float ry, Uint8 r, Uint8 g, Uint8 b, Uint8 a );
     int aaFilledPolygonColor( SDL_Renderer * renderer, const double * vx, const double * vy, int n, Uint32 color );
     int aaFilledPolygonRGBA( SDL_Renderer * renderer, const double * vx, const double * vy, int n, Uint8 r, Uint8 g, Uint8 b, Uint8 a );
-    int aaFilledPieColor( SDL_Renderer * renderer, float cx, float cy, float rx, float ry, float start, float end, Uint32 chord, Uint32 color );
-    int aaFilledPieRGBA( SDL_Renderer * renderer, float cx, float cy, float rx, float ry, float start, float end, Uint32 chord, Uint8 r, Uint8 g, Uint8 b, Uint8 a );
+    int aaFilledPieColor( SDL_Renderer * renderer, float cx, float cy, float rx, float ry, float start, float end, bool isChord, Uint32 color );
+    int aaFilledPieRGBA( SDL_Renderer * renderer, float cx, float cy, float rx, float ry, float start, float end, bool isChord, Uint8 r, Uint8 g, Uint8 b, Uint8 a );
 
     int aaArcColor( SDL_Renderer * renderer, float cx, float cy, float rx, float ry, float start, float end, float thick, Uint32 color );
     int aaArcRGBA( SDL_Renderer * renderer, float cx, float cy, float rx, float ry, float start, float end, float thick, Uint8 r, Uint8 g, Uint8 b, Uint8 a );

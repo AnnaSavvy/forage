@@ -30,8 +30,6 @@ Richard Russell -- richard at rtrussell dot co dot uk
 
 */
 
-#include <math.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -4678,7 +4676,7 @@ namespace SDL
     /
     \returns Returns 0 on success, -1 on failure.
     */
-    int aaFilledPieRGBA( SDL_Renderer * renderer, float cx, float cy, float rx, float ry, float start, float end, Uint32 chord, Uint8 r, Uint8 g, Uint8 b, Uint8 a )
+    int aaFilledPieRGBA( SDL_Renderer * renderer, float cx, float cy, float rx, float ry, float start, float end, bool isChord, Uint8 r, Uint8 g, Uint8 b, Uint8 a )
     {
         int nverts, i, result;
         double *vx, *vy;
@@ -4719,7 +4717,7 @@ namespace SDL
         vx[i] = cx;
         vy[i] = cy;
 
-        result = aaFilledPolygonRGBA( renderer, vx, vy, nverts + 1 - ( chord != 0 ), r, g, b, a );
+        result = aaFilledPolygonRGBA( renderer, vx, vy, nverts + 1 - ( isChord != 0 ), r, g, b, a );
 
         // Free combined vertex array
         free( vx );
@@ -4728,10 +4726,10 @@ namespace SDL
     }
 
     // returns Returns 0 on success, -1 on failure.
-    int aaFilledPieColor( SDL_Renderer * renderer, float cx, float cy, float rx, float ry, float start, float end, Uint32 chord, Uint32 color )
+    int aaFilledPieColor( SDL_Renderer * renderer, float cx, float cy, float rx, float ry, float start, float end, bool isChord, Uint32 color )
     {
         Uint8 * c = (Uint8 *)&color;
-        return aaFilledPieRGBA( renderer, cx, cy, rx, ry, start, end, chord, c[0], c[1], c[2], c[3] );
+        return aaFilledPieRGBA( renderer, cx, cy, rx, ry, start, end, isChord, c[0], c[1], c[2], c[3] );
     }
 
     /*!
