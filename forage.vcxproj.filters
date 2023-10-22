@@ -135,6 +135,9 @@
     <ClCompile Include="src\SDL2_gfx.cpp">
       <Filter>Source Files\engine</Filter>
     </ClCompile>
+    <ClCompile Include="src\chart.cpp">
+      <Filter>Source Files\engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\object.h">
@@ -264,6 +267,9 @@
       <Filter>Header Files\rpg</Filter>
     </ClInclude>
     <ClInclude Include="src\SDL2_gfx.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\chart.h">
       <Filter>Header Files\engine</Filter>
     </ClInclude>
   </ItemGroup>

@@ -168,13 +168,12 @@ bool RenderEngine::DrawDestroySurface( SDL_Surface * surface, const Rect & targe
     return success;
 }
 
-bool RenderEngine::DrawPieSlice( const Rect & target, double startAngle, double size, StandardColor color )
+bool RenderEngine::DrawPieSlice( const Rect & target, double startAngle, double endAngle, StandardColor color )
 {
     SDL_Color * pieColor = static_cast<SDL_Color *>( StandardStyles::getColor( color ) );
     if ( !pieColor ) {
         return false;
     }
-    const double endAngle = startAngle + size * 360;
     return SDL::aaFilledPieRGBA( engine._renderer, target._pos._x, target._pos._y, target._size._x, target._size._y, startAngle, endAngle, false, pieColor->r,
                                  pieColor->g, pieColor->b, pieColor->a )
            == 0;

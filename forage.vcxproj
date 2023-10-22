@@ -147,6 +147,7 @@
   <ItemGroup>
     <ClCompile Include="src\asset_loader.cpp" />
     <ClCompile Include="src\build_optimizer.cpp" />
+    <ClCompile Include="src\chart.cpp" />
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\game_battle.cpp" />
     <ClCompile Include="src\game_build_calc.cpp" />
@@ -181,6 +182,7 @@
     <ClInclude Include="src\base_game.h" />
     <ClInclude Include="src\build_optimizer.h" />
     <ClInclude Include="src\character.h" />
+    <ClInclude Include="src\chart.h" />
     <ClInclude Include="src\component.h" />
     <ClInclude Include="src\game.h" />
     <ClInclude Include="src\gamemode.h" />
