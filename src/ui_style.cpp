@@ -75,6 +75,15 @@ namespace StandardStyles
         colors[static_cast<int>( StandardColor::DARK_RED )] = { 100, 0, 10, 255 };
         colors[static_cast<int>( StandardColor::DARK_BLUE )] = { 0, 20, 100, 255 };
         colors[static_cast<int>( StandardColor::HIGHLIGHT_RED )] = { 200, 40, 50, 255 };
+        colors[static_cast<int>( StandardColor::REALM_LIFE )] = { 245, 242, 219, 255 };
+        colors[static_cast<int>( StandardColor::REALM_ARCANE )] = { 46, 40, 200, 255 };
+        colors[static_cast<int>( StandardColor::REALM_NATURE )] = { 0, 128, 46, 255 };
+        colors[static_cast<int>( StandardColor::REALM_CHAOS )] = { 204, 44, 4, 255 };
+        colors[static_cast<int>( StandardColor::REALM_DEATH )] = { 28, 6, 37, 255 };
+        colors[static_cast<int>( StandardColor::REALM_POWER )] = { 200, 40, 50, 255 };
+        colors[static_cast<int>( StandardColor::REALM_DEFENSE )] = { 200, 40, 50, 255 };
+        colors[static_cast<int>( StandardColor::REALM_SPEED )] = { 200, 40, 50, 255 };
+        colors[static_cast<int>( StandardColor::REALM_PRECISION )] = { 200, 40, 50, 255 };
 
         return true;
     }

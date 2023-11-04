@@ -20,6 +20,15 @@ enum class StandardColor : int
     DARK_RED,
     DARK_BLUE,
     HIGHLIGHT_RED,
+    REALM_LIFE,
+    REALM_ARCANE,
+    REALM_NATURE,
+    REALM_CHAOS,
+    REALM_DEATH,
+    REALM_POWER,
+    REALM_DEFENSE,
+    REALM_SPEED,
+    REALM_PRECISION,
     END,
 };
 

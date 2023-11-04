@@ -138,6 +138,9 @@
     <ClCompile Include="src\chart.cpp">
       <Filter>Source Files\engine</Filter>
     </ClCompile>
+    <ClCompile Include="src\game_options.cpp">
+      <Filter>Source Files\gamemodes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\object.h">
@@ -271,6 +274,9 @@
     </ClInclude>
     <ClInclude Include="src\chart.h">
       <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game_options.h">
+      <Filter>Header Files\gamemodes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,7 @@
 #include "game_mainmenu.h"
 #include "input.h"
 #include "renderer.h"
+#include "chart.h"
 
 ModeMainMenu::ModeMainMenu()
     : _backgroundMap( 100 )
@@ -41,7 +42,7 @@ GameModeName ModeMainMenu::handleEvents()
                 return GameModeName::LOAD_GAME;
             }
             else if ( _bOptions.getRect().contains( mouseClick ) ) {
-                return GameModeName::BATTLE;
+                return GameModeName::OPTIONS_SCREEN;
             }
             else if ( _bQuitGame.getRect().contains( mouseClick ) ) {
                 return GameModeName::QUIT_GAME;

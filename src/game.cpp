@@ -3,6 +3,7 @@
 #include "game_battle.h"
 #include "game_build_calc.h"
 #include "game_mainmenu.h"
+#include "game_options.h"
 #include "game_strategic.h"
 #include "map.h"
 #include "renderer.h"
@@ -58,6 +59,7 @@ void Game::handleEvents()
         _modeStack.push( std::make_shared<ModeBuildCalculator>() );
         break;
     case GameModeName::OPTIONS_SCREEN:
+        _modeStack.push( std::make_shared<ModeOptions>() );
         break;
     case GameModeName::HIGHSCORES:
         break;

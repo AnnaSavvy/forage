@@ -20,8 +20,10 @@ namespace Chart
     class Pie : public UIComponent
     {
     public:
+        Pie( const Point & center, const Point & size );
         Pie( const Point & center, const Point & size, const std::vector<DataPoint> & data );
 
+        void setData( const std::vector<DataPoint> & data );
         virtual void update( float deltaTime ) override {}
         virtual void render() override;
 
