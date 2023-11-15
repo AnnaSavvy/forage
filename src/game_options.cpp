@@ -9,20 +9,20 @@ ModeOptions::ModeOptions()
 {
     name = GameModeName::OPTIONS_SCREEN;
 
-    std::vector<Chart::DataPoint> magicalData;
-    magicalData.emplace_back( StandardColor::REALM_LIFE, 0.2 );
-    magicalData.emplace_back( StandardColor::REALM_ARCANE, 0.2 );
-    magicalData.emplace_back( StandardColor::REALM_DEATH, 0.2 );
-    magicalData.emplace_back( StandardColor::REALM_CHAOS, 0.2 );
-    magicalData.emplace_back( StandardColor::REALM_NATURE, 0.2 );
-    _realmPhysical.setData( magicalData );
-
     std::vector<Chart::DataPoint> physicalData;
     physicalData.emplace_back( StandardColor::REALM_POWER, 0.25 );
-    physicalData.emplace_back( StandardColor::REALM_DEFENSE, 0.25 );
-    physicalData.emplace_back( StandardColor::REALM_SPEED, 0.25 );
     physicalData.emplace_back( StandardColor::REALM_PRECISION, 0.25 );
-    _realmMagical.setData( physicalData );
+    physicalData.emplace_back( StandardColor::REALM_SPEED, 0.25 );
+    physicalData.emplace_back( StandardColor::REALM_DEFENSE, 0.25 );
+    _realmPhysical.setData( physicalData );
+
+    std::vector<Chart::DataPoint> magicalData;
+    magicalData.emplace_back( StandardColor::REALM_LIFE, 0.2, true );
+    magicalData.emplace_back( StandardColor::REALM_ARCANE, 0.2, false );
+    magicalData.emplace_back( StandardColor::REALM_DEATH, 0.2, true );
+    magicalData.emplace_back( StandardColor::REALM_CHAOS, 0.2, false );
+    magicalData.emplace_back( StandardColor::REALM_NATURE, 0.2, true );
+    _realmMagical.setData( magicalData );
 }
 
 GameModeName ModeOptions::handleEvents()
@@ -41,14 +41,16 @@ GameModeName ModeOptions::handleEvents()
     return GameModeName::QUIT_GAME;
 }
 
-void ModeOptions::update( float deltaTime ) {}
+void ModeOptions::update( float deltaTime ) {
+    _realmMagical.update( deltaTime );
+}
 
 void ModeOptions::render()
 {
     _title.render();
 
-    _realmPhysical.render();
     _realmMagical.render();
+    _realmPhysical.render();
 
     _bExit.render();
 }
