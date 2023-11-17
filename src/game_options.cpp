@@ -2,7 +2,7 @@
 #include "input.h"
 
 ModeOptions::ModeOptions()
-    : _title( { 50, 10 }, "Battle" )
+    : _title( { 50, 10 }, "Options" )
     , _bExit( 400, 800, 270, 80, "Return" )
     , _realmPhysical( { 200, 200 }, { 150, 150 } )
     , _realmMagical( { 600, 200 }, { 150, 150 } )
@@ -17,11 +17,11 @@ ModeOptions::ModeOptions()
     _realmPhysical.setData( physicalData );
 
     std::vector<Chart::DataPoint> magicalData;
-    magicalData.emplace_back( StandardColor::REALM_LIFE, 0.2, true );
+    magicalData.emplace_back( StandardColor::REALM_LIFE, 0.2, false );
     magicalData.emplace_back( StandardColor::REALM_ARCANE, 0.2, false );
-    magicalData.emplace_back( StandardColor::REALM_DEATH, 0.2, true );
+    magicalData.emplace_back( StandardColor::REALM_DEATH, 0.2, false );
     magicalData.emplace_back( StandardColor::REALM_CHAOS, 0.2, false );
-    magicalData.emplace_back( StandardColor::REALM_NATURE, 0.2, true );
+    magicalData.emplace_back( StandardColor::REALM_NATURE, 0.2, false );
     _realmMagical.setData( magicalData );
 }
 
@@ -34,6 +34,9 @@ GameModeName ModeOptions::handleEvents()
             const Point & mouseClick = input.getClickPosition();
             if ( _bExit.getRect().contains( mouseClick ) ) {
                 return GameModeName::CANCEL;
+            }
+            else if ( _realmMagical.getRect().contains(mouseClick ) ) {
+                _realmMagical.handleClick( mouseClick );
             }
         }
         return name;
