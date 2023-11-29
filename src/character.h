@@ -1,4 +1,5 @@
 #pragma once
+#include "character_class.h"
 #include "point.h"
 #include "spell.h"
 #include <cassert>
@@ -16,11 +17,34 @@ namespace RPG
         int strength = 0;
         int dexterity = 0;
         int agility = 0;
-        int vitality = 0;
-        int perception = 0;
+        int constitution = 0;
         int intelligence = 0;
-        int wisdom = 0;
+        int willpower = 0;
+        int charisma = 0;
     };
+
+    struct Skills
+    {
+        int combat = 0;
+        int ranged = 0;
+        int dodge = 0;
+        int block = 0;
+        int stealth = 0;
+
+        int life = 0;
+        int sorcery = 0;
+        int nature = 0;
+        int chaos = 0;
+        int death = 0;
+    };
+
+    struct Requirements
+    {
+        Stats stat;
+        Skills skill;
+    };
+
+    Requirements getRequirements( CharacterClass name );
 
     struct Unit
     {
@@ -35,11 +59,16 @@ namespace RPG
         enum Skills
         {
             CLOSE_COMBAT,
+            RANGED_COMBAT,
+            DODGE,
+            BLOCK,
             STEALTH,
 
-            WIZARDRY,
-            ALCHEMY,
-            DIVINITY,
+            LIFE,
+            ARCANA,
+            NATURE,
+            CHAOS,
+            DEATH,
 
             MAGIC_FIRE,
             MAGIC_WATER,
@@ -77,19 +106,19 @@ namespace RPG
 
         int getAttackDamage( bool isRanged ) const
         {
-            const int statValue = isRanged ? ( stats.strength + stats.perception ) / 2 : stats.strength;
+            const int statValue = isRanged ? ( stats.strength + stats.dexterity ) / 2 : stats.strength;
             return 1 + statValue / 10;
         }
 
         int getMagicDamage() const
         {
-            return 1 + ( stats.intelligence + stats.perception ) / 20;
+            return 1 + ( stats.intelligence + stats.willpower ) / 20;
         }
 
         double calcMagicSuccessChance( Spell spell, int power ) const
         {
             const int difficulty = spell.level * 20 + power * 10;
-            const int skill = skills[WIZARDRY] + getRealmSkill( spell.realm );
+            const int skill = skills[LIFE] + getRealmSkill( spell.realm );
             return skill / difficulty;
         }
 
@@ -100,7 +129,7 @@ namespace RPG
 
         int getMaxHealth() const
         {
-            return 1 + ( stats.vitality / 6 + 1 ) * level;
+            return 1 + ( stats.constitution / 6 + 1 ) * level;
         }
 
         bool isDead() const

@@ -141,6 +141,12 @@
     <ClCompile Include="src\game_options.cpp">
       <Filter>Source Files\gamemodes</Filter>
     </ClCompile>
+    <ClCompile Include="src\character_class.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\character.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\object.h">
@@ -277,6 +283,9 @@
     </ClInclude>
     <ClInclude Include="src\game_options.h">
       <Filter>Header Files\gamemodes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\character_class.h">
+      <Filter>Header Files\rpg</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
