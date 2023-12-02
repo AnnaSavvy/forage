@@ -31,6 +31,11 @@ bool Chart::Pie::handleClick( const Point & target )
     return false;
 }
 
+std::vector<Chart::DataPoint> & Chart::Pie::getData()
+{
+    return _data;
+}
+
 void Chart::Pie::setData( const std::vector<DataPoint> & data )
 {
     _data = data;

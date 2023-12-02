@@ -26,6 +26,7 @@ namespace Chart
         Pie( const Point & center, const Point & size, const std::vector<DataPoint> & data );
 
         bool handleClick( const Point & target );
+        std::vector<DataPoint> & getData();
         void setData( const std::vector<DataPoint> & data );
         virtual void update( float deltaTime ) override;
         virtual void render() override;
