@@ -57,9 +57,11 @@ namespace BuildOrder
         int getGoldIncome() const;
         int getPowerIncome() const;
         int getUnrest() const;
+        std::vector<Building> getAvailableBuildings() const;
 
         static int GetBuildingCost( Building building );
         static int GetBuildingMaintanence( Building building );
+        static std::vector<Building> GetBuildingPrerequisites( Building building );
         static std::string GetBuildingName( Building building );
     };
 
@@ -97,7 +99,7 @@ namespace BuildOrder
     public:
         HistoryRecord nextEvent( City & target, Building nextOrder, const HistoryRecord & previous );
         std::vector<HistoryRecord> executeBuildOrder( const City & target, std::vector<Building> buildOrder );
-        std::vector<HistoryRecord> findBestBuild( std::vector<Building> buildOrder, const City & target );
+        std::vector<HistoryRecord> findBestBuild( const City & target, const HistoryRecord & previous );
 
         static void PrintFullHistory( const std::vector<HistoryRecord> & history );
         static void PrintResult( const std::vector<HistoryRecord> & history );

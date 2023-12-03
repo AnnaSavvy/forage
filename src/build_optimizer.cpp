@@ -97,6 +97,54 @@ namespace BuildOrder
         return 0;
     }
 
+    std::vector<Building> City::GetBuildingPrerequisites( Building building )
+    {
+        switch ( building ) {
+        case BuildOrder::Foresters:
+            return { BuildOrder::Sawmill };
+        case BuildOrder::Granary:
+        case BuildOrder::Library:
+        case BuildOrder::Miners:
+        case BuildOrder::Shrine:
+            return { BuildOrder::Builders };
+        case BuildOrder::Stables:
+        case BuildOrder::Armory:
+        case BuildOrder::Marketplace:
+            return { BuildOrder::Smithy };
+        case BuildOrder::Farmers:
+            return { BuildOrder::Granary, BuildOrder::Marketplace };
+        case BuildOrder::Sages:
+            return { BuildOrder::Library };
+        case BuildOrder::Alchemists:
+        case BuildOrder::University:
+            return { BuildOrder::Sages };
+        case BuildOrder::Temple:
+            return { BuildOrder::Shrine };
+        case BuildOrder::Parthenon:
+            return { BuildOrder::Temple };
+        case BuildOrder::Cathedral:
+            return { BuildOrder::Parthenon };
+        case BuildOrder::Bank:
+            return { BuildOrder::University, BuildOrder::Marketplace };
+        case BuildOrder::Mechanicians:
+            return { BuildOrder::University, BuildOrder::Miners };
+        case BuildOrder::Wizards:
+            return { BuildOrder::University, BuildOrder::Alchemists };
+        case BuildOrder::Animists:
+            return { BuildOrder::Stables, BuildOrder::Sages };
+        case BuildOrder::Figthers:
+            return { BuildOrder::Armory };
+        case BuildOrder::Armorers:
+            return { BuildOrder::Figthers };
+        case BuildOrder::Sawmill:
+        case BuildOrder::Smithy:
+        case BuildOrder::Builders:
+            // none
+            break;
+        }
+        return std::vector<Building>();
+    }
+
     std::string City::GetBuildingName( Building building )
     {
         switch ( building ) {
@@ -307,6 +355,32 @@ namespace BuildOrder
         return std::max( 0, unrest );
     }
 
+    std::vector<Building> City::getAvailableBuildings() const
+    {
+        std::vector<Building> list;
+
+        for ( int index = Sawmill; index <= Armorers; index++ ) {
+            Building building = static_cast<Building>( index );
+            if ( hasBuilding( building ) ) {
+                continue;
+            }
+
+            bool canBuild = true;
+            for ( auto prereq : GetBuildingPrerequisites( building ) ) {
+                if ( !hasBuilding( prereq ) ) {
+                    canBuild = false;
+                    break;
+                }
+            }
+
+            if ( canBuild ) {
+                list.push_back( building );
+            }
+        }
+
+        return list;
+    }
+
     HistoryRecord::HistoryRecord( City city )
     {
         buildings = city.buildings;
@@ -426,9 +500,47 @@ namespace BuildOrder
         return history;
     }
 
-    std::vector<HistoryRecord> Optimizer::findBestBuild( std::vector<Building> buildOrder, const City & target )
+    std::vector<HistoryRecord> Optimizer::findBestBuild( const City & target, const HistoryRecord & previous )
     {
-        return std::vector<HistoryRecord>();
+        static int globalCallNumber = 0;
+        int currentCall = globalCallNumber++;
+        std::vector<HistoryRecord> history;
+        std::vector<HistoryRecord> bestBuild;
+        int bestTurn = INT_MAX;
+
+        history.push_back( previous );
+
+        auto available = target.getAvailableBuildings();
+        std::cout << "Call #" << currentCall << ": starting at turn " << previous.turn << " build options " << available.size() << std::endl;
+
+        for ( auto build : available ) {
+            City city = target;
+
+            auto event = nextEvent( city, build, previous );
+            while ( !event.buildCompleted ) {
+                event = nextEvent( city, build, event );
+            }
+            //std::cout << ">> Call #" << currentCall << ": completed " << City::GetBuildingName( event.currentOrder ) << "; city buildings: " << city.buildings.size() << std::endl;
+
+            auto extra = findBestBuild( city, event );
+            if ( previous.turn == 1 ) {
+                std::cout << std::endl;
+            }
+
+            //std::cout << ">> Call #" << currentCall << ": city buildings: " << city.buildings.size() << std::endl;
+            if ( !extra.empty() && extra.back().turn < bestTurn ) {
+                bestTurn = extra.back().turn;
+                bestBuild = extra;
+            }
+        }
+
+        //std::cout << "Call #" << currentCall << ": collapsing, got " << bestBuild.size() << " events" << std::endl;
+
+        if ( !bestBuild.empty() ) {
+            history.insert( history.end(), bestBuild.begin(), bestBuild.end() );
+        }
+
+        return history;
     }
 
     void Optimizer::PrintFullHistory( const std::vector<HistoryRecord> & history )
