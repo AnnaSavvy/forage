@@ -14,6 +14,8 @@ class ModeBuildCalculator : public GameMode
     Label _charName;
     Button _bGenerateName;
 
+    std::vector<ProgressBar> skills;
+
 public:
     ModeBuildCalculator();
     virtual GameModeName handleEvents() override;

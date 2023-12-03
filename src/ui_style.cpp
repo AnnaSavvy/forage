@@ -69,6 +69,13 @@ namespace StandardStyles
         }
         fonts[static_cast<int>( StandardFont::MENU_HUGE_TITLE )] = font;
 
+        font = TTF_OpenFont( "assets/font/Roboto-Bold.ttf", 14 );
+        if ( !font ) {
+            std::cout << "Failed to load font: " << TTF_GetError() << std::endl;
+            return false;
+        }
+        fonts[static_cast<int>( StandardFont::SMALL )] = font;
+
         colors[static_cast<int>( StandardColor::WHITE )] = { 255, 255, 255, 255 };
         colors[static_cast<int>( StandardColor::BLACK )] = { 0, 0, 0, 255 };
         colors[static_cast<int>( StandardColor::DARK_GREY )] = { 50, 47, 50, 255 };

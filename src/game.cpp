@@ -48,9 +48,10 @@ void Game::handleEvents()
         _modeStack.push( std::make_shared<ModeMainMenu>());
         break;
     case GameModeName::NEW_GAME:
-        _modeStack.push( std::make_shared<ModeStrategicView>() );
+        _modeStack.push( std::make_shared<ModeBuildCalculator>() );
         break;
     case GameModeName::LOAD_GAME:
+        _modeStack.push( std::make_shared<ModeStrategicView>() );
         break;
     case GameModeName::BATTLE:
         _modeStack.push( std::make_shared<ModeBattle>() );

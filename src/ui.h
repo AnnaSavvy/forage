@@ -77,6 +77,23 @@ public:
     void setLabel( const std::string & label );
 };
 
+class ProgressBar : public UIComponent
+{
+public:
+    ProgressBar( const Rect & dimensions, int max, const Style & style );
+
+    void setValue( int newValue );
+    int getValue() const;
+
+    virtual void update( float deltaTime ) override {}
+    virtual void render() override;
+
+private:
+    Style _style;
+    int _value = 0;
+    int _maximum = 0;
+};
+
 // A basic menu element
 class Menu : public UIComponent
 {

@@ -9,6 +9,7 @@ enum class StandardFont : int
     REGULAR,
     REGULAR_BOLD,
     MENU_HUGE_TITLE,
+    SMALL,
     END,
 };
 

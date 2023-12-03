@@ -9,6 +9,16 @@ ModeBuildCalculator::ModeBuildCalculator()
     , _bGenerateName( 50, 130, 100, 50, "Generate" )
 {
     name = GameModeName::BUILD_CALCULATOR;
+
+    Style skillBarStyle;
+    skillBarStyle.font = StandardFont::REGULAR_BOLD;
+    skillBarStyle.textColor = StandardColor::WHITE;
+    skillBarStyle.backgroundColor = StandardColor::REALM_PRECISION;
+    skillBarStyle.borderColor = StandardColor::DARK_GREY;
+    skillBarStyle.borderWidth = 5;
+    skills.push_back( { { 150, 150, 200, 50 }, 100, skillBarStyle } );
+
+    skills[0].setValue( 50 );
 }
 
 GameModeName ModeBuildCalculator::handleEvents()
@@ -39,4 +49,8 @@ void ModeBuildCalculator::render()
 
     _charName.render();
     _bGenerateName.render();
+
+    for ( auto & elem : skills ) {
+        elem.render();
+    }
 }
