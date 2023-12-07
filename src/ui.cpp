@@ -186,6 +186,9 @@ ProgressBar::ProgressBar( const Rect & dimensions, int max, const Style & style 
 void ProgressBar::setValue( int newValue )
 {
     _value = newValue;
+    if ( _value > _maximum ) {
+        _value = _maximum;
+    }
 }
 
 int ProgressBar::getValue() const

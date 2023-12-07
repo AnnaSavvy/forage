@@ -1,24 +1,42 @@
 #include "game_build_calc.h"
 #include "input.h"
 #include "rpg_generation.h"
+#include "renderer.h"
 
 ModeBuildCalculator::ModeBuildCalculator()
     : _title( { 50, 10 }, "Character Builer" )
     , _bExit( 400, 800, 270, 80, "Return" )
-    , _charName( { 50, 80 }, "Unknown" )
-    , _bGenerateName( 50, 130, 100, 50, "Generate" )
+    , _charName( { RenderEngine::GetScreenSize()._x / 2, 80 }, "Unknown" )
+    , _bGenerateName( RenderEngine::GetScreenSize()._x / 2, 130, 100, 50, "Generate" )
 {
     name = GameModeName::BUILD_CALCULATOR;
 
     Style skillBarStyle;
-    skillBarStyle.font = StandardFont::REGULAR_BOLD;
+    skillBarStyle.font = StandardFont::SMALL;
     skillBarStyle.textColor = StandardColor::WHITE;
-    skillBarStyle.backgroundColor = StandardColor::REALM_PRECISION;
-    skillBarStyle.borderColor = StandardColor::DARK_GREY;
-    skillBarStyle.borderWidth = 5;
-    skills.push_back( { { 150, 150, 200, 50 }, 100, skillBarStyle } );
+    skillBarStyle.backgroundColor = StandardColor::DARK_GREY;
+    skillBarStyle.borderColor = StandardColor::REALM_PRECISION;
+    skillBarStyle.borderWidth = 2;
+    skillBarStyle.borderRadius = 5;
 
-    skills[0].setValue( 50 );
+    Style buttonStyle;
+    buttonStyle.font = StandardFont::REGULAR;
+    buttonStyle.textColor = StandardColor::WHITE;
+    buttonStyle.backgroundColor = StandardColor::DARK_GREY;
+    buttonStyle.borderColor = StandardColor::REALM_PRECISION;
+    buttonStyle.borderWidth = 2;
+
+
+    increase.push_back( { { 264, 200, 31, 31 }, "-", buttonStyle } );
+    skills.push_back( { { 300, 200, 200, 31 }, 100, skillBarStyle } );
+    increase.push_back( { { 505, 200, 31, 31 }, "+", buttonStyle } );
+
+    skills.push_back( { { 300, 250, 200, 31 }, 100, skillBarStyle } );
+    skills.push_back( { { 300, 300, 200, 31 }, 100, skillBarStyle } );
+    skills.push_back( { { 300, 350, 200, 31 }, 100, skillBarStyle } );
+    skills.push_back( { { 300, 400, 200, 31 }, 100, skillBarStyle } );
+    skills.push_back( { { 300, 450, 200, 31 }, 100, skillBarStyle } );
+    skills.push_back( { { 300, 500, 200, 31 }, 100, skillBarStyle } );
 }
 
 GameModeName ModeBuildCalculator::handleEvents()
@@ -34,6 +52,20 @@ GameModeName ModeBuildCalculator::handleEvents()
             else if ( _bGenerateName.getRect().contains( mouseClick ) ) {
                 _charName.setText( RPG::Generator::GetCharacterName() );
             }
+            else if ( increase[0].getRect().contains( mouseClick ) ) {
+                skills[0].setValue( skills[0].getValue() - 1 );
+            }
+            else if ( increase[1].getRect().contains( mouseClick ) ) {
+                skills[0].setValue( skills[0].getValue() + 1 );
+            }
+        }
+        else if ( input.isSet( InputHandler::UP ) ) {
+            skills[0].setValue( skills[0].getValue() + 1 );
+        }
+        else if ( input.isSet( InputHandler::DOWN ) ) {
+            if ( skills[0].getValue() > 0 ) {
+                skills[0].setValue( skills[0].getValue() - 1 );
+            }
         }
         return name;
     }
@@ -47,10 +79,15 @@ void ModeBuildCalculator::render()
     _title.render();
     _bExit.render();
 
+    RenderEngine::Draw( "assets/portaits/03087.png", { 10, 10, 256, 384 } );
+
     _charName.render();
     _bGenerateName.render();
 
     for ( auto & elem : skills ) {
+        elem.render();
+    }
+    for ( auto & elem : increase ) {
         elem.render();
     }
 }

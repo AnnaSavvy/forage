@@ -15,6 +15,7 @@ class ModeBuildCalculator : public GameMode
     Button _bGenerateName;
 
     std::vector<ProgressBar> skills;
+    std::vector<Button> increase;
 
 public:
     ModeBuildCalculator();
