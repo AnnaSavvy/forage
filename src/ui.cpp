@@ -177,6 +177,11 @@ std::shared_ptr<UIComponent> Window::processClickEvent( const Point & click )
     return nullptr;
 }
 
+ProgressBar::ProgressBar( const Rect & dimensions, int max )
+    : UIComponent( dimensions )
+    , _maximum( max )
+{}
+
 ProgressBar::ProgressBar( const Rect & dimensions, int max, const Style & style )
     : UIComponent( dimensions )
     , _maximum( max )
@@ -194,6 +199,11 @@ void ProgressBar::setValue( int newValue )
 int ProgressBar::getValue() const
 {
     return _value;
+}
+
+void ProgressBar::setStyle( const Style & style )
+{
+    _style = style;
 }
 
 void ProgressBar::render()

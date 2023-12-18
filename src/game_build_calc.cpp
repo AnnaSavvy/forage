@@ -1,7 +1,53 @@
 #include "game_build_calc.h"
 #include "input.h"
-#include "rpg_generation.h"
 #include "renderer.h"
+#include "rpg_generation.h"
+
+namespace
+{
+    class SkillCounter
+    {
+        Point position;
+        ProgressBar skillBar;
+        Button increase;
+        Button decrease;
+        Label nameLabel;
+
+        SkillCounter( Point position, int width, std::string label )
+            : skillBar( { position._x, position._y, width, 31 }, 100 )
+            , decrease( position._x - 36, position._y, 31, 31, "-" )
+            , increase( position._x + width + 5, position._y, 31, 31, "+" )
+            , nameLabel( position, label )
+        {
+            Style skillBarStyle;
+            skillBarStyle.font = StandardFont::SMALL;
+            skillBarStyle.textColor = StandardColor::WHITE;
+            skillBarStyle.backgroundColor = StandardColor::DARK_GREY;
+            skillBarStyle.borderColor = StandardColor::REALM_PRECISION;
+            skillBarStyle.borderWidth = 2;
+            skillBarStyle.borderRadius = 5;
+
+            skillBar.setStyle( skillBarStyle );
+
+            Style buttonStyle;
+            buttonStyle.font = StandardFont::REGULAR;
+            buttonStyle.textColor = StandardColor::WHITE;
+            buttonStyle.backgroundColor = StandardColor::DARK_GREY;
+            buttonStyle.borderColor = StandardColor::REALM_PRECISION;
+            buttonStyle.borderWidth = 2;
+
+            decrease.setStyle( buttonStyle );
+            increase.setStyle( buttonStyle );
+        }
+
+        void render()
+        {
+            skillBar.render();
+            decrease.render();
+            increase.render();
+        }
+    };
+}
 
 ModeBuildCalculator::ModeBuildCalculator()
     : _title( { 50, 10 }, "Character Builer" )
@@ -10,33 +56,6 @@ ModeBuildCalculator::ModeBuildCalculator()
     , _bGenerateName( RenderEngine::GetScreenSize()._x / 2, 130, 100, 50, "Generate" )
 {
     name = GameModeName::BUILD_CALCULATOR;
-
-    Style skillBarStyle;
-    skillBarStyle.font = StandardFont::SMALL;
-    skillBarStyle.textColor = StandardColor::WHITE;
-    skillBarStyle.backgroundColor = StandardColor::DARK_GREY;
-    skillBarStyle.borderColor = StandardColor::REALM_PRECISION;
-    skillBarStyle.borderWidth = 2;
-    skillBarStyle.borderRadius = 5;
-
-    Style buttonStyle;
-    buttonStyle.font = StandardFont::REGULAR;
-    buttonStyle.textColor = StandardColor::WHITE;
-    buttonStyle.backgroundColor = StandardColor::DARK_GREY;
-    buttonStyle.borderColor = StandardColor::REALM_PRECISION;
-    buttonStyle.borderWidth = 2;
-
-
-    increase.push_back( { { 264, 200, 31, 31 }, "-", buttonStyle } );
-    skills.push_back( { { 300, 200, 200, 31 }, 100, skillBarStyle } );
-    increase.push_back( { { 505, 200, 31, 31 }, "+", buttonStyle } );
-
-    skills.push_back( { { 300, 250, 200, 31 }, 100, skillBarStyle } );
-    skills.push_back( { { 300, 300, 200, 31 }, 100, skillBarStyle } );
-    skills.push_back( { { 300, 350, 200, 31 }, 100, skillBarStyle } );
-    skills.push_back( { { 300, 400, 200, 31 }, 100, skillBarStyle } );
-    skills.push_back( { { 300, 450, 200, 31 }, 100, skillBarStyle } );
-    skills.push_back( { { 300, 500, 200, 31 }, 100, skillBarStyle } );
 }
 
 GameModeName ModeBuildCalculator::handleEvents()

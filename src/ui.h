@@ -80,11 +80,13 @@ public:
 class ProgressBar : public UIComponent
 {
 public:
+    ProgressBar( const Rect & dimensions, int max );
     ProgressBar( const Rect & dimensions, int max, const Style & style );
 
     void setValue( int newValue );
     int getValue() const;
 
+    void setStyle( const Style & style );
     virtual void update( float deltaTime ) override {}
     virtual void render() override;
 
