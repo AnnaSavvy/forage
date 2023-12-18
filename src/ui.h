@@ -18,8 +18,8 @@ public:
     UIComponent( const Rect & dimensions );
     virtual ~UIComponent() = default;
 
-    virtual void update( float deltaTime ) {}
-    virtual void render() {}
+    virtual void update( float deltaTime ) = 0;
+    virtual void render() = 0;
 
     bool isHidden() const
     {

@@ -62,7 +62,13 @@ ModeBuildCalculator::ModeBuildCalculator()
 {
     name = GameModeName::BUILD_CALCULATOR;
 
-    skills.push_back( SkillCounter( { 300, 500 }, 200, "" ) );
+    Point p( 300, 500 );
+    skills.push_back( std::make_shared<SkillCounter>( p, 200, "" ) );
+    skills.push_back( std::make_shared<SkillCounter>( p.modAdd( 0, 40 ), 200, "" ) );
+    skills.push_back( std::make_shared<SkillCounter>( p.modAdd( 0, 40 ), 200, "" ) );
+    skills.push_back( std::make_shared<SkillCounter>( p.modAdd( 0, 40 ), 200, "" ) );
+    skills.push_back( std::make_shared<SkillCounter>( p.modAdd( 0, 40 ), 200, "" ) );
+    skills.push_back( std::make_shared<SkillCounter>( p.modAdd( 0, 40 ), 200, "" ) );
 }
 
 GameModeName ModeBuildCalculator::handleEvents()
@@ -111,6 +117,6 @@ void ModeBuildCalculator::render()
     _bGenerateName.render();
 
     for ( auto & elem : skills ) {
-        elem.render();
+        elem->render();
     }
 }
