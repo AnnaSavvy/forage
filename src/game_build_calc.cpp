@@ -5,7 +5,7 @@
 
 namespace
 {
-    class SkillCounter
+    class SkillCounter : public UIComponent
     {
         Point position;
         ProgressBar skillBar;
@@ -13,8 +13,11 @@ namespace
         Button decrease;
         Label nameLabel;
 
+    public:
+
         SkillCounter( Point position, int width, std::string label )
-            : skillBar( { position._x, position._y, width, 31 }, 100 )
+            : UIComponent( { position._x, position._y, width, 31 } )
+            , skillBar( { position._x, position._y, width, 31 }, 100 )
             , decrease( position._x - 36, position._y, 31, 31, "-" )
             , increase( position._x + width + 5, position._y, 31, 31, "+" )
             , nameLabel( position, label )
@@ -40,7 +43,9 @@ namespace
             increase.setStyle( buttonStyle );
         }
 
-        void render()
+        void update( float deltaTime ) override {}
+
+        void render() override
         {
             skillBar.render();
             decrease.render();
@@ -56,6 +61,8 @@ ModeBuildCalculator::ModeBuildCalculator()
     , _bGenerateName( RenderEngine::GetScreenSize()._x / 2, 130, 100, 50, "Generate" )
 {
     name = GameModeName::BUILD_CALCULATOR;
+
+    skills.push_back( SkillCounter( { 300, 500 }, 200, "" ) );
 }
 
 GameModeName ModeBuildCalculator::handleEvents()
@@ -68,24 +75,24 @@ GameModeName ModeBuildCalculator::handleEvents()
             if ( _bExit.getRect().contains( mouseClick ) ) {
                 return GameModeName::CANCEL;
             }
-            else if ( _bGenerateName.getRect().contains( mouseClick ) ) {
-                _charName.setText( RPG::Generator::GetCharacterName() );
-            }
-            else if ( increase[0].getRect().contains( mouseClick ) ) {
-                skills[0].setValue( skills[0].getValue() - 1 );
-            }
-            else if ( increase[1].getRect().contains( mouseClick ) ) {
-                skills[0].setValue( skills[0].getValue() + 1 );
-            }
+            // else if ( _bGenerateName.getRect().contains( mouseClick ) ) {
+            //     _charName.setText( RPG::Generator::GetCharacterName() );
+            // }
+            // else if ( increase[0].getRect().contains( mouseClick ) ) {
+            //     skills[0].setValue( skills[0].getValue() - 1 );
+            // }
+            // else if ( increase[1].getRect().contains( mouseClick ) ) {
+            //     skills[0].setValue( skills[0].getValue() + 1 );
+            // }
         }
-        else if ( input.isSet( InputHandler::UP ) ) {
-            skills[0].setValue( skills[0].getValue() + 1 );
-        }
-        else if ( input.isSet( InputHandler::DOWN ) ) {
-            if ( skills[0].getValue() > 0 ) {
-                skills[0].setValue( skills[0].getValue() - 1 );
-            }
-        }
+        // else if ( input.isSet( InputHandler::UP ) ) {
+        //     skills[0].setValue( skills[0].getValue() + 1 );
+        // }
+        // else if ( input.isSet( InputHandler::DOWN ) ) {
+        //     if ( skills[0].getValue() > 0 ) {
+        //         skills[0].setValue( skills[0].getValue() - 1 );
+        //     }
+        // }
         return name;
     }
     return GameModeName::QUIT_GAME;
@@ -104,9 +111,6 @@ void ModeBuildCalculator::render()
     _bGenerateName.render();
 
     for ( auto & elem : skills ) {
-        elem.render();
-    }
-    for ( auto & elem : increase ) {
         elem.render();
     }
 }
