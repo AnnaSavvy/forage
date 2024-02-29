@@ -19,8 +19,11 @@ class Game : public BaseGame
     WaveMap _map;
     std::stack<std::shared_ptr<GameMode> > _modeStack;
 
+    double _windowScaling = 1.0;
+    Point _logicalSize;
+
 public:
-    Game();
+    Game( Point desiredSize );
     virtual ~Game();
 
     bool init();

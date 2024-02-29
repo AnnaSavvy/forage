@@ -1,7 +1,7 @@
 #include "game.h"
 
 int main(int argc, char* argv[]) {
-    Game game;
+    Game game = { { 768, 768 } };
     game.init();
     game.run();
 

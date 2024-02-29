@@ -34,6 +34,7 @@ public:
     int getModes() const;
     bool isSet( InputToggle mode ) const;
     const Point & getClickPosition() const;
+    void setScaling( double windowScaling );
     bool handleEvent();
 
     static InputHandler & Get();
@@ -41,4 +42,5 @@ public:
 private:
     int _modes = InputToggle::NONE;
     Point _mouseClick;
+    double _scaling = 1.0;
 };

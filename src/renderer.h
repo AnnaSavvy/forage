@@ -13,9 +13,10 @@ class RenderEngine
     AssetLoader _assets;
     SDL_Window * _window = nullptr;
     SDL_Renderer * _renderer = nullptr;
+    Point _logicalSize = { 1024, 1024 };
 
 public:
-    bool Initialize();
+    bool Initialize( Point logicalSize, double scaling );
     SDL_Renderer * GetRenderer();
     static Point GetScreenSize();
     static RenderEngine & Get();

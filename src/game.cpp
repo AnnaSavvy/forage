@@ -10,8 +10,10 @@
 
 #include <SDL.h>
 
-Game::Game()
+Game::Game( Point desiredSize )
     : _map( 32 )
+    , _logicalSize( 1024, 1024 )
+    , _windowScaling( desiredSize._y / 1024.0 )
 {}
 
 Game::~Game()
@@ -22,7 +24,8 @@ Game::~Game()
 bool Game::init()
 {
     // Initialize any additional game state variables or components here
-    RenderEngine::Get().Initialize();
+    RenderEngine::Get().Initialize( _logicalSize, _windowScaling );
+    InputHandler::Get().setScaling( _windowScaling );
     _map.updateMap();
 
     return true;
@@ -45,7 +48,7 @@ void Game::handleEvents()
         break;
     case GameModeName::MAIN_MENU:
         _modeStack = {}; // clear
-        _modeStack.push( std::make_shared<ModeMainMenu>());
+        _modeStack.push( std::make_shared<ModeMainMenu>() );
         break;
     case GameModeName::NEW_GAME:
         _modeStack.push( std::make_shared<ModeBuildCalculator>() );

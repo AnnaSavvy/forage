@@ -20,6 +20,11 @@ const Point & InputHandler::getClickPosition() const
     return _mouseClick;
 }
 
+void InputHandler::setScaling( double windowScaling )
+{
+    _scaling = windowScaling;
+}
+
 bool InputHandler::handleEvent()
 {
     static int modesToReset = KEY_PRESSED | MOUSE_CLICKED | MOUSE_MOVED | MOUSE_WHEEL;
@@ -69,13 +74,14 @@ bool InputHandler::handleEvent()
                 break;
             }
             break;
-        case SDL_MOUSEBUTTONDOWN:
+        case SDL_MOUSEBUTTONDOWN: {
             _modes |= InputToggle::MOUSE_CLICKED;
 
             std::cout << event.button.x << "," << event.button.y << std::endl;
-            _mouseClick._x = event.button.x;
-            _mouseClick._y = event.button.y;
+            _mouseClick._x = event.button.x / _scaling;
+            _mouseClick._y = event.button.y / _scaling;
             break;
+        }
         default:
             break;
         }

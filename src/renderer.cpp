@@ -17,15 +17,17 @@ SDL_Rect convertRect( const Rect & rect )
     return { rect._pos._x, rect._pos._y, rect._size._x, rect._size._y };
 }
 
-bool RenderEngine::Initialize()
+bool RenderEngine::Initialize( Point logicalSize, double scaling )
 {
+    _logicalSize = logicalSize;
+
     // Initialize SDL2 and create window/renderer
     if ( SDL_Init( SDL_INIT_VIDEO ) != 0 ) {
         std::cerr << "SDL_Init error: " << SDL_GetError() << std::endl;
         return false;
     }
 
-    _window = SDL_CreateWindow( "Card Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1024, 1024, SDL_WINDOW_SHOWN );
+    _window = SDL_CreateWindow( "Card Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _logicalSize._x * scaling, _logicalSize._y * scaling, SDL_WINDOW_SHOWN );
     if ( !_window ) {
         std::cerr << "SDL_CreateWindow error: " << SDL_GetError() << std::endl;
         SDL_Quit();
@@ -39,6 +41,8 @@ bool RenderEngine::Initialize()
         SDL_Quit();
         return false;
     }
+
+    SDL_RenderSetScale( _renderer, scaling, scaling );
 
     if ( !StandardStyles::loadAssets() ) {
         std::cout << "Error initializing standard fonts and colors" << std::endl;
@@ -58,7 +62,7 @@ SDL_Renderer * RenderEngine::GetRenderer()
 
 Point RenderEngine::GetScreenSize()
 {
-    return Point( 1024, 1024 );
+    return engine._logicalSize;
 }
 
 RenderEngine & RenderEngine::Get()
