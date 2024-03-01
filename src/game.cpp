@@ -11,8 +11,7 @@
 #include <SDL.h>
 
 Game::Game( Point desiredSize )
-    : _map( 32 )
-    , _logicalSize( 1024, 1024 )
+    : _logicalSize( 1024, 1024 )
     , _windowScaling( desiredSize._y / 1024.0 )
 {}
 
@@ -26,7 +25,7 @@ bool Game::init()
     // Initialize any additional game state variables or components here
     RenderEngine::Get().Initialize( _logicalSize, _windowScaling );
     InputHandler::Get().setScaling( _windowScaling );
-    _map.updateMap();
+    _state.map.updateMap();
 
     return true;
 }
@@ -57,7 +56,7 @@ void Game::handleEvents()
         _modeStack.push( std::make_shared<ModeStrategicView>() );
         break;
     case GameModeName::BATTLE:
-        _modeStack.push( std::make_shared<ModeBattle>() );
+        _modeStack.push( std::make_shared<ModeBattle>( _state ) );
         break;
     case GameModeName::BUILD_CALCULATOR:
         _modeStack.push( std::make_shared<ModeBuildCalculator>() );

@@ -27,16 +27,30 @@ namespace RPG
         BattleUnit( CharacterRef unit ) {}
 
         Action getAction() const;
+
+        inline std::string getSprite() const {
+            return "char_orc.png";
+        }
     };
 
     using BattleUnitRef = std::reference_wrapper<BattleUnit>;
+    using BattleUnitConst = std::reference_wrapper<const BattleUnit>;
 
     class Force
     {
     public:
+        /*
+        *     D2/KB
+        *   5 2  2 5   DD 5 4 2 1   1 2 4 5
+        *   4 1  1 4
+        *   6 3  3 6   
+        */
+
         enum Position
         {
+            RESERVE,
             FRONT,
+            SIDE,
             CENTER,
             BACK,
             ALL
@@ -51,7 +65,7 @@ namespace RPG
         bool switchPosition( const CharacterRef character, Position to = FRONT );
         bool isAnyAlive() const;
         std::vector<BattleUnitRef> modifyCharacters( Position pos );
-        std::vector<std::reference_wrapper<const BattleUnit>> getCharacters( Position pos ) const;
+        std::vector<BattleUnitConst> getCharacters( Position pos ) const;
     };
 
     class Arena

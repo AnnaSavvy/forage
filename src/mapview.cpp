@@ -83,4 +83,9 @@ void MapView::render() const
             RenderEngine::Draw( texture, target );
         }
     }
+
+    Rect center;
+    center._pos = { screenSize._x / 2, screenSize._y / 2 };
+    center._size = { TILESIZE, TILESIZE };
+    RenderEngine::Draw( "assets/char.png", center );
 }

@@ -1,9 +1,8 @@
 #include "game_battle.h"
 #include "input.h"
-#include "rpg_arena.h"
 #include "rpg_generation.h"
 
-ModeBattle::ModeBattle()
+ModeBattle::ModeBattle( GameState state )
     : _title( { 50, 10 }, "Battle" )
     , _bExit( 400, 800, 270, 80, "Return" )
 {

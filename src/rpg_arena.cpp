@@ -13,8 +13,18 @@ namespace RPG
 
     bool Force::switchPosition( const CharacterRef character, Position to )
     {
+        size_t swapIdx;
+        for ( swapIdx = 0; swapIdx < units.size(); ++swapIdx ) {
+            if ( units[swapIdx].first == to ) {
+                break;
+            }
+        }
+
         for ( auto & [position, unit] : units ) {
             if ( unit.getId() == character.get().getId() ) {
+                if ( swapIdx < units.size() ) {
+                    units[swapIdx].first = position;
+                }
                 position = to;
                 return true;
             }
@@ -43,9 +53,9 @@ namespace RPG
         return retval;
     }
 
-    std::vector<std::reference_wrapper<const BattleUnit> > Force::getCharacters( Position pos ) const
+    std::vector<BattleUnitConst> Force::getCharacters( Position pos ) const
     {
-        std::vector<std::reference_wrapper<const BattleUnit> > retval;
+        std::vector<BattleUnitConst> retval;
         for ( auto & [position, character] : units ) {
             if ( pos == Force::ALL || pos == position ) {
                 retval.emplace_back( character );
@@ -122,7 +132,7 @@ namespace RPG
 
     bool Arena::checkIfCombatEnded() const
     {
-        return attackers.isAnyAlive() && defenders.isAnyAlive();
+        return !attackers.isAnyAlive() || !defenders.isAnyAlive();
     }
 
     Action BattleUnit::getAction() const

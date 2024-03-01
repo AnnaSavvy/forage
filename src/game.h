@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "base_game.h"
+#include "game_state.h"
 #include "input.h"
 #include "mapview.h"
 #include "wave_function.h"
@@ -16,7 +17,7 @@ class Game : public BaseGame
     bool _isRunning = false;
 
     // Add any additional game state variables or components here
-    WaveMap _map;
+    GameState _state;
     std::stack<std::shared_ptr<GameMode> > _modeStack;
 
     double _windowScaling = 1.0;

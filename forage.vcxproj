@@ -78,8 +78,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\Tools\SDL2-2.0.20\include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\Tools\SDL2-2.0.20\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\SDL2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\SDL2\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -195,6 +195,7 @@
     <ClInclude Include="src\game_campaign.h" />
     <ClInclude Include="src\game_mainmenu.h" />
     <ClInclude Include="src\game_options.h" />
+    <ClInclude Include="src\game_state.h" />
     <ClInclude Include="src\game_strategic.h" />
     <ClInclude Include="src\genetics.h" />
     <ClInclude Include="src\gene.h" />
@@ -220,6 +221,7 @@
     <ClInclude Include="src\tournament.h" />
     <ClInclude Include="src\types.h" />
     <ClInclude Include="src\ui.h" />
+    <ClInclude Include="src\ui_forms.h" />
     <ClInclude Include="src\ui_style.h" />
     <ClInclude Include="src\unit.h" />
     <ClInclude Include="src\unit_villager.h" />

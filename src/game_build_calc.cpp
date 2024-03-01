@@ -14,7 +14,6 @@ namespace
         Label nameLabel;
 
     public:
-
         SkillCounter( Point position, int width, std::string label )
             : UIComponent( { position._x, position._y, width, 31 } )
             , skillBar( { position._x, position._y, width, 31 }, 100 )
@@ -81,9 +80,9 @@ GameModeName ModeBuildCalculator::handleEvents()
             if ( _bExit.getRect().contains( mouseClick ) ) {
                 return GameModeName::CANCEL;
             }
-            // else if ( _bGenerateName.getRect().contains( mouseClick ) ) {
-            //     _charName.setText( RPG::Generator::GetCharacterName() );
-            // }
+            else if ( _bGenerateName.getRect().contains( mouseClick ) ) {
+                _charName.setText( RPG::Generator::GetCharacterName() );
+            }
             // else if ( increase[0].getRect().contains( mouseClick ) ) {
             //     skills[0].setValue( skills[0].getValue() - 1 );
             // }
