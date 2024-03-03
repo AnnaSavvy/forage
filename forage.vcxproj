@@ -180,6 +180,7 @@
     <ClCompile Include="src\wave_function.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\assets.h" />
     <ClInclude Include="src\asset_loader.h" />
     <ClInclude Include="src\audio_manager.h" />
     <ClInclude Include="src\base_game.h" />

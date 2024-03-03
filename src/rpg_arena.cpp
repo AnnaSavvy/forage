@@ -135,8 +135,24 @@ namespace RPG
         return !attackers.isAnyAlive() || !defenders.isAnyAlive();
     }
 
+    BattleUnit::BattleUnit( CharacterRef unit ) {}
+
+    void BattleUnit::update( float deltaTime ) {
+        _animTimer += deltaTime;
+
+        if ( ((int)_animTimer) % 2 ) {
+            _frame = ( _frame + 1 ) % 2;
+            _animTimer = 0;
+        }
+    }
+
     Action BattleUnit::getAction() const
     {
         return Action();
+    }
+
+    std::string BattleUnit::getSprite() const
+    {
+        return "assets/char_druid" + std::to_string( _frame ) + ".png";
     }
 }

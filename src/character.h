@@ -86,7 +86,11 @@ namespace RPG
         int skills[INVALID_SKILL] = { 0 };
         int level = 0;
 
+        static int lastID;
+
     public:
+
+        Character();
 
         int getId() const {
             return id;

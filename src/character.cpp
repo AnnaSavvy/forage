@@ -2,6 +2,12 @@
 
 namespace RPG
 {
+    int Character::lastID = 0;
+
+    Character::Character() {
+        id = lastID++;
+    }
+
     Requirements getRequirements( CharacterClass name )
     {
         Requirements require;

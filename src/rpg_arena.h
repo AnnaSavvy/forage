@@ -21,15 +21,15 @@ namespace RPG
 
     class BattleUnit : public Character
     {
+        float _animTimer = 0;
+        int _frame = 0;
+
     public:
-        BattleUnit( CharacterRef unit ) {}
+        BattleUnit( CharacterRef unit );
 
+        void update( float deltaTime );
         Action getAction() const;
-
-        inline std::string getSprite() const
-        {
-            return "assets/char_druid.png";
-        }
+        std::string getSprite() const;
     };
 
     using BattleUnitRef = std::reference_wrapper<BattleUnit>;

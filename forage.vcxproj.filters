@@ -293,6 +293,9 @@
     <ClInclude Include="src\game_state.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\assets.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="data.json">
