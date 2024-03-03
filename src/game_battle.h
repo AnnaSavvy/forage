@@ -1,7 +1,7 @@
 #pragma once
 
-#include "gamemode.h"
 #include "game_state.h"
+#include "gamemode.h"
 #include "rpg_arena.h"
 #include "ui.h"
 

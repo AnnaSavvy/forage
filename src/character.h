@@ -12,6 +12,14 @@ namespace RPG
         MAGIC
     };
 
+    enum class CharacterPreset
+    {
+        MELEE,
+        AGILE,
+        WIZARD,
+        MONSTER
+    };
+
     struct Stats
     {
         int strength = 0;
@@ -81,7 +89,6 @@ namespace RPG
         };
 
     private:
-
         Stats stats;
         int skills[INVALID_SKILL] = { 0 };
         int level = 0;
@@ -89,10 +96,13 @@ namespace RPG
         static int lastID;
 
     public:
-
         Character();
+        Character( CharacterPreset preset );
 
-        int getId() const {
+        CharacterClass getClass() const;
+
+        int getId() const
+        {
             return id;
         }
 

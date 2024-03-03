@@ -3,6 +3,7 @@
 #include "map.h"
 #include "rpg_arena.h"
 #include "wave_function.h"
+#include "rng.h"
 
 struct GameState
 {
@@ -13,7 +14,8 @@ struct GameState
 
     GameState() : map(32) {
         for ( int i = 0; i < 8; ++i ) {
-            units.emplace_back();
+            const int maximum = static_cast<int>( RPG::CharacterPreset::MONSTER );
+            units.emplace_back( static_cast<RPG::CharacterPreset>( RandomGenerator::Get().next( 0, maximum ) ) );
         }
 
         playerForce.add( units[0] );

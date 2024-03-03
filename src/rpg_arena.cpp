@@ -135,12 +135,15 @@ namespace RPG
         return !attackers.isAnyAlive() || !defenders.isAnyAlive();
     }
 
-    BattleUnit::BattleUnit( CharacterRef unit ) {}
+    BattleUnit::BattleUnit( CharacterRef unit )
+        : Character( unit )
+    {}
 
-    void BattleUnit::update( float deltaTime ) {
+    void BattleUnit::update( float deltaTime )
+    {
         _animTimer += deltaTime;
 
-        if ( ((int)_animTimer) % 2 ) {
+        if ( ( (int)_animTimer ) % 2 ) {
             _frame = ( _frame + 1 ) % 2;
             _animTimer = 0;
         }
@@ -153,6 +156,19 @@ namespace RPG
 
     std::string BattleUnit::getSprite() const
     {
-        return "assets/char_druid" + std::to_string( _frame ) + ".png";
+        std::string spriteName = "assets/char_";
+        switch ( getClass() ) {
+        case CharacterClass::MARTIAL_STR:
+            spriteName.append( "orc" );
+            break;
+        case CharacterClass::MAGICAL_NATURE:
+            spriteName.append( "druid" );
+            break;
+        default:
+            break;
+        }
+        spriteName.append( std::to_string( _frame ) );
+        spriteName.append( ".png" );
+        return spriteName;
     }
 }

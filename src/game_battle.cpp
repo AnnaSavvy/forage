@@ -28,6 +28,9 @@ GameModeName ModeBattle::handleEvents()
             if ( _bExit.getRect().contains( mouseClick ) ) {
                 return GameModeName::CANCEL;
             }
+            else {
+                _arena.executeTurn();
+            }
         }
         return name;
     }
@@ -75,7 +78,7 @@ void ModeBattle::renderForce( const RPG::Force & target, bool mirror )
     const Point & screenSize = RenderEngine::GetScreenSize();
     const std::vector<RPG::Force::Position> positions = { RPG::Force::FRONT, RPG::Force::SIDE, RPG::Force::CENTER, RPG::Force::BACK };
 
-    Rect drawArea = { { (screenSize._x - BATTLE_TILE ) / 2, (screenSize._y - BATTLE_TILE) / 2 }, { BATTLE_TILE, BATTLE_TILE } };
+    Rect drawArea = { { ( screenSize._x - BATTLE_TILE ) / 2, ( screenSize._y - BATTLE_TILE ) / 2 }, { BATTLE_TILE, BATTLE_TILE } };
 
     for ( auto & position : positions ) {
         const int offset = ( mirror ) ? BATTLE_TILE + PADDING : -BATTLE_TILE - PADDING;
