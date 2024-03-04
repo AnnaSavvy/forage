@@ -23,6 +23,7 @@ namespace RPG
     {
         float _animTimer = 0;
         int _frame = 0;
+        bool rightSide = false;
 
     public:
         BattleUnit( CharacterRef unit );
@@ -81,7 +82,7 @@ namespace RPG
         {}
 
         bool executeTurn();
-        bool executeAction( Action action );
+        bool executeAction( BattleUnit & currentUnit, Action action );
 
         std::vector<BattleUnitRef> getInitiativeList();
         bool checkIfCombatEnded() const;

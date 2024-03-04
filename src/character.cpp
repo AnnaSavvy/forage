@@ -32,7 +32,7 @@ namespace RPG
         stats.intelligence = 50;
         stats.strength = 50;
         stats.willpower = 50;
-        level = 1;
+        level = 4;
 
         switch ( preset ) {
         case RPG::CharacterPreset::MELEE:

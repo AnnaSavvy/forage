@@ -7,7 +7,8 @@ namespace RPG
 {
     bool Force::add( CharacterRef character, Position pos )
     {
-        units.emplace_back( pos, character );
+        BattleUnit newUnit = { character };
+        units.emplace_back( pos, newUnit );
         return true;
     }
 
@@ -46,6 +47,10 @@ namespace RPG
     {
         std::vector<BattleUnitRef> retval;
         for ( auto & [position, character] : units ) {
+            if ( character.isDead() ) {
+                continue;
+            }
+
             if ( pos == Force::ALL || pos == position ) {
                 retval.push_back( character );
             }
@@ -57,6 +62,10 @@ namespace RPG
     {
         std::vector<BattleUnitConst> retval;
         for ( auto & [position, character] : units ) {
+            if ( character.isDead() ) {
+                continue;
+            }
+
             if ( pos == Force::ALL || pos == position ) {
                 retval.emplace_back( character );
             }
@@ -72,13 +81,16 @@ namespace RPG
         }
 
         for ( BattleUnitRef unit : list ) {
-            executeAction( unit.get().getAction() );
+            executeAction( unit, unit.get().getAction() );
+            if ( complete ) {
+                return false;
+            }
         }
 
         return true;
     }
 
-    bool Arena::executeAction( Action action )
+    bool Arena::executeAction( BattleUnit & currentUnit, Action action )
     {
         // check if still possible
         if ( false ) {
@@ -90,9 +102,15 @@ namespace RPG
         case Action::MELEE:
         case Action::RANGED:
         case Action::SKILL:
-        case Action::SPELL:
-            std::cout << "Action!" << std::endl;
+        case Action::SPELL: {
+            auto list = defenders.modifyCharacters( Force::Position::ALL );
+            if ( !list.empty() ) {
+                const int damage = currentUnit.getAttackDamage( false );
+                list.front().get().recieveDamage( AttackSource::PHYSICAL, damage );
+                std::cout << "Action! " << list.front().get().getId() << " takes " << damage << std::endl;
+            }
             break;
+        }
         default:
             // Unexpected action type!
             assert( false );
