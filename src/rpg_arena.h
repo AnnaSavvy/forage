@@ -14,6 +14,10 @@ namespace RPG
             SPELL
         };
 
+        Action( ActionType type = MELEE )
+            : type( type )
+        {}
+
         ActionType type = MELEE;
         int target = -1;
         int extra = -1;
@@ -23,10 +27,11 @@ namespace RPG
     {
         float _animTimer = 0;
         int _frame = 0;
-        bool rightSide = false;
 
     public:
-        BattleUnit( CharacterRef unit );
+        bool rightSide = false;
+
+        BattleUnit( CharacterRef unit, bool isDefender );
 
         void update( float deltaTime );
         Action getAction() const;
@@ -60,7 +65,7 @@ namespace RPG
         std::vector<std::pair<Position, BattleUnit> > units;
 
     public:
-        bool add( CharacterRef character, Position pos = FRONT );
+        bool add( CharacterRef character, bool isDefender, Position pos = FRONT );
         bool switchPosition( const CharacterRef character, Position to = FRONT );
         bool isAnyAlive() const;
         std::vector<BattleUnitRef> modifyCharacters( Position pos );
@@ -72,7 +77,7 @@ namespace RPG
         Force attackers;
         Force defenders;
 
-        std::pair<int, Character *> currentUnit;
+        std::pair<int, BattleUnit *> currentUnit;
         bool complete = false;
 
     public:
@@ -86,6 +91,8 @@ namespace RPG
 
         std::vector<BattleUnitRef> getInitiativeList();
         bool checkIfCombatEnded() const;
+
+        BattleUnit * getUnitByIndex( int index );
 
         inline Force & getAttackers()
         {

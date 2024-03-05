@@ -5,9 +5,9 @@
 
 namespace RPG
 {
-    bool Force::add( CharacterRef character, Position pos )
+    bool Force::add( CharacterRef character, bool isDefender, Position pos )
     {
-        BattleUnit newUnit = { character };
+        BattleUnit newUnit = { character, isDefender };
         units.emplace_back( pos, newUnit );
         return true;
     }
@@ -98,16 +98,34 @@ namespace RPG
             // action = fallback;
         }
 
+        RPG::Force & targets = currentUnit.rightSide ? attackers : defenders;
+
         switch ( action.type ) {
         case Action::MELEE:
-        case Action::RANGED:
-        case Action::SKILL:
-        case Action::SPELL: {
-            auto list = defenders.modifyCharacters( Force::Position::ALL );
+        case Action::SKILL: {
+            auto list = targets.modifyCharacters( Force::Position::ALL );
             if ( !list.empty() ) {
                 const int damage = currentUnit.getAttackDamage( false );
                 list.front().get().recieveDamage( AttackSource::PHYSICAL, damage );
-                std::cout << "Action! " << list.front().get().getId() << " takes " << damage << std::endl;
+                std::cout << "Melee attack! " << list.front().get().getId() << " takes " << damage << std::endl;
+            }
+            break;
+        }
+        case Action::RANGED: {
+            auto list = targets.modifyCharacters( Force::Position::ALL );
+            if ( !list.empty() ) {
+                const int damage = currentUnit.getAttackDamage( true );
+                list.front().get().recieveDamage( AttackSource::PHYSICAL, damage );
+                std::cout << "Ranged attack! " << list.front().get().getId() << " takes " << damage << std::endl;
+            }
+            break;
+        }
+        case Action::SPELL: {
+            auto list = targets.modifyCharacters( Force::Position::ALL );
+            if ( !list.empty() ) {
+                const int damage = currentUnit.getMagicDamage();
+                list.front().get().recieveDamage( AttackSource::MAGIC, damage );
+                std::cout << "Spell babah " << list.front().get().getId() << " takes " << damage << std::endl;
             }
             break;
         }
@@ -153,15 +171,35 @@ namespace RPG
         return !attackers.isAnyAlive() || !defenders.isAnyAlive();
     }
 
-    BattleUnit::BattleUnit( CharacterRef unit )
+    BattleUnit * Arena::getUnitByIndex( int index )
+    {
+        if ( index < 0 ) {
+            return currentUnit.second;
+        }
+        const std::vector<Force::Position> dLayout = { Force::Position::BACK,  Force::Position::CENTER, Force::Position::SIDE,   Force::Position::FRONT,
+                                                       Force::Position::FRONT, Force::Position::SIDE,   Force::Position::CENTER, Force::Position::BACK };
+
+        if ( index < 4 ) {
+            const std::vector<BattleUnitRef> & list = attackers.modifyCharacters( dLayout[index] );
+            return list.empty() ? nullptr : &list.front().get();
+        }
+        else if ( index < dLayout.size() ) {
+            const std::vector<BattleUnitRef> & list = defenders.modifyCharacters( dLayout[index] );
+            return list.empty() ? nullptr : &list.front().get();
+        }
+        return nullptr;
+    }
+
+    BattleUnit::BattleUnit( CharacterRef unit, bool isDefender )
         : Character( unit )
+        , rightSide(isDefender)
     {}
 
     void BattleUnit::update( float deltaTime )
     {
         _animTimer += deltaTime;
 
-        if ( ( (int)_animTimer ) % 2 ) {
+        if ( _animTimer > 0.3 ) {
             _frame = ( _frame + 1 ) % 2;
             _animTimer = 0;
         }
@@ -169,6 +207,14 @@ namespace RPG
 
     Action BattleUnit::getAction() const
     {
+        switch (getClass()) {
+        case CharacterClass::MARTIAL_STR:
+            return Action();
+        case CharacterClass::MARTIAL_AGI:
+            return Action( Action::RANGED );
+        case CharacterClass::MAGICAL_NATURE:
+            return Action( Action::SPELL );
+        }
         return Action();
     }
 

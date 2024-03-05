@@ -44,6 +44,9 @@ void ModeBattle::update( float deltaTime )
     for ( auto & unit : _arena.getAttackers().modifyCharacters( RPG::Force::ALL ) ) {
         unit.get().update( deltaTime );
     }
+    for ( auto & unit : _arena.getDefenders().modifyCharacters( RPG::Force::ALL ) ) {
+        unit.get().update( deltaTime );
+    }
 }
 
 void ModeBattle::render()
@@ -88,7 +91,11 @@ void ModeBattle::renderForce( const RPG::Force & target, bool mirror )
         if ( !units.empty() ) {
             const RPG::BattleUnit & unit = units.front().get();
             RenderEngine::Draw( unit.getSprite(), drawArea, mirror );
-            RenderEngine::DrawText( std::to_string( unit.getCurrentHealth() ), drawArea._pos );
+            Point textPosition = drawArea._pos;
+            if ( mirror ) {
+                textPosition._x += BATTLE_TILE - 22;
+            }
+            RenderEngine::DrawText( std::to_string( unit.getCurrentHealth() ), textPosition );
         }
     }
 }
