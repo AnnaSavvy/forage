@@ -14,7 +14,7 @@ class ModeBuildCalculator : public GameMode
     Label _charName;
     Button _bGenerateName;
 
-    std::vector<std::shared_ptr<UIComponent>> skills;
+    UIContainer skills;
 
 public:
     ModeBuildCalculator();

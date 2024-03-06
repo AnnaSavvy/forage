@@ -7,10 +7,9 @@ namespace
 {
     class SkillCounter : public UIContainer
     {
-
     public:
         SkillCounter( Point position, int width, std::string label )
-            : UIContainer()
+            : UIContainer( { position._x, position._y, 0, 0 } )
         {
             Style skillBarStyle;
             skillBarStyle.font = StandardFont::SMALL;
@@ -20,7 +19,7 @@ namespace
             skillBarStyle.borderWidth = 2;
             skillBarStyle.borderRadius = 5;
 
-            _items.push_back( std::make_shared<ProgressBar>( ProgressBar( { position._x, position._y, width, 31 }, 100, skillBarStyle ) ) );
+            addElement( std::make_shared<ProgressBar>( ProgressBar( { position._x, position._y, width, 31 }, 100, skillBarStyle ) ) );
 
             Style buttonStyle;
             buttonStyle.font = StandardFont::REGULAR;
@@ -29,14 +28,15 @@ namespace
             buttonStyle.borderColor = StandardColor::REALM_PRECISION;
             buttonStyle.borderWidth = 2;
 
-            _items.push_back( std::make_shared<Button>( Button( { position._x + width + 5, position._y, 31, 31 }, "+", buttonStyle ) ) );
-            _items.push_back( std::make_shared<Button>( Button( { position._x - 36, position._y, 31, 31 }, "-", buttonStyle ) ) );
-            _items.push_back( std::make_shared<Label>( Label( position, label ) ) );
+            addElement( std::make_shared<Button>( Button( { position._x + width + 5, position._y, 31, 31 }, "+", buttonStyle ) ) );
+            addElement( std::make_shared<Button>( Button( { position._x - 36, position._y, 31, 31 }, "-", buttonStyle ) ) );
+            addElement( std::make_shared<Label>( Label( position, label ) ) );
 
             updateRect();
         }
 
-        void handleClickEvent(const Point& click) override {
+        void handleClickEvent( const Point & click ) override
+        {
             if ( _items[1]->getRect().contains( click ) ) {
                 if ( ProgressBar * bar = dynamic_cast<ProgressBar *>( _items[0].get() ); bar != nullptr ) {
                     bar->setValue( bar->getValue() + 1 );
@@ -56,16 +56,17 @@ ModeBuildCalculator::ModeBuildCalculator()
     , _bExit( 400, 800, 270, 80, "Return" )
     , _charName( { RenderEngine::GetScreenSize()._x / 2, 80 }, "Unknown" )
     , _bGenerateName( RenderEngine::GetScreenSize()._x / 2, 130, 100, 50, "Generate" )
+    , skills( {300, 500, 0, 0} )
 {
     name = GameModeName::BUILD_CALCULATOR;
 
-    Point p( 300, 500 );
-    skills.push_back( std::make_shared<SkillCounter>( p, 200, "" ) );
-    skills.push_back( std::make_shared<SkillCounter>( p.modAdd( 0, 40 ), 200, "" ) );
-    skills.push_back( std::make_shared<SkillCounter>( p.modAdd( 0, 40 ), 200, "" ) );
-    skills.push_back( std::make_shared<SkillCounter>( p.modAdd( 0, 40 ), 200, "" ) );
-    skills.push_back( std::make_shared<SkillCounter>( p.modAdd( 0, 40 ), 200, "" ) );
-    skills.push_back( std::make_shared<SkillCounter>( p.modAdd( 0, 40 ), 200, "" ) );
+    Point p = skills.getRect()._pos;
+    skills.addElement( std::make_shared<SkillCounter>( p, 200, "" ) );
+    skills.addElement( std::make_shared<SkillCounter>( p.modAdd( 0, 40 ), 200, "" ) );
+    skills.addElement( std::make_shared<SkillCounter>( p.modAdd( 0, 40 ), 200, "" ) );
+    skills.addElement( std::make_shared<SkillCounter>( p.modAdd( 0, 40 ), 200, "" ) );
+    skills.addElement( std::make_shared<SkillCounter>( p.modAdd( 0, 40 ), 200, "" ) );
+    skills.addElement( std::make_shared<SkillCounter>( p.modAdd( 0, 40 ), 200, "" ) );
 }
 
 GameModeName ModeBuildCalculator::handleEvents()
@@ -81,8 +82,8 @@ GameModeName ModeBuildCalculator::handleEvents()
             else if ( _bGenerateName.getRect().contains( mouseClick ) ) {
                 _charName.setText( RPG::Generator::GetCharacterName() );
             }
-            else if ( skills[0]->getRect().contains( mouseClick ) ) {
-                skills[0]->handleClickEvent( mouseClick );
+            else if ( skills.getRect().contains( mouseClick ) ) {
+                skills.handleClickEvent( mouseClick );
             }
         }
         // else if ( input.isSet( InputHandler::UP ) ) {
@@ -110,7 +111,5 @@ void ModeBuildCalculator::render()
     _charName.render();
     _bGenerateName.render();
 
-    for ( auto & elem : skills ) {
-        elem->render();
-    }
+    skills.render();
 }

@@ -253,7 +253,9 @@ void ProgressBar::render()
     }
 }
 
-UIContainer::UIContainer() : UIComponent({}) {}
+UIContainer::UIContainer( const Rect & dimensions )
+    : UIComponent( dimensions )
+{}
 
 void UIContainer::update( float deltaTime )
 {
@@ -267,6 +269,22 @@ void UIContainer::render()
     for ( auto & component : _items ) {
         component.get()->render();
     }
+}
+
+void UIContainer::handleClickEvent( const Point & click )
+{
+    for ( auto & component : _items ) {
+        if ( component->getRect().contains( click ) ) {
+            component->handleClickEvent( click );
+            break;
+        }
+    }
+}
+
+void UIContainer::addElement( std::shared_ptr<UIComponent> element )
+{
+    _items.push_back( element );
+    updateRect();
 }
 
 std::shared_ptr<UIComponent> UIContainer::getElement( const Point & click )
@@ -291,7 +309,7 @@ void UIContainer::updateRect()
         }
 
         Point bottomRight = dimensions._pos + dimensions._size;
-        Point diff = bottomRight - _rect._pos + _rect._size;
+        Point diff = bottomRight - ( _rect._pos + _rect._size );
         if ( diff._x > 0 ) {
             _rect._size._x += diff._x;
         }

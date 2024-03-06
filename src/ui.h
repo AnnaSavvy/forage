@@ -21,7 +21,7 @@ public:
     virtual void update( float deltaTime ) = 0;
     virtual void render() = 0;
 
-    virtual void handleClickEvent(const Point& click) {}
+    virtual void handleClickEvent( const Point & click ) {}
 
     bool isHidden() const
     {
@@ -45,12 +45,13 @@ protected:
     std::vector<std::shared_ptr<UIComponent> > _items;
 
 public:
-    UIContainer();
+    UIContainer( const Rect & dimensions );
 
     virtual void update( float deltaTime );
     virtual void render();
-    virtual void handleClickEvent( const Point & click ) {}
+    virtual void handleClickEvent( const Point & click );
 
+    void addElement( std::shared_ptr<UIComponent> element );
     virtual std::shared_ptr<UIComponent> getElement( const Point & click );
     void updateRect();
 };
