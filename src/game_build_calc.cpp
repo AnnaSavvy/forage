@@ -5,21 +5,12 @@
 
 namespace
 {
-    class SkillCounter : public UIComponent
+    class SkillCounter : public UIContainer
     {
-        Point position;
-        ProgressBar skillBar;
-        Button increase;
-        Button decrease;
-        Label nameLabel;
 
     public:
         SkillCounter( Point position, int width, std::string label )
-            : UIComponent( { position._x, position._y, width, 31 } )
-            , skillBar( { position._x, position._y, width, 31 }, 100 )
-            , decrease( position._x - 36, position._y, 31, 31, "-" )
-            , increase( position._x + width + 5, position._y, 31, 31, "+" )
-            , nameLabel( position, label )
+            : UIContainer()
         {
             Style skillBarStyle;
             skillBarStyle.font = StandardFont::SMALL;
@@ -29,7 +20,7 @@ namespace
             skillBarStyle.borderWidth = 2;
             skillBarStyle.borderRadius = 5;
 
-            skillBar.setStyle( skillBarStyle );
+            _items.push_back( std::make_shared<ProgressBar>( ProgressBar( { position._x, position._y, width, 31 }, 100, skillBarStyle ) ) );
 
             Style buttonStyle;
             buttonStyle.font = StandardFont::REGULAR;
@@ -38,17 +29,24 @@ namespace
             buttonStyle.borderColor = StandardColor::REALM_PRECISION;
             buttonStyle.borderWidth = 2;
 
-            decrease.setStyle( buttonStyle );
-            increase.setStyle( buttonStyle );
+            _items.push_back( std::make_shared<Button>( Button( { position._x + width + 5, position._y, 31, 31 }, "+", buttonStyle ) ) );
+            _items.push_back( std::make_shared<Button>( Button( { position._x - 36, position._y, 31, 31 }, "-", buttonStyle ) ) );
+            _items.push_back( std::make_shared<Label>( Label( position, label ) ) );
+
+            updateRect();
         }
 
-        void update( float deltaTime ) override {}
-
-        void render() override
-        {
-            skillBar.render();
-            decrease.render();
-            increase.render();
+        void handleClickEvent(const Point& click) override {
+            if ( _items[1]->getRect().contains( click ) ) {
+                if ( ProgressBar * bar = dynamic_cast<ProgressBar *>( _items[0].get() ); bar != nullptr ) {
+                    bar->setValue( bar->getValue() + 1 );
+                }
+            }
+            else if ( _items[2]->getRect().contains( click ) ) {
+                if ( ProgressBar * bar = dynamic_cast<ProgressBar *>( _items[0].get() ); bar != nullptr ) {
+                    bar->setValue( bar->getValue() - 1 );
+                }
+            }
         }
     };
 }
@@ -83,12 +81,9 @@ GameModeName ModeBuildCalculator::handleEvents()
             else if ( _bGenerateName.getRect().contains( mouseClick ) ) {
                 _charName.setText( RPG::Generator::GetCharacterName() );
             }
-            // else if ( increase[0].getRect().contains( mouseClick ) ) {
-            //     skills[0].setValue( skills[0].getValue() - 1 );
-            // }
-            // else if ( increase[1].getRect().contains( mouseClick ) ) {
-            //     skills[0].setValue( skills[0].getValue() + 1 );
-            // }
+            else if ( skills[0]->getRect().contains( mouseClick ) ) {
+                skills[0]->handleClickEvent( mouseClick );
+            }
         }
         // else if ( input.isSet( InputHandler::UP ) ) {
         //     skills[0].setValue( skills[0].getValue() + 1 );

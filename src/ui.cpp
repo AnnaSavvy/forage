@@ -165,7 +165,7 @@ void Window::addComponent( std::shared_ptr<UIComponent> component )
     _components.push_back( component );
 }
 
-std::shared_ptr<UIComponent> Window::processClickEvent( const Point & click )
+std::shared_ptr<UIComponent> Window::getElement( const Point & click )
 {
     if ( _rect.contains( click ) ) {
         for ( auto component : _components ) {
@@ -250,5 +250,53 @@ void ProgressBar::render()
         textRect._size._y = surface->h;
 
         RenderEngine::DrawDestroySurface( surface, textRect );
+    }
+}
+
+UIContainer::UIContainer() : UIComponent({}) {}
+
+void UIContainer::update( float deltaTime )
+{
+    for ( auto & component : _items ) {
+        component.get()->update( deltaTime );
+    }
+}
+
+void UIContainer::render()
+{
+    for ( auto & component : _items ) {
+        component.get()->render();
+    }
+}
+
+std::shared_ptr<UIComponent> UIContainer::getElement( const Point & click )
+{
+    for ( auto & component : _items ) {
+        if ( component.get()->getRect().contains( click ) ) {
+            return component;
+        }
+    }
+    return nullptr;
+}
+
+void UIContainer::updateRect()
+{
+    for ( const auto & component : _items ) {
+        const Rect & dimensions = component.get()->getRect();
+        if ( dimensions._pos._x < _rect._pos._x ) {
+            _rect._pos._x = dimensions._pos._x;
+        }
+        if ( dimensions._pos._y < _rect._pos._y ) {
+            _rect._pos._y = dimensions._pos._y;
+        }
+
+        Point bottomRight = dimensions._pos + dimensions._size;
+        Point diff = bottomRight - _rect._pos + _rect._size;
+        if ( diff._x > 0 ) {
+            _rect._size._x += diff._x;
+        }
+        if ( diff._y > 0 ) {
+            _rect._size._y += diff._y;
+        }
     }
 }

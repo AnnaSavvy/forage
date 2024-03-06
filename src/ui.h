@@ -21,6 +21,8 @@ public:
     virtual void update( float deltaTime ) = 0;
     virtual void render() = 0;
 
+    virtual void handleClickEvent(const Point& click) {}
+
     bool isHidden() const
     {
         return _hidden;
@@ -35,6 +37,22 @@ public:
     {
         return _rect;
     }
+};
+
+class UIContainer : public UIComponent
+{
+protected:
+    std::vector<std::shared_ptr<UIComponent> > _items;
+
+public:
+    UIContainer();
+
+    virtual void update( float deltaTime );
+    virtual void render();
+    virtual void handleClickEvent( const Point & click ) {}
+
+    virtual std::shared_ptr<UIComponent> getElement( const Point & click );
+    void updateRect();
 };
 
 // A basic text label element
@@ -123,7 +141,7 @@ public:
     void setStyle( const Style & style );
     void addComponent( std::shared_ptr<UIComponent> component );
 
-    std::shared_ptr<UIComponent> processClickEvent( const Point & click );
+    std::shared_ptr<UIComponent> getElement( const Point & click );
 
 private:
     Style _style;
