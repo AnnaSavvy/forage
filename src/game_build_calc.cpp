@@ -51,14 +51,17 @@ namespace
     };
 }
 
-ModeBuildCalculator::ModeBuildCalculator()
-    : _title( { 50, 10 }, "Character Builer" )
-    , _bExit( 400, 800, 270, 80, "Return" )
+ModeBuildCalculator::ModeBuildCalculator( GameState & state )
+    : _state( state )
+    , _title( { 50, 10 }, "Character Builer" )
+    , _bExit( RenderEngine::GetScreenSize()._x / 2 + 100, RenderEngine::GetScreenSize()._y - 80, 270, 60, "Return" )
     , _charName( { RenderEngine::GetScreenSize()._x / 2, 80 }, "Unknown" )
-    , _bGenerateName( RenderEngine::GetScreenSize()._x / 2, 130, 100, 50, "Generate" )
-    , skills( {300, 500, 0, 0} )
+    , _bGenerateName( RenderEngine::GetScreenSize()._x / 2 - 100, RenderEngine::GetScreenSize()._y - 80, 100, 60, "Generate" )
+    , skills( { 300, 500, 0, 0 } )
 {
     name = GameModeName::BUILD_CALCULATOR;
+
+    _character = _state.units.front();
 
     Point p = skills.getRect()._pos;
     skills.addElement( std::make_shared<SkillCounter>( p, 200, "" ) );
@@ -86,14 +89,6 @@ GameModeName ModeBuildCalculator::handleEvents()
                 skills.handleClickEvent( mouseClick );
             }
         }
-        // else if ( input.isSet( InputHandler::UP ) ) {
-        //     skills[0].setValue( skills[0].getValue() + 1 );
-        // }
-        // else if ( input.isSet( InputHandler::DOWN ) ) {
-        //     if ( skills[0].getValue() > 0 ) {
-        //         skills[0].setValue( skills[0].getValue() - 1 );
-        //     }
-        // }
         return name;
     }
     return GameModeName::QUIT_GAME;

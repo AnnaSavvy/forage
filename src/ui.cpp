@@ -13,6 +13,12 @@ Button::Button( int x, int y, int width, int height, const std::string & label )
     _label = label;
 }
 
+Button::Button( const Point & position, int width, int height, const std::string & label )
+    : UIComponent( { position._x, position._y, width, height } )
+{
+    _label = label;
+}
+
 Button::Button( const Rect & dimensions, const std::string & label, const Style & style )
     : UIComponent( dimensions )
     , _style( style )

@@ -1,11 +1,13 @@
 #pragma once
 
 #include "character.h"
+#include "game_state.h"
 #include "gamemode.h"
 #include "ui.h"
 
 class ModeBuildCalculator : public GameMode
 {
+    GameState & _state;
     RPG::Character _character;
 
     Label _title;
@@ -17,7 +19,7 @@ class ModeBuildCalculator : public GameMode
     UIContainer skills;
 
 public:
-    ModeBuildCalculator();
+    ModeBuildCalculator( GameState & state );
     virtual GameModeName handleEvents() override;
     virtual void update( float deltaTime ) override;
     virtual void render() override;
