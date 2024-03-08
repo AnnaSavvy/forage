@@ -1,4 +1,5 @@
 #include "game_build_calc.h"
+#include "binding.h"
 #include "input.h"
 #include "renderer.h"
 #include "rpg_generation.h"
@@ -7,10 +8,16 @@ namespace
 {
     class SkillCounter : public UIContainer
     {
+        ValueBinding _binding;
+
     public:
-        SkillCounter( Point position, int width, std::string label )
+        SkillCounter( Point position, int width, RPG::Character::Skills skill, ValueBinding binding )
             : UIContainer( { position._x, position._y, 0, 0 } )
+            , _binding( binding )
         {
+            addElement( std::make_shared<Label>( Label( position, RPG::Character::GetSkillName( skill ) ) ) );
+            position.modAdd( 150, 0 );
+
             Style skillBarStyle;
             skillBarStyle.font = StandardFont::SMALL;
             skillBarStyle.textColor = StandardColor::WHITE;
@@ -19,7 +26,7 @@ namespace
             skillBarStyle.borderWidth = 2;
             skillBarStyle.borderRadius = 5;
 
-            addElement( std::make_shared<ProgressBar>( ProgressBar( { position._x, position._y, width, 31 }, 100, skillBarStyle ) ) );
+            addElement( std::make_shared<ProgressBar>( ProgressBar( { position._x, position._y, width, 31 }, binding, skillBarStyle ) ) );
 
             Style buttonStyle;
             buttonStyle.font = StandardFont::REGULAR;
@@ -30,20 +37,19 @@ namespace
 
             addElement( std::make_shared<Button>( Button( { position._x + width + 5, position._y, 31, 31 }, "+", buttonStyle ) ) );
             addElement( std::make_shared<Button>( Button( { position._x - 36, position._y, 31, 31 }, "-", buttonStyle ) ) );
-            addElement( std::make_shared<Label>( Label( position, label ) ) );
 
             updateRect();
         }
 
         void handleClickEvent( const Point & click ) override
         {
-            if ( _items[1]->getRect().contains( click ) ) {
-                if ( ProgressBar * bar = dynamic_cast<ProgressBar *>( _items[0].get() ); bar != nullptr ) {
+            if ( _items[2]->getRect().contains( click ) ) {
+                if ( ProgressBar * bar = dynamic_cast<ProgressBar *>( _items[1].get() ); bar != nullptr ) {
                     bar->setValue( bar->getValue() + 1 );
                 }
             }
-            else if ( _items[2]->getRect().contains( click ) ) {
-                if ( ProgressBar * bar = dynamic_cast<ProgressBar *>( _items[0].get() ); bar != nullptr ) {
+            else if ( _items[3]->getRect().contains( click ) ) {
+                if ( ProgressBar * bar = dynamic_cast<ProgressBar *>( _items[1].get() ); bar != nullptr ) {
                     bar->setValue( bar->getValue() - 1 );
                 }
             }
@@ -64,12 +70,12 @@ ModeBuildCalculator::ModeBuildCalculator( GameState & state )
     _character = _state.units.front();
 
     Point p = skills.getRect()._pos;
-    skills.addElement( std::make_shared<SkillCounter>( p, 200, "" ) );
-    skills.addElement( std::make_shared<SkillCounter>( p.modAdd( 0, 40 ), 200, "" ) );
-    skills.addElement( std::make_shared<SkillCounter>( p.modAdd( 0, 40 ), 200, "" ) );
-    skills.addElement( std::make_shared<SkillCounter>( p.modAdd( 0, 40 ), 200, "" ) );
-    skills.addElement( std::make_shared<SkillCounter>( p.modAdd( 0, 40 ), 200, "" ) );
-    skills.addElement( std::make_shared<SkillCounter>( p.modAdd( 0, 40 ), 200, "" ) );
+    skills.addElement( std::make_shared<SkillCounter>( p, 200, RPG::Character::CLOSE_COMBAT, _character.getSkillBinding( RPG::Character::CLOSE_COMBAT ) ) );
+    skills.addElement(
+        std::make_shared<SkillCounter>( p.modAdd( 0, 40 ), 200, RPG::Character::RANGED_COMBAT, _character.getSkillBinding( RPG::Character::RANGED_COMBAT ) ) );
+    skills.addElement( std::make_shared<SkillCounter>( p.modAdd( 0, 40 ), 200, RPG::Character::DODGE, _character.getSkillBinding( RPG::Character::DODGE ) ) );
+    skills.addElement( std::make_shared<SkillCounter>( p.modAdd( 0, 40 ), 200, RPG::Character::BLOCK, _character.getSkillBinding( RPG::Character::BLOCK ) ) );
+    skills.addElement( std::make_shared<SkillCounter>( p.modAdd( 0, 40 ), 200, RPG::Character::STEALTH, _character.getSkillBinding( RPG::Character::STEALTH ) ) );
 }
 
 GameModeName ModeBuildCalculator::handleEvents()

@@ -184,6 +184,7 @@
     <ClInclude Include="src\asset_loader.h" />
     <ClInclude Include="src\audio_manager.h" />
     <ClInclude Include="src\base_game.h" />
+    <ClInclude Include="src\binding.h" />
     <ClInclude Include="src\build_optimizer.h" />
     <ClInclude Include="src\character.h" />
     <ClInclude Include="src\character_class.h" />

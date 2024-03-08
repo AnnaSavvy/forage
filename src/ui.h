@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include "binding.h"
 #include "point.h"
 #include "ui_style.h"
 
@@ -100,8 +101,8 @@ public:
 class ProgressBar : public UIComponent
 {
 public:
-    ProgressBar( const Rect & dimensions, int max );
-    ProgressBar( const Rect & dimensions, int max, const Style & style );
+    ProgressBar( const Rect & dimensions, ValueBinding binding );
+    ProgressBar( const Rect & dimensions, ValueBinding binding, const Style & style );
 
     void setValue( int newValue );
     int getValue() const;
@@ -112,8 +113,7 @@ public:
 
 private:
     Style _style;
-    int _value = 0;
-    int _maximum = 0;
+    ValueBinding _binding;
 };
 
 // A basic menu element

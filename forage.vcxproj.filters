@@ -141,11 +141,11 @@
     <ClCompile Include="src\game_options.cpp">
       <Filter>Source Files\gamemodes</Filter>
     </ClCompile>
-    <ClCompile Include="src\character_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\character.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\rpg</Filter>
+    </ClCompile>
+    <ClCompile Include="src\character_class.cpp">
+      <Filter>Source Files\rpg</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -295,6 +295,9 @@
     </ClInclude>
     <ClInclude Include="src\assets.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\binding.h">
+      <Filter>Header Files\engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

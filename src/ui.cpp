@@ -183,28 +183,28 @@ std::shared_ptr<UIComponent> Window::getElement( const Point & click )
     return nullptr;
 }
 
-ProgressBar::ProgressBar( const Rect & dimensions, int max )
+ProgressBar::ProgressBar( const Rect & dimensions, ValueBinding binding )
     : UIComponent( dimensions )
-    , _maximum( max )
+    , _binding( binding )
 {}
 
-ProgressBar::ProgressBar( const Rect & dimensions, int max, const Style & style )
+ProgressBar::ProgressBar( const Rect & dimensions, ValueBinding binding, const Style & style )
     : UIComponent( dimensions )
-    , _maximum( max )
+    , _binding( binding )
     , _style( style )
 {}
 
 void ProgressBar::setValue( int newValue )
 {
-    _value = newValue;
-    if ( _value > _maximum ) {
-        _value = _maximum;
+    _binding.value = newValue;
+    if ( _binding.value > _binding.maximum ) {
+        _binding.value = _binding.maximum;
     }
 }
 
 int ProgressBar::getValue() const
 {
-    return _value;
+    return _binding.value;
 }
 
 void ProgressBar::setStyle( const Style & style )
@@ -232,7 +232,7 @@ void ProgressBar::render()
         RenderEngine::DrawRect( _rect, _style.backgroundColor );
     }
 
-    const double ratio = std::min( static_cast<double>( _value ) / _maximum, 1.0 );
+    const double ratio = std::min( static_cast<double>( _binding.value ) / _binding.maximum, 1.0 );
     if ( ratio > 0.0001 ) {
         Rect barArea = _rect;
         barArea._pos._x += _style.borderWidth;
@@ -246,7 +246,7 @@ void ProgressBar::render()
         RenderEngine::DrawRect( barArea, StandardColor::HIGHLIGHT_RED );
     }
 
-    std::string str = std::to_string( _value ) + " / " + std::to_string( _maximum );
+    std::string str = std::to_string( _binding.value ) + " / " + std::to_string( _binding.maximum );
     SDL_Surface * surface = RenderEngine::GetTextSurface( str, _style.font, _style.textColor );
     if ( surface ) {
         Rect textRect = _rect;

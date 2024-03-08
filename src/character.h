@@ -1,4 +1,5 @@
 #pragma once
+#include "binding.h"
 #include "character_class.h"
 #include "point.h"
 #include "spell.h"
@@ -177,6 +178,12 @@ namespace RPG
             }
             return false;
         }
+
+        inline ValueBinding getSkillBinding( Skills skill ) {
+            return { skills[skill] };
+        }
+
+        static std::string GetSkillName( Skills skill );
     };
 
     using CharacterRef = std::reference_wrapper<Character>;

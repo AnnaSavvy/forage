@@ -85,6 +85,45 @@ namespace RPG
         currentHealth = getMaxHealth();
     }
 
+    std::string Character::GetSkillName( Skills skill )
+    {
+        switch ( skill ) {
+        case RPG::Character::CLOSE_COMBAT:
+            return "Melee";
+        case RPG::Character::RANGED_COMBAT:
+            return "Ranged";
+        case RPG::Character::DODGE:
+            return "Dodge";
+        case RPG::Character::BLOCK:
+            return "Block";
+        case RPG::Character::STEALTH:
+            return "Stealth";
+        case RPG::Character::LIFE:
+            return "Life";
+        case RPG::Character::ARCANA:
+            return "Arcana";
+        case RPG::Character::NATURE:
+            return "Nature";
+        case RPG::Character::CHAOS:
+            return "Chaos";
+        case RPG::Character::DEATH:
+            return "Death";
+        case RPG::Character::MAGIC_FIRE:
+            return "Fire";
+        case RPG::Character::MAGIC_WATER:
+            return "Water";
+        case RPG::Character::MAGIC_AIR:
+            return "Air";
+        case RPG::Character::MAGIC_EARTH:
+            return "Earth";
+        case RPG::Character::MAGIC_MENTAL:
+            return "Mental";
+        case RPG::Character::MAGIC_DIVINITY:
+            return "Divinity";
+        }
+        return "Unknown";
+    }
+
     Requirements getRequirements( CharacterClass name )
     {
         Requirements require;
