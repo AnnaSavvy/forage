@@ -1,14 +1,15 @@
 #pragma once
 
-#include "character.h"
 #include "game_state.h"
 #include "gamemode.h"
 #include "ui.h"
 
+class Character;
+
 class ModeBuildCalculator : public GameMode
 {
     GameState & _state;
-    RPG::Character _character;
+    RPG::Character & _character;
 
     Label _title;
     Button _bExit;

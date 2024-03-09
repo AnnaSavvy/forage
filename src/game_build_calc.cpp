@@ -1,3 +1,4 @@
+#include "character.h"
 #include "game_build_calc.h"
 #include "binding.h"
 #include "input.h"
@@ -6,6 +7,10 @@
 
 namespace
 {
+    const std::vector<RPG::Character::Skills> group = {
+        RPG::Character::CLOSE_COMBAT, RPG::Character::RANGED_COMBAT, RPG::Character::DODGE, RPG::Character::BLOCK, RPG::Character::STEALTH,
+    };
+
     class SkillCounter : public UIContainer
     {
         ValueBinding _binding;
@@ -59,6 +64,7 @@ namespace
 
 ModeBuildCalculator::ModeBuildCalculator( GameState & state )
     : _state( state )
+    , _character( _state.units.front() )
     , _title( { 50, 10 }, "Character Builer" )
     , _bExit( RenderEngine::GetScreenSize()._x / 2 + 100, RenderEngine::GetScreenSize()._y - 80, 270, 60, "Return" )
     , _charName( { RenderEngine::GetScreenSize()._x / 2, 80 }, "Unknown" )
@@ -67,15 +73,12 @@ ModeBuildCalculator::ModeBuildCalculator( GameState & state )
 {
     name = GameModeName::BUILD_CALCULATOR;
 
-    _character = _state.units.front();
-
     Point p = skills.getRect()._pos;
-    skills.addElement( std::make_shared<SkillCounter>( p, 200, RPG::Character::CLOSE_COMBAT, _character.getSkillBinding( RPG::Character::CLOSE_COMBAT ) ) );
-    skills.addElement(
-        std::make_shared<SkillCounter>( p.modAdd( 0, 40 ), 200, RPG::Character::RANGED_COMBAT, _character.getSkillBinding( RPG::Character::RANGED_COMBAT ) ) );
-    skills.addElement( std::make_shared<SkillCounter>( p.modAdd( 0, 40 ), 200, RPG::Character::DODGE, _character.getSkillBinding( RPG::Character::DODGE ) ) );
-    skills.addElement( std::make_shared<SkillCounter>( p.modAdd( 0, 40 ), 200, RPG::Character::BLOCK, _character.getSkillBinding( RPG::Character::BLOCK ) ) );
-    skills.addElement( std::make_shared<SkillCounter>( p.modAdd( 0, 40 ), 200, RPG::Character::STEALTH, _character.getSkillBinding( RPG::Character::STEALTH ) ) );
+
+    for ( auto skill : group ) {
+        skills.addElement( std::make_shared<SkillCounter>( p, 200, skill, _character.getSkillBinding( skill ) ) );
+        p.modAdd( 0, 40 );
+    }
 }
 
 GameModeName ModeBuildCalculator::handleEvents()
