@@ -277,11 +277,11 @@ void UIContainer::render()
     }
 }
 
-void UIContainer::handleClickEvent( const Point & click )
+void UIContainer::handleClickEvent( const Point & click, int modes )
 {
     for ( auto & component : _items ) {
         if ( component->getRect().contains( click ) ) {
-            component->handleClickEvent( click );
+            component->handleClickEvent( click, modes );
             break;
         }
     }

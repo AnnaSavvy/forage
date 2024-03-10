@@ -22,7 +22,7 @@ public:
     virtual void update( float deltaTime ) = 0;
     virtual void render() = 0;
 
-    virtual void handleClickEvent( const Point & click ) {}
+    virtual void handleClickEvent( const Point & click, int modes ) {}
 
     bool isHidden() const
     {
@@ -50,10 +50,10 @@ public:
 
     virtual void update( float deltaTime );
     virtual void render();
-    virtual void handleClickEvent( const Point & click );
+    virtual void handleClickEvent( const Point & click, int modes );
 
     void addElement( std::shared_ptr<UIComponent> element );
-    virtual std::shared_ptr<UIComponent> getElement( const Point & click );
+    virtual std::shared_ptr<UIComponent> getElement( const Point & position );
     void updateRect();
 };
 

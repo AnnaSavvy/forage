@@ -1,15 +1,14 @@
-#include "character.h"
 #include "game_build_calc.h"
 #include "binding.h"
+#include "character.h"
 #include "input.h"
 #include "renderer.h"
 #include "rpg_generation.h"
 
 namespace
 {
-    const std::vector<RPG::Character::Skills> group = {
-        RPG::Character::CLOSE_COMBAT, RPG::Character::RANGED_COMBAT, RPG::Character::DODGE, RPG::Character::BLOCK, RPG::Character::STEALTH,
-    };
+    const std::vector<RPG::Character::Skills> group
+        = { RPG::Character::CLOSE_COMBAT, RPG::Character::RANGED_COMBAT, RPG::Character::DODGE, RPG::Character::BLOCK, RPG::Character::STEALTH };
 
     class SkillCounter : public UIContainer
     {
@@ -46,17 +45,15 @@ namespace
             updateRect();
         }
 
-        void handleClickEvent( const Point & click ) override
+        void handleClickEvent( const Point & click, int modes ) override
         {
             if ( _items[2]->getRect().contains( click ) ) {
-                if ( ProgressBar * bar = dynamic_cast<ProgressBar *>( _items[1].get() ); bar != nullptr ) {
-                    bar->setValue( bar->getValue() + 1 );
-                }
+                const int change = modes & InputHandler::MOUSE_RIGHT_CLICKED ? 10 : 1;
+                _binding.value = std::min( _binding.value + change, _binding.maximum );
             }
             else if ( _items[3]->getRect().contains( click ) ) {
-                if ( ProgressBar * bar = dynamic_cast<ProgressBar *>( _items[1].get() ); bar != nullptr ) {
-                    bar->setValue( bar->getValue() - 1 );
-                }
+                const int change = modes & InputHandler::MOUSE_RIGHT_CLICKED ? 10 : 1;
+                _binding.value = std::min( _binding.value - change, _binding.maximum );
             }
         }
     };
@@ -95,7 +92,7 @@ GameModeName ModeBuildCalculator::handleEvents()
                 _charName.setText( RPG::Generator::GetCharacterName() );
             }
             else if ( skills.getRect().contains( mouseClick ) ) {
-                skills.handleClickEvent( mouseClick );
+                skills.handleClickEvent( mouseClick, input.getModes() & InputHandler::MOUSE_CLICKED );
             }
         }
         return name;
