@@ -9,15 +9,23 @@ class Character;
 class ModeBuildCalculator : public GameMode
 {
     GameState & _state;
-    RPG::Character & _character;
+    RPG::Character _character;
 
     Label _title;
     Button _bExit;
 
     Label _charName;
+    Label _levelClass;
+    ProgressBar _health;
     Button _bGenerateName;
+    Button _bNext;
+    Button _bPrevious;
 
-    UIContainer skills;
+    UIContainer _attributes;
+    UIContainer _physicalSkills;
+    UIContainer _magicalSkills;
+
+    void changeCharacter( RPG::Character other );
 
 public:
     ModeBuildCalculator( GameState & state );
