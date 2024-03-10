@@ -95,3 +95,17 @@ namespace StandardStyles
         return true;
     }
 }
+
+Style::Style( StandardColor backgroundColor, StandardColor borderColor, int borderWidth )
+    : backgroundColor( backgroundColor )
+    , borderColor( borderColor )
+    , borderWidth( borderWidth )
+{}
+
+Style::Style( StandardFont font, StandardColor textColor, StandardColor backgroundColor, StandardColor borderColor, int borderWidth )
+    : font( font )
+    , textColor( textColor )
+    , backgroundColor( backgroundColor )
+    , borderColor( borderColor )
+    , borderWidth( borderWidth )
+{}

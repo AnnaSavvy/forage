@@ -12,6 +12,8 @@ namespace
     const std::vector<RPG::Character::Skills> magicalGroup
         = { RPG::Character::LIFE, RPG::Character::ARCANA, RPG::Character::NATURE, RPG::Character::CHAOS, RPG::Character::DEATH };
 
+    const Style skillBarStyle{ StandardFont::SMALL, StandardColor::WHITE, StandardColor::DARK_GREY, StandardColor::REALM_PRECISION, 2 };
+
     constexpr int FIRST_ROW = 20;
     constexpr int SECOND_ROW = 300;
 
@@ -27,22 +29,9 @@ namespace
             addElement( std::make_shared<Label>( Label( position, RPG::Character::GetSkillName( skill ) ) ) );
             position.modAdd( 150, 0 );
 
-            Style skillBarStyle;
-            skillBarStyle.font = StandardFont::SMALL;
-            skillBarStyle.textColor = StandardColor::WHITE;
-            skillBarStyle.backgroundColor = StandardColor::DARK_GREY;
-            skillBarStyle.borderColor = StandardColor::REALM_PRECISION;
-            skillBarStyle.borderWidth = 2;
-            skillBarStyle.borderRadius = 5;
-
             addElement( std::make_shared<ProgressBar>( ProgressBar( { position._x, position._y, width, 31 }, binding, skillBarStyle ) ) );
 
-            Style buttonStyle;
-            buttonStyle.font = StandardFont::REGULAR;
-            buttonStyle.textColor = StandardColor::WHITE;
-            buttonStyle.backgroundColor = StandardColor::DARK_GREY;
-            buttonStyle.borderColor = StandardColor::REALM_PRECISION;
-            buttonStyle.borderWidth = 2;
+            const Style buttonStyle{ StandardFont::REGULAR, StandardColor::WHITE, StandardColor::DARK_GREY, StandardColor::REALM_PRECISION, 2 };
 
             addElement( std::make_shared<Button>( Button( { position._x + width + 5, position._y, 31, 31 }, "+", buttonStyle ) ) );
             addElement( std::make_shared<Button>( Button( { position._x - 36, position._y, 31, 31 }, "-", buttonStyle ) ) );
@@ -72,10 +61,10 @@ ModeBuildCalculator::ModeBuildCalculator( GameState & state )
     , _bGenerateName( RenderEngine::GetScreenSize()._x / 2 - 100, RenderEngine::GetScreenSize()._y - 80, 100, 60, "Generate" )
     , _bNext( RenderEngine::GetScreenSize()._x - 110, RenderEngine::GetScreenSize()._y - 80, 100, 60, "Next >" )
     , _bPrevious( FIRST_ROW, RenderEngine::GetScreenSize()._y - 80, 100, 60, "< Prev" )
-    , _health( { FIRST_ROW, 490, 200, 31 }, _character.getSkillBinding( RPG::Character::ARCANA ) )
+    , _health( { FIRST_ROW, 490, 236, 40 }, _character.getSkillBinding( RPG::Character::ARCANA ), skillBarStyle )
     , _charName( { FIRST_ROW, 410 }, "Unknown" )
     , _levelClass( { FIRST_ROW, 440 }, "Level 1 Adventurer" )
-    , _attributes( { FIRST_ROW, 510, 0, 0 } )
+    , _attributes( { FIRST_ROW, 550, 0, 0 } )
     , _physicalSkills( { SECOND_ROW, 200, 0, 0 } )
     , _magicalSkills( { SECOND_ROW, 500, 0, 0 } )
 {

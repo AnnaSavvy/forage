@@ -43,6 +43,13 @@ struct Style
     int paddingY = 0;
     int borderWidth = 0;
     int borderRadius = 0;
+
+    Style() {}
+
+    Style( StandardColor backgroundColor, StandardColor borderColor = StandardColor::BLACK, int borderWidth = 0 );
+
+    Style( StandardFont font, StandardColor textColor = StandardColor::WHITE, StandardColor backgroundColor = StandardColor::BLACK,
+           StandardColor borderColor = StandardColor::BLACK, int borderWidth = 0 );
 };
 
 namespace StandardStyles

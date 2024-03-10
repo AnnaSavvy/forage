@@ -17,11 +17,7 @@ ModeStrategicView::ModeStrategicView()
 
     _menuPopup.setHidden( true );
 
-    Style buttonStyle;
-    buttonStyle.font = StandardFont::REGULAR_BOLD;
-    buttonStyle.textColor = StandardColor::HIGHLIGHT_RED;
-    buttonStyle.borderColor = StandardColor::DARK_GREY;
-    buttonStyle.borderWidth = 5;
+    Style buttonStyle{ StandardFont::REGULAR_BOLD, StandardColor::HIGHLIGHT_RED, StandardColor::BLACK, StandardColor::DARK_GREY, 5 };
     _bOpenMenu.setStyle( buttonStyle );
     _bEndTurn.setStyle( buttonStyle );
 

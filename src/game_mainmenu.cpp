@@ -3,29 +3,24 @@
 #include "renderer.h"
 #include "chart.h"
 
+namespace
+{
+    const Style buttonStyle{ StandardFont::REGULAR_BOLD, StandardColor::HIGHLIGHT_RED, StandardColor::BLACK, StandardColor::DARK_GREY, 5 };
+}
+
 ModeMainMenu::ModeMainMenu()
     : _backgroundMap( 100 )
     , _mapView( true )
     , _title( { 200, 150 }, "Best Damn Game", StandardFont::MENU_HUGE_TITLE, StandardColor::WHITE )
-    , _bNewGame( 400, 500, 270, 80, "New Game" )
-    , _bLoadGame( 400, 600, 270, 80, "Load Game" )
-    , _bOptions( 400, 700, 270, 80, "Options" )
-    , _bQuitGame( 400, 800, 270, 80, "Quit Game" )
+    , _bNewGame( { 400, 500, 270, 80 }, "New Game", buttonStyle )
+    , _bLoadGame( { 400, 600, 270, 80 }, "Load Game", buttonStyle )
+    , _bOptions( { 400, 700, 270, 80 }, "Options", buttonStyle )
+    , _bQuitGame( { 400, 800, 270, 80 }, "Quit Game", buttonStyle )
 {
     name = GameModeName::MAIN_MENU;
 
     _backgroundMap.updateMap();
     _mapView.setMap( _backgroundMap );
-
-    Style buttonStyle;
-    buttonStyle.font = StandardFont::REGULAR_BOLD;
-    buttonStyle.textColor = StandardColor::HIGHLIGHT_RED;
-    buttonStyle.borderColor = StandardColor::DARK_GREY;
-    buttonStyle.borderWidth = 5;
-    _bNewGame.setStyle( buttonStyle );
-    _bLoadGame.setStyle( buttonStyle );
-    _bOptions.setStyle( buttonStyle );
-    _bQuitGame.setStyle( buttonStyle );
 }
 
 GameModeName ModeMainMenu::handleEvents()
