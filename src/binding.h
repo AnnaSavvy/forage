@@ -16,3 +16,23 @@ struct ValueBinding
         , maximum( max )
     {}
 };
+
+class ValueComponent
+{
+    ValueBinding _binding;
+
+public:
+    ValueComponent( ValueBinding binding )
+        : _binding( binding )
+    {}
+
+    const ValueBinding & get() const
+    {
+        return _binding;
+    }
+
+    ValueBinding & editValue()
+    {
+        return _binding;
+    }
+};

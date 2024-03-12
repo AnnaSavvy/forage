@@ -100,20 +100,17 @@ public:
 
 class ProgressBar : public UIComponent
 {
+    Style _style;
+
 public:
+    ValueComponent _binding;
+
     ProgressBar( const Rect & dimensions, ValueBinding binding );
     ProgressBar( const Rect & dimensions, ValueBinding binding, const Style & style );
-
-    void setValue( int newValue );
-    int getValue() const;
 
     void setStyle( const Style & style );
     virtual void update( float deltaTime ) override {}
     virtual void render() override;
-
-private:
-    Style _style;
-    ValueBinding _binding;
 };
 
 // A basic menu element

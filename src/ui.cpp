@@ -194,19 +194,6 @@ ProgressBar::ProgressBar( const Rect & dimensions, ValueBinding binding, const S
     , _style( style )
 {}
 
-void ProgressBar::setValue( int newValue )
-{
-    _binding.value = newValue;
-    if ( _binding.value > _binding.maximum ) {
-        _binding.value = _binding.maximum;
-    }
-}
-
-int ProgressBar::getValue() const
-{
-    return _binding.value;
-}
-
 void ProgressBar::setStyle( const Style & style )
 {
     _style = style;
@@ -232,7 +219,8 @@ void ProgressBar::render()
         RenderEngine::DrawRect( _rect, _style.backgroundColor );
     }
 
-    const double ratio = std::min( static_cast<double>( _binding.value ) / _binding.maximum, 1.0 );
+    auto & binding = _binding.get();
+    const double ratio = std::min( static_cast<double>( binding.value ) / binding.maximum, 1.0 );
     if ( ratio > 0.0001 ) {
         Rect barArea = _rect;
         barArea._pos._x += _style.borderWidth;
@@ -246,7 +234,7 @@ void ProgressBar::render()
         RenderEngine::DrawRect( barArea, StandardColor::HIGHLIGHT_RED );
     }
 
-    std::string str = std::to_string( _binding.value ) + " / " + std::to_string( _binding.maximum );
+    std::string str = std::to_string( binding.value ) + " / " + std::to_string( binding.maximum );
     SDL_Surface * surface = RenderEngine::GetTextSurface( str, _style.font, _style.textColor );
     if ( surface ) {
         Rect textRect = _rect;

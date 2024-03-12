@@ -7,7 +7,7 @@
 
 namespace
 {
-    const std::vector<RPG::CharacterAttributes> martialGroup = { RPG::CharacterAttributes::CLOSE_COMBAT, RPG::CharacterAttributes::RANGED_COMBAT,
+    const std::vector<RPG::CharacterAttributes> physicalGroup = { RPG::CharacterAttributes::CLOSE_COMBAT, RPG::CharacterAttributes::RANGED_COMBAT,
                                                                  RPG::CharacterAttributes::DODGE, RPG::CharacterAttributes::BLOCK, RPG::CharacterAttributes::STEALTH };
     const std::vector<RPG::CharacterAttributes> magicalGroup = { RPG::CharacterAttributes::LIFE, RPG::CharacterAttributes::ARCANA, RPG::CharacterAttributes::NATURE,
                                                                  RPG::CharacterAttributes::CHAOS, RPG::CharacterAttributes::DEATH };
@@ -19,9 +19,9 @@ namespace
 
     class SkillCounter : public UIContainer
     {
-        ValueBinding _binding;
-
     public:
+        ValueComponent _binding;
+
         SkillCounter( Point position, int width, RPG::CharacterAttributes skill, ValueBinding binding )
             : UIContainer( { position._x, position._y, 0, 0 } )
             , _binding( binding )
@@ -41,13 +41,14 @@ namespace
 
         void handleClickEvent( const Point & click, int modes ) override
         {
+            const ValueBinding & binding = _binding.get();
             if ( _items[2]->getRect().contains( click ) ) {
                 const int change = modes & InputHandler::MOUSE_RIGHT_CLICKED ? 10 : 1;
-                _binding.value = std::min( _binding.value + change, _binding.maximum );
+                binding.value = std::min( binding.value + change, binding.maximum );
             }
             else if ( _items[3]->getRect().contains( click ) ) {
                 const int change = modes & InputHandler::MOUSE_RIGHT_CLICKED ? 10 : 1;
-                _binding.value = std::min( _binding.value - change, _binding.maximum );
+                binding.value = std::min( binding.value - change, binding.maximum );
             }
         }
     };
@@ -55,7 +56,6 @@ namespace
 
 ModeBuildCalculator::ModeBuildCalculator( GameState & state )
     : _state( state )
-    , _character( _state.units.front() )
     , _title( { 50, 10 }, "Character Builer" )
     , _bExit( RenderEngine::GetScreenSize()._x / 2 + 100, RenderEngine::GetScreenSize()._y - 80, 270, 60, "Return" )
     , _bGenerateName( RenderEngine::GetScreenSize()._x / 2 - 100, RenderEngine::GetScreenSize()._y - 80, 100, 60, "Generate" )
@@ -70,9 +70,11 @@ ModeBuildCalculator::ModeBuildCalculator( GameState & state )
 {
     name = GameModeName::BUILD_CALCULATOR;
 
+    changeCharacter( _state.units.front() );
+
     Point p = _physicalSkills.getRect()._pos;
 
-    for ( auto skill : martialGroup ) {
+    for ( auto skill : physicalGroup ) {
         _physicalSkills.addElement( std::make_shared<SkillCounter>( p, 200, skill, _character.getBinding( skill ) ) );
         p.modAdd( 0, 40 );
     }
@@ -88,6 +90,8 @@ void ModeBuildCalculator::changeCharacter( RPG::Character other )
 {
     _character = other;
     _charName.setText( std::to_string( _character.getId() ) );
+
+    _health._binding.editValue().maximum = _character.getMaxHealth();
 
     const int level = _character.getBinding( RPG::CharacterAttributes::LEVEL ).value;
     _levelClass.setText( "Level " + std::to_string( level ) + " " + CharacterClassToString( _character.getClass() ) );
