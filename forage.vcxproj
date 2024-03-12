@@ -187,6 +187,7 @@
     <ClInclude Include="src\binding.h" />
     <ClInclude Include="src\build_optimizer.h" />
     <ClInclude Include="src\character.h" />
+    <ClInclude Include="src\character_base.h" />
     <ClInclude Include="src\character_class.h" />
     <ClInclude Include="src\chart.h" />
     <ClInclude Include="src\component.h" />

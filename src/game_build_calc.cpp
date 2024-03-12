@@ -7,10 +7,8 @@
 
 namespace
 {
-    const std::vector<RPG::Character::Skills> martialGroup
-        = { RPG::Character::CLOSE_COMBAT, RPG::Character::RANGED_COMBAT, RPG::Character::DODGE, RPG::Character::BLOCK, RPG::Character::STEALTH };
-    const std::vector<RPG::Character::Skills> magicalGroup
-        = { RPG::Character::LIFE, RPG::Character::ARCANA, RPG::Character::NATURE, RPG::Character::CHAOS, RPG::Character::DEATH };
+    const std::vector<Skills::Enum> martialGroup = { Skills::CLOSE_COMBAT, Skills::RANGED_COMBAT, Skills::DODGE, Skills::BLOCK, Skills::STEALTH };
+    const std::vector<Skills::Enum> magicalGroup = { Skills::LIFE, Skills::ARCANA, Skills::NATURE, Skills::CHAOS, Skills::DEATH };
 
     const Style skillBarStyle{ StandardFont::SMALL, StandardColor::WHITE, StandardColor::DARK_GREY, StandardColor::REALM_PRECISION, 2 };
 
@@ -22,11 +20,11 @@ namespace
         ValueBinding _binding;
 
     public:
-        SkillCounter( Point position, int width, RPG::Character::Skills skill, ValueBinding binding )
+        SkillCounter( Point position, int width, Skills::Enum skill, ValueBinding binding )
             : UIContainer( { position._x, position._y, 0, 0 } )
             , _binding( binding )
         {
-            addElement( std::make_shared<Label>( Label( position, RPG::Character::GetSkillName( skill ) ) ) );
+            addElement( std::make_shared<Label>( Label( position, Skills::GetSkillName( skill ) ) ) );
             position.modAdd( 150, 0 );
 
             addElement( std::make_shared<ProgressBar>( ProgressBar( { position._x, position._y, width, 31 }, binding, skillBarStyle ) ) );
@@ -61,7 +59,7 @@ ModeBuildCalculator::ModeBuildCalculator( GameState & state )
     , _bGenerateName( RenderEngine::GetScreenSize()._x / 2 - 100, RenderEngine::GetScreenSize()._y - 80, 100, 60, "Generate" )
     , _bNext( RenderEngine::GetScreenSize()._x - 110, RenderEngine::GetScreenSize()._y - 80, 100, 60, "Next >" )
     , _bPrevious( FIRST_ROW, RenderEngine::GetScreenSize()._y - 80, 100, 60, "< Prev" )
-    , _health( { FIRST_ROW, 490, 236, 40 }, _character.getSkillBinding( RPG::Character::ARCANA ), skillBarStyle )
+    , _health( { FIRST_ROW, 490, 236, 40 }, _character.getBinding( Skills::ARCANA ), skillBarStyle )
     , _charName( { FIRST_ROW, 410 }, "Unknown" )
     , _levelClass( { FIRST_ROW, 440 }, "Level 1 Adventurer" )
     , _attributes( { FIRST_ROW, 550, 0, 0 } )
@@ -73,13 +71,13 @@ ModeBuildCalculator::ModeBuildCalculator( GameState & state )
     Point p = _physicalSkills.getRect()._pos;
 
     for ( auto skill : martialGroup ) {
-        _physicalSkills.addElement( std::make_shared<SkillCounter>( p, 200, skill, _character.getSkillBinding( skill ) ) );
+        _physicalSkills.addElement( std::make_shared<SkillCounter>( p, 200, skill, _character.getBinding( skill ) ) );
         p.modAdd( 0, 40 );
     }
 
     p = _magicalSkills.getRect()._pos;
     for ( auto skill : magicalGroup ) {
-        _magicalSkills.addElement( std::make_shared<SkillCounter>( p, 200, skill, _character.getSkillBinding( skill ) ) );
+        _magicalSkills.addElement( std::make_shared<SkillCounter>( p, 200, skill, _character.getBinding( skill ) ) );
         p.modAdd( 0, 40 );
     }
 }
@@ -88,7 +86,7 @@ void ModeBuildCalculator::changeCharacter( RPG::Character other )
 {
     _character = other;
     _charName.setText( std::to_string( _character.getId() ) );
-    _levelClass.setText( "Level 1 " + ToString( _character.getClass() ) );
+    _levelClass.setText( "Level 1 " + CharacterClassToString( _character.getClass() ) );
 }
 
 GameModeName ModeBuildCalculator::handleEvents()
@@ -99,6 +97,12 @@ GameModeName ModeBuildCalculator::handleEvents()
         if ( input.isSet( InputHandler::MOUSE_CLICKED ) ) {
             const Point & mouseClick = input.getClickPosition();
             if ( _bExit.getRect().contains( mouseClick ) ) {
+                for ( auto & unit : _state.units ) {
+                    if ( unit.getId() == _character.getId() ) {
+                        unit = _character;
+                        break;
+                    }
+                }
                 return GameModeName::CANCEL;
             }
             else if ( _bGenerateName.getRect().contains( mouseClick ) ) {

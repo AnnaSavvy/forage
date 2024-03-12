@@ -299,6 +299,9 @@
     <ClInclude Include="src\binding.h">
       <Filter>Header Files\engine</Filter>
     </ClInclude>
+    <ClInclude Include="src\character_base.h">
+      <Filter>Header Files\rpg</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="data.json">

@@ -1,5 +1,5 @@
 #pragma once
-#include <string>
+#include "character_base.h"
 
 enum class CharacterClass
 {
@@ -84,4 +84,12 @@ enum class CharacterClass
     PRESTIGE_DEMIGOD,
 };
 
-std::string ToString( CharacterClass name );
+struct Requirements
+{
+    Stats stat;
+    Skills skill;
+
+    static Requirements BuildForClass( CharacterClass name );
+};
+
+std::string CharacterClassToString( CharacterClass name );

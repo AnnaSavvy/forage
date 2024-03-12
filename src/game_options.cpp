@@ -1,6 +1,6 @@
 #include "game_options.h"
-#include "input.h"
 #include "character.h"
+#include "input.h"
 
 ModeOptions::ModeOptions()
     : _title( { 50, 10 }, "Options" )
@@ -46,7 +46,7 @@ GameModeName ModeOptions::handleEvents()
         else if ( input.isSet( InputHandler::UP ) ) {
             if ( inputDelay <= 0 ) {
                 current = static_cast<CharacterClass>( static_cast<int>( current ) + 1 );
-                _title.setText( ToString( current ) );
+                _title.setText( CharacterClassToString( current ) );
                 pick( current );
                 inputDelay = 15;
             }
@@ -55,7 +55,7 @@ GameModeName ModeOptions::handleEvents()
         else if ( input.isSet( InputHandler::DOWN ) ) {
             if ( inputDelay <= 0 ) {
                 current = static_cast<CharacterClass>( static_cast<int>( current ) - 1 );
-                _title.setText( ToString( current ) );
+                _title.setText( CharacterClassToString( current ) );
                 pick( current );
                 inputDelay = 15;
             }
@@ -84,7 +84,7 @@ void ModeOptions::render()
 
 void ModeOptions::pick( CharacterClass name )
 {
-    RPG::Requirements require = RPG::getRequirements( name );
+    Requirements require = Requirements::BuildForClass( name );
 
     for ( Chart::DataPoint & dp : _realmPhysical.getData() ) {
         switch ( dp.color ) {
