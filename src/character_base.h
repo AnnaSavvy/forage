@@ -50,45 +50,6 @@ struct Skills
 
         INVALID_SKILL
     };
-
-    static std::string GetSkillName( Skills::Enum skill )
-    {
-        switch ( skill ) {
-        case CLOSE_COMBAT:
-            return "Melee";
-        case RANGED_COMBAT:
-            return "Ranged";
-        case DODGE:
-            return "Dodge";
-        case BLOCK:
-            return "Block";
-        case STEALTH:
-            return "Stealth";
-        case LIFE:
-            return "Life";
-        case ARCANA:
-            return "Arcana";
-        case NATURE:
-            return "Nature";
-        case CHAOS:
-            return "Chaos";
-        case DEATH:
-            return "Death";
-        case MAGIC_FIRE:
-            return "Fire";
-        case MAGIC_WATER:
-            return "Water";
-        case MAGIC_AIR:
-            return "Air";
-        case MAGIC_EARTH:
-            return "Earth";
-        case MAGIC_MENTAL:
-            return "Mental";
-        case MAGIC_DIVINITY:
-            return "Divinity";
-        }
-        return "Unknown";
-    }
 };
 
 struct Unit

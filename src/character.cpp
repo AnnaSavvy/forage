@@ -85,8 +85,101 @@ namespace RPG
         currentHealth = getMaxHealth();
     }
 
-    ValueBinding Character::getBinding( Skills::Enum skill )
+    std::string Character::GetSkillName( CharacterAttributes skill )
     {
-        return { skills[skill] };
+        switch ( skill ) {
+        case CharacterAttributes::CLOSE_COMBAT:
+            return "Melee";
+        case CharacterAttributes::RANGED_COMBAT:
+            return "Ranged";
+        case CharacterAttributes::DODGE:
+            return "Dodge";
+        case CharacterAttributes::BLOCK:
+            return "Block";
+        case CharacterAttributes::STEALTH:
+            return "Stealth";
+        case CharacterAttributes::LIFE:
+            return "Life";
+        case CharacterAttributes::ARCANA:
+            return "Arcana";
+        case CharacterAttributes::NATURE:
+            return "Nature";
+        case CharacterAttributes::CHAOS:
+            return "Chaos";
+        case CharacterAttributes::DEATH:
+            return "Death";
+        case CharacterAttributes::MAGIC_FIRE:
+            return "Fire";
+        case CharacterAttributes::MAGIC_WATER:
+            return "Water";
+        case CharacterAttributes::MAGIC_AIR:
+            return "Air";
+        case CharacterAttributes::MAGIC_EARTH:
+            return "Earth";
+        case CharacterAttributes::MAGIC_MENTAL:
+            return "Mental";
+        case CharacterAttributes::MAGIC_DIVINITY:
+            return "Divinity";
+        }
+        return "Unknown";
+    }
+
+    ValueBinding Character::getBinding( CharacterAttributes attribute )
+    {
+        switch ( attribute ) {
+        case RPG::CharacterAttributes::HEALTH:
+            return { currentHealth, 0, getMaxHealth() };
+        case RPG::CharacterAttributes::LEVEL:
+            return { level };
+        case RPG::CharacterAttributes::STRENGTH:
+            return { stats.strength };
+        case RPG::CharacterAttributes::DEXTERITY:
+            return { stats.dexterity };
+        case RPG::CharacterAttributes::AGILITY:
+            return { stats.agility };
+        case RPG::CharacterAttributes::CONSTITUTION:
+            return { stats.constitution };
+        case RPG::CharacterAttributes::INTELLIGENCE:
+            return { stats.intelligence };
+        case RPG::CharacterAttributes::WILLPOWER:
+            return { stats.willpower };
+        case RPG::CharacterAttributes::CHARISMA:
+            return { stats.charisma };
+        case RPG::CharacterAttributes::CLOSE_COMBAT:
+            return { skills[Skills::CLOSE_COMBAT] };
+        case RPG::CharacterAttributes::RANGED_COMBAT:
+            return { skills[Skills::RANGED_COMBAT] };
+        case RPG::CharacterAttributes::DODGE:
+            return { skills[Skills::DODGE] };
+        case RPG::CharacterAttributes::BLOCK:
+            return { skills[Skills::BLOCK] };
+        case RPG::CharacterAttributes::STEALTH:
+            return { skills[Skills::STEALTH] };
+        case RPG::CharacterAttributes::LIFE:
+            return { skills[Skills::LIFE] };
+        case RPG::CharacterAttributes::ARCANA:
+            return { skills[Skills::ARCANA] };
+        case RPG::CharacterAttributes::NATURE:
+            return { skills[Skills::NATURE] };
+        case RPG::CharacterAttributes::CHAOS:
+            return { skills[Skills::CHAOS] };
+        case RPG::CharacterAttributes::DEATH:
+            return { skills[Skills::DEATH] };
+        case RPG::CharacterAttributes::MAGIC_FIRE:
+            return { skills[Skills::MAGIC_FIRE] };
+        case RPG::CharacterAttributes::MAGIC_WATER:
+            return { skills[Skills::MAGIC_WATER] };
+        case RPG::CharacterAttributes::MAGIC_AIR:
+            return { skills[Skills::MAGIC_AIR] };
+        case RPG::CharacterAttributes::MAGIC_EARTH:
+            return { skills[Skills::MAGIC_EARTH] };
+        case RPG::CharacterAttributes::MAGIC_MENTAL:
+            return { skills[Skills::MAGIC_MENTAL] };
+        case RPG::CharacterAttributes::MAGIC_DIVINITY:
+            return { skills[Skills::MAGIC_DIVINITY] };
+        default:
+            break;
+        }
+        return { level };
     }
 }

@@ -1,5 +1,6 @@
 #include "rpg_arena.h"
 
+#include <cassert>
 #include <iostream>
 #include <queue>
 

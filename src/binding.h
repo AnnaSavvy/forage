@@ -9,4 +9,10 @@ struct ValueBinding
     ValueBinding( int & input )
         : value( input )
     {}
+
+    ValueBinding( int & input, int min, int max )
+        : value( input )
+        , minimum( min )
+        , maximum( max )
+    {}
 };

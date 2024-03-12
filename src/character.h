@@ -3,7 +3,6 @@
 #include "character_class.h"
 #include "point.h"
 #include "spell.h"
-#include <cassert>
 
 namespace RPG
 {
@@ -19,6 +18,39 @@ namespace RPG
         AGILE,
         WIZARD,
         MONSTER
+    };
+
+    enum class CharacterAttributes
+    {
+        HEALTH,
+        LEVEL,
+
+        STRENGTH,
+        DEXTERITY,
+        AGILITY,
+        CONSTITUTION,
+        INTELLIGENCE,
+        WILLPOWER,
+        CHARISMA,
+
+        CLOSE_COMBAT,
+        RANGED_COMBAT,
+        DODGE,
+        BLOCK,
+        STEALTH,
+
+        LIFE,
+        ARCANA,
+        NATURE,
+        CHAOS,
+        DEATH,
+
+        MAGIC_FIRE,
+        MAGIC_WATER,
+        MAGIC_AIR,
+        MAGIC_EARTH,
+        MAGIC_MENTAL,
+        MAGIC_DIVINITY
     };
 
     class Character : protected Unit
@@ -106,7 +138,9 @@ namespace RPG
             return false;
         }
 
-        ValueBinding getBinding( Skills::Enum skill );
+        static std::string GetSkillName( CharacterAttributes skill );
+
+        ValueBinding getBinding( CharacterAttributes attribute );
     };
 
     using CharacterRef = std::reference_wrapper<Character>;

@@ -7,8 +7,10 @@
 
 namespace
 {
-    const std::vector<Skills::Enum> martialGroup = { Skills::CLOSE_COMBAT, Skills::RANGED_COMBAT, Skills::DODGE, Skills::BLOCK, Skills::STEALTH };
-    const std::vector<Skills::Enum> magicalGroup = { Skills::LIFE, Skills::ARCANA, Skills::NATURE, Skills::CHAOS, Skills::DEATH };
+    const std::vector<RPG::CharacterAttributes> martialGroup = { RPG::CharacterAttributes::CLOSE_COMBAT, RPG::CharacterAttributes::RANGED_COMBAT,
+                                                                 RPG::CharacterAttributes::DODGE, RPG::CharacterAttributes::BLOCK, RPG::CharacterAttributes::STEALTH };
+    const std::vector<RPG::CharacterAttributes> magicalGroup = { RPG::CharacterAttributes::LIFE, RPG::CharacterAttributes::ARCANA, RPG::CharacterAttributes::NATURE,
+                                                                 RPG::CharacterAttributes::CHAOS, RPG::CharacterAttributes::DEATH };
 
     const Style skillBarStyle{ StandardFont::SMALL, StandardColor::WHITE, StandardColor::DARK_GREY, StandardColor::REALM_PRECISION, 2 };
 
@@ -20,11 +22,11 @@ namespace
         ValueBinding _binding;
 
     public:
-        SkillCounter( Point position, int width, Skills::Enum skill, ValueBinding binding )
+        SkillCounter( Point position, int width, RPG::CharacterAttributes skill, ValueBinding binding )
             : UIContainer( { position._x, position._y, 0, 0 } )
             , _binding( binding )
         {
-            addElement( std::make_shared<Label>( Label( position, Skills::GetSkillName( skill ) ) ) );
+            addElement( std::make_shared<Label>( Label( position, RPG::Character::GetSkillName( skill ) ) ) );
             position.modAdd( 150, 0 );
 
             addElement( std::make_shared<ProgressBar>( ProgressBar( { position._x, position._y, width, 31 }, binding, skillBarStyle ) ) );
@@ -59,7 +61,7 @@ ModeBuildCalculator::ModeBuildCalculator( GameState & state )
     , _bGenerateName( RenderEngine::GetScreenSize()._x / 2 - 100, RenderEngine::GetScreenSize()._y - 80, 100, 60, "Generate" )
     , _bNext( RenderEngine::GetScreenSize()._x - 110, RenderEngine::GetScreenSize()._y - 80, 100, 60, "Next >" )
     , _bPrevious( FIRST_ROW, RenderEngine::GetScreenSize()._y - 80, 100, 60, "< Prev" )
-    , _health( { FIRST_ROW, 490, 236, 40 }, _character.getBinding( Skills::ARCANA ), skillBarStyle )
+    , _health( { FIRST_ROW, 490, 236, 40 }, _character.getBinding( RPG::CharacterAttributes::HEALTH ), skillBarStyle )
     , _charName( { FIRST_ROW, 410 }, "Unknown" )
     , _levelClass( { FIRST_ROW, 440 }, "Level 1 Adventurer" )
     , _attributes( { FIRST_ROW, 550, 0, 0 } )
@@ -86,7 +88,9 @@ void ModeBuildCalculator::changeCharacter( RPG::Character other )
 {
     _character = other;
     _charName.setText( std::to_string( _character.getId() ) );
-    _levelClass.setText( "Level 1 " + CharacterClassToString( _character.getClass() ) );
+
+    const int level = _character.getBinding( RPG::CharacterAttributes::LEVEL ).value;
+    _levelClass.setText( "Level " + std::to_string( level ) + " " + CharacterClassToString( _character.getClass() ) );
 }
 
 GameModeName ModeBuildCalculator::handleEvents()
