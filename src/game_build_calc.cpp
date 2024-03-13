@@ -4,11 +4,12 @@
 #include "input.h"
 #include "renderer.h"
 #include "rpg_generation.h"
+#include "ui_rpg.h"
 
 namespace
 {
     const std::vector<RPG::CharacterAttributes> physicalGroup = { RPG::CharacterAttributes::CLOSE_COMBAT, RPG::CharacterAttributes::RANGED_COMBAT,
-                                                                 RPG::CharacterAttributes::DODGE, RPG::CharacterAttributes::BLOCK, RPG::CharacterAttributes::STEALTH };
+                                                                  RPG::CharacterAttributes::DODGE, RPG::CharacterAttributes::BLOCK, RPG::CharacterAttributes::STEALTH };
     const std::vector<RPG::CharacterAttributes> magicalGroup = { RPG::CharacterAttributes::LIFE, RPG::CharacterAttributes::ARCANA, RPG::CharacterAttributes::NATURE,
                                                                  RPG::CharacterAttributes::CHAOS, RPG::CharacterAttributes::DEATH };
 
@@ -16,42 +17,6 @@ namespace
 
     constexpr int FIRST_ROW = 20;
     constexpr int SECOND_ROW = 300;
-
-    class SkillCounter : public UIContainer
-    {
-    public:
-        ValueComponent _binding;
-
-        SkillCounter( Point position, int width, RPG::CharacterAttributes skill, ValueBinding binding )
-            : UIContainer( { position._x, position._y, 0, 0 } )
-            , _binding( binding )
-        {
-            addElement( std::make_shared<Label>( Label( position, RPG::Character::GetSkillName( skill ) ) ) );
-            position.modAdd( 150, 0 );
-
-            addElement( std::make_shared<ProgressBar>( ProgressBar( { position._x, position._y, width, 31 }, binding, skillBarStyle ) ) );
-
-            const Style buttonStyle{ StandardFont::REGULAR, StandardColor::WHITE, StandardColor::DARK_GREY, StandardColor::REALM_PRECISION, 2 };
-
-            addElement( std::make_shared<Button>( Button( { position._x + width + 5, position._y, 31, 31 }, "+", buttonStyle ) ) );
-            addElement( std::make_shared<Button>( Button( { position._x - 36, position._y, 31, 31 }, "-", buttonStyle ) ) );
-
-            updateRect();
-        }
-
-        void handleClickEvent( const Point & click, int modes ) override
-        {
-            const ValueBinding & binding = _binding.get();
-            if ( _items[2]->getRect().contains( click ) ) {
-                const int change = modes & InputHandler::MOUSE_RIGHT_CLICKED ? 10 : 1;
-                binding.value = std::min( binding.value + change, binding.maximum );
-            }
-            else if ( _items[3]->getRect().contains( click ) ) {
-                const int change = modes & InputHandler::MOUSE_RIGHT_CLICKED ? 10 : 1;
-                binding.value = std::min( binding.value - change, binding.maximum );
-            }
-        }
-    };
 }
 
 ModeBuildCalculator::ModeBuildCalculator( GameState & state )
@@ -75,13 +40,13 @@ ModeBuildCalculator::ModeBuildCalculator( GameState & state )
     Point p = _physicalSkills.getRect()._pos;
 
     for ( auto skill : physicalGroup ) {
-        _physicalSkills.addElement( std::make_shared<SkillCounter>( p, 200, skill, _character.getBinding( skill ) ) );
+        _physicalSkills.addElement( std::make_shared<SkillCounter>( p, 200, RPG::Character::GetSkillName( skill ), _character.getBinding( skill ) ) );
         p.modAdd( 0, 40 );
     }
 
     p = _magicalSkills.getRect()._pos;
     for ( auto skill : magicalGroup ) {
-        _magicalSkills.addElement( std::make_shared<SkillCounter>( p, 200, skill, _character.getBinding( skill ) ) );
+        _magicalSkills.addElement( std::make_shared<SkillCounter>( p, 200, RPG::Character::GetSkillName( skill ), _character.getBinding( skill ) ) );
         p.modAdd( 0, 40 );
     }
 }
