@@ -65,6 +65,29 @@ Point RenderEngine::GetScreenSize()
     return engine._logicalSize;
 }
 
+Point RenderEngine::GetAnchorPoint( AnchorPoint anchor )
+{
+    switch ( anchor ) {
+    case AnchorPoint::TOP_LEFT:
+        return {};
+    case AnchorPoint::TOP_CENTER:
+        return { engine._logicalSize._x / 2, 0 };
+    case AnchorPoint::TOP_RIGHT:
+        return { engine._logicalSize._x, 0 };
+    case AnchorPoint::CENTER_LEFT:
+        return { 0, engine._logicalSize._y / 2 };
+    case AnchorPoint::CENTER:
+        return engine._logicalSize.div( 2 );
+    case AnchorPoint::CENTER_RIGHT:
+        return { engine._logicalSize._x, engine._logicalSize._y / 2 };
+    case AnchorPoint::BOTTOM_LEFT:
+        return { 0, engine._logicalSize._y };
+    case AnchorPoint::BOTTOM_CENTER:
+        return { engine._logicalSize._x / 2, engine._logicalSize._y };
+    }
+    return engine._logicalSize;
+}
+
 RenderEngine & RenderEngine::Get()
 {
     return engine;

@@ -85,8 +85,8 @@ class Button : public UIComponent
 
 public:
     Button( int x, int y, int width, int height, const std::string & label );
-    Button( const Point & position, int width, int height, const std::string & label );
     Button( const Rect & dimensions, const std::string & label, const Style & style );
+    Button( const Point & position, int width, int height, const std::string & label, const Style & style );
     virtual ~Button() = default;
 
     void update( float deltaTime ) override;

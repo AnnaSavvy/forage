@@ -2,6 +2,8 @@
 #include "input.h"
 #include "renderer.h"
 
+#include <SDL.h>
+
 namespace
 {
     const Style skillBarStyle{ StandardFont::SMALL, StandardColor::WHITE, StandardColor::DARK_GREY, StandardColor::REALM_PRECISION, 2 };
@@ -10,15 +12,7 @@ namespace
 CenteringLabel::CenteringLabel( const Point & position, const std::string & text, int width )
     : Label( position, text )
     , _expectedWidth( width )
-{
-    updateOffset();
-}
-
-void CenteringLabel::setText( const std::string & text )
-{
-    Label::setText( text );
-    updateOffset();
-}
+{}
 
 void CenteringLabel::render()
 {
@@ -26,13 +20,15 @@ void CenteringLabel::render()
         return;
     }
 
-    RenderEngine::DrawText( _text, _rect._pos.add( _offset, 0 ), _font, _color );
-}
+    SDL_Surface * surface = RenderEngine::GetTextSurface( _text, _font, _color );
+    if ( surface ) {
+        Rect textRect = _rect;
+        textRect._pos._x += ( _expectedWidth - surface->w ) / 2;
+        textRect._size._x = surface->w;
+        textRect._size._y = surface->h;
 
-void CenteringLabel::updateOffset()
-{
-    const int width = RenderEngine::GetTextWidth( _text, _font );
-    _offset = ( width < _expectedWidth ) ? ( _expectedWidth - width ) / 2 : 0;
+        RenderEngine::DrawDestroySurface( surface, textRect );
+    }
 }
 
 SkillCounter::SkillCounter( Point position, int width, std::string description, ValueBinding binding )

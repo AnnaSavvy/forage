@@ -4,14 +4,9 @@
 class CenteringLabel : public Label
 {
     int _expectedWidth;
-    int _offset = 0;
-
-    void updateOffset();
 
 public:
     CenteringLabel( const Point & position, const std::string & text, int width );
-
-    virtual void setText( const std::string & text ) override;
     virtual void render() override;
 };
 

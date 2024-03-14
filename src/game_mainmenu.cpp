@@ -1,7 +1,7 @@
 #include "game_mainmenu.h"
+#include "chart.h"
 #include "input.h"
 #include "renderer.h"
-#include "chart.h"
 
 namespace
 {
@@ -11,11 +11,11 @@ namespace
 ModeMainMenu::ModeMainMenu()
     : _backgroundMap( 100 )
     , _mapView( true )
-    , _title( { 200, 150 }, "Best Damn Game", StandardFont::MENU_HUGE_TITLE, StandardColor::WHITE )
-    , _bNewGame( { 400, 500, 270, 80 }, "New Game", buttonStyle )
-    , _bLoadGame( { 400, 600, 270, 80 }, "Load Game", buttonStyle )
-    , _bOptions( { 400, 700, 270, 80 }, "Options", buttonStyle )
-    , _bQuitGame( { 400, 800, 270, 80 }, "Quit Game", buttonStyle )
+    , _title( RenderEngine::GetAnchorPoint( AnchorPoint::TOP_CENTER ).modAdd( -333, 100 ), "Best Damn Game", StandardFont::MENU_HUGE_TITLE, StandardColor::WHITE )
+    , _bNewGame( RenderEngine::GetAnchorPoint( AnchorPoint::CENTER ).modAdd( -135, 0 ), 270, 80, "New Game", buttonStyle )
+    , _bLoadGame( RenderEngine::GetAnchorPoint( AnchorPoint::CENTER ).modAdd( -135, 100 ), 270, 80, "Load Game", buttonStyle )
+    , _bOptions( RenderEngine::GetAnchorPoint( AnchorPoint::CENTER ).modAdd( -135, 200 ), 270, 80, "Options", buttonStyle )
+    , _bQuitGame( RenderEngine::GetAnchorPoint( AnchorPoint::CENTER ).modAdd( -135, 300 ), 270, 80, "Quit Game", buttonStyle )
 {
     name = GameModeName::MAIN_MENU;
 

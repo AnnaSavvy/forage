@@ -8,6 +8,19 @@ struct SDL_Window;
 struct SDL_Renderer;
 struct SDL_Surface;
 
+enum class AnchorPoint
+{
+    TOP_LEFT,
+    TOP_CENTER,
+    TOP_RIGHT,
+    CENTER_LEFT,
+    CENTER,
+    CENTER_RIGHT,
+    BOTTOM_LEFT,
+    BOTTOM_CENTER,
+    BOTTOM_RIGHT,
+};
+
 class RenderEngine
 {
     AssetLoader _assets;
@@ -19,6 +32,7 @@ public:
     bool Initialize( Point logicalSize, double scaling );
     SDL_Renderer * GetRenderer();
     static Point GetScreenSize();
+    static Point GetAnchorPoint( AnchorPoint anchor );
     static RenderEngine & Get();
 
     static bool Draw( const std::string & image, const Rect & target, bool flipped = false );
