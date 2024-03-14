@@ -64,13 +64,13 @@ public:
     Label( const Point & position, const std::string & text );
     Label( const Point & position, const std::string & text, StandardFont font, StandardColor color );
 
-    void setText( const std::string & text );
     void setColor( StandardColor color );
+    virtual void setText( const std::string & text );
 
     virtual void update( float deltaTime ) override {}
     virtual void render() override;
 
-private:
+protected:
     std::string _text;
     StandardFont _font = StandardFont::REGULAR;
     StandardColor _color = StandardColor::WHITE;

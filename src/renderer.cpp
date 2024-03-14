@@ -118,17 +118,17 @@ bool RenderEngine::DrawStyledRect( const Rect & target, const Style & style )
     return SDL_RenderFillRect( engine._renderer, &rect ) == 0;
 }
 
-bool RenderEngine::DrawText( const std::string & text, const Point & target )
+int RenderEngine::DrawText( const std::string & text, const Point & target )
 {
     return DrawText( text, target, StandardFont::REGULAR, StandardColor::WHITE );
 }
 
-bool RenderEngine::DrawText( const std::string & text, const Point & target, StandardFont font )
+int RenderEngine::DrawText( const std::string & text, const Point & target, StandardFont font )
 {
     return DrawText( text, target, font, StandardColor::WHITE );
 }
 
-bool RenderEngine::DrawText( const std::string & text, const Point & target, StandardFont font, StandardColor color )
+int RenderEngine::DrawText( const std::string & text, const Point & target, StandardFont font, StandardColor color )
 {
     SDL_Surface * textSurface = GetTextSurface( text, font, color );
     if ( !textSurface ) {
@@ -142,7 +142,7 @@ bool RenderEngine::DrawText( const std::string & text, const Point & target, Sta
     SDL_FreeSurface( textSurface );
     SDL_DestroyTexture( textTexture );
 
-    return success;
+    return success ? textRect.w : 0;
 }
 
 SDL_Surface * RenderEngine::GetTextSurface( const std::string & text, StandardFont font, StandardColor color )
@@ -185,4 +185,17 @@ bool RenderEngine::DrawPieSlice( const Rect & target, double startAngle, double 
     return SDL::aaFilledPieRGBA( engine._renderer, target._pos._x, target._pos._y, target._size._x, target._size._y, startAngle, endAngle, false, pieColor->r,
                                  pieColor->g, pieColor->b, pieColor->a )
            == 0;
+}
+
+int RenderEngine::GetTextWidth( const std::string & text, StandardFont font )
+{
+    SDL_Surface * textSurface = GetTextSurface( text, font, StandardColor::WHITE );
+    if ( !textSurface ) {
+        return 0;
+    }
+
+    const int result = textSurface->w;
+    SDL_FreeSurface( textSurface );
+
+    return result;
 }

@@ -88,6 +88,20 @@ namespace RPG
     std::string Character::GetSkillName( CharacterAttributes skill )
     {
         switch ( skill ) {
+        case RPG::CharacterAttributes::STRENGTH:
+            return "STR";
+        case RPG::CharacterAttributes::DEXTERITY:
+            return "DEX";
+        case RPG::CharacterAttributes::AGILITY:
+            return "AGI";
+        case RPG::CharacterAttributes::CONSTITUTION:
+            return "CON";
+        case RPG::CharacterAttributes::INTELLIGENCE:
+            return "INT";
+        case RPG::CharacterAttributes::WILLPOWER:
+            return "WIL";
+        case RPG::CharacterAttributes::CHARISMA:
+            return "CHA";
         case CharacterAttributes::CLOSE_COMBAT:
             return "Melee";
         case CharacterAttributes::RANGED_COMBAT:

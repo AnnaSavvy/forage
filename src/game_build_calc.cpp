@@ -8,6 +8,9 @@
 
 namespace
 {
+    const std::vector<RPG::CharacterAttributes> attributeGroup
+        = { RPG::CharacterAttributes::STRENGTH,     RPG::CharacterAttributes::AGILITY,   RPG::CharacterAttributes::CONSTITUTION, RPG::CharacterAttributes::DEXTERITY,
+            RPG::CharacterAttributes::INTELLIGENCE, RPG::CharacterAttributes::WILLPOWER, RPG::CharacterAttributes::CHARISMA };
     const std::vector<RPG::CharacterAttributes> physicalGroup = { RPG::CharacterAttributes::CLOSE_COMBAT, RPG::CharacterAttributes::RANGED_COMBAT,
                                                                   RPG::CharacterAttributes::DODGE, RPG::CharacterAttributes::BLOCK, RPG::CharacterAttributes::STEALTH };
     const std::vector<RPG::CharacterAttributes> magicalGroup = { RPG::CharacterAttributes::LIFE, RPG::CharacterAttributes::ARCANA, RPG::CharacterAttributes::NATURE,
@@ -26,10 +29,10 @@ ModeBuildCalculator::ModeBuildCalculator( GameState & state )
     , _bGenerateName( RenderEngine::GetScreenSize()._x / 2 - 100, RenderEngine::GetScreenSize()._y - 80, 100, 60, "Generate" )
     , _bNext( RenderEngine::GetScreenSize()._x - 110, RenderEngine::GetScreenSize()._y - 80, 100, 60, "Next >" )
     , _bPrevious( FIRST_ROW, RenderEngine::GetScreenSize()._y - 80, 100, 60, "< Prev" )
-    , _health( { FIRST_ROW, 490, 236, 40 }, _character.getBinding( RPG::CharacterAttributes::HEALTH ), skillBarStyle )
+    , _health( { FIRST_ROW, 480, 236, 40 }, _character.getBinding( RPG::CharacterAttributes::HEALTH ), skillBarStyle )
     , _charName( { FIRST_ROW, 410 }, "Unknown" )
     , _levelClass( { FIRST_ROW, 440 }, "Level 1 Adventurer" )
-    , _attributes( { FIRST_ROW, 550, 0, 0 } )
+    , _attributes( { FIRST_ROW, 580, 0, 0 } )
     , _physicalSkills( { SECOND_ROW, 200, 0, 0 } )
     , _magicalSkills( { SECOND_ROW, 500, 0, 0 } )
 {
@@ -47,6 +50,12 @@ ModeBuildCalculator::ModeBuildCalculator( GameState & state )
     p = _magicalSkills.getRect()._pos;
     for ( auto skill : magicalGroup ) {
         _magicalSkills.addElement( std::make_shared<SkillCounter>( p, 200, RPG::Character::GetSkillName( skill ), _character.getBinding( skill ) ) );
+        p.modAdd( 0, 40 );
+    }
+
+    p = _attributes.getRect()._pos;
+    for ( auto attribute : attributeGroup ) {
+        _attributes.addElement( std::make_shared<AttributeCounter>( p, RPG::Character::GetSkillName( attribute ), _character.getBinding( attribute ) ) );
         p.modAdd( 0, 40 );
     }
 }
