@@ -12,7 +12,7 @@ namespace
 
 ModeBattle::ModeBattle( GameState & state )
     : _title( { 50, 10 }, "Battle" )
-    , _bExit( 400, 800, 270, 80, "Return" )
+    , _bExit( RenderEngine::GetAnchorRect( AnchorPoint::BOTTOM_RIGHT, 270, 80 ), "Return", {} )
     , _arena( state.playerForce, state.otherForce )
 {
     name = GameModeName::BATTLE;

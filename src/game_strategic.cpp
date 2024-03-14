@@ -6,9 +6,9 @@
 ModeStrategicView::ModeStrategicView()
     : _map( 40 )
     , _lResources( { 50, 10 }, "Food: 0, Tools: 0, Gold: 0" )
-    , _bOpenMenu( 824, 0, 200, 80, "Menu" )
-    , _bEndTurn( 824, 944, 200, 80, "End Turn" )
-    , _menuPopup( { 312, 262, 400, 500 }, "Menu" )
+    , _bOpenMenu( RenderEngine::GetAnchorRect( AnchorPoint::TOP_RIGHT, 200, 80 ), "Menu", {} )
+    , _bEndTurn( RenderEngine::GetAnchorRect( AnchorPoint::BOTTOM_RIGHT, 200, 80 ), "End Turn", {} )
+    , _menuPopup( RenderEngine::GetAnchorRect( AnchorPoint::CENTER, 400, 50 ), "Menu" )
 {
     name = GameModeName::NEW_GAME;
 

@@ -11,8 +11,8 @@
 #include <SDL.h>
 
 Game::Game( Point desiredSize )
-    : _logicalSize( 1024, 1024 )
-    , _windowScaling( desiredSize._y / 1024.0 )
+    : _logicalSize( BASE_RESOLUTION_X, BASE_RESOLUTION_Y )
+    , _windowScaling( desiredSize._y / (double)BASE_RESOLUTION_Y )
 {}
 
 Game::~Game()

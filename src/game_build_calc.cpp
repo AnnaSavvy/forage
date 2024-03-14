@@ -24,7 +24,7 @@ namespace
 
 ModeBuildCalculator::ModeBuildCalculator( GameState & state )
     : _state( state )
-    , _title( { 50, 10 }, "Character Builer" )
+    , _title( RenderEngine::GetAnchorPoint( AnchorPoint::TOP_CENTER ).modAdd( 100, -70 ), "Character Builer" )
     , _bExit( RenderEngine::GetAnchorPoint( AnchorPoint::BOTTOM_CENTER ).modAdd( 100, -70 ), 270, 60, "Return", {} )
     , _bGenerateName( RenderEngine::GetAnchorPoint( AnchorPoint::BOTTOM_CENTER ).modAdd( -100, -70 ), 100, 60, "Generate", {} )
     , _bNext( RenderEngine::GetAnchorPoint( AnchorPoint::BOTTOM_RIGHT ).modAdd( -110, -70 ), 100, 60, "Next >", {} )
@@ -133,7 +133,7 @@ void ModeBuildCalculator::render()
 {
     _title.render();
 
-    RenderEngine::Draw( "assets/portaits/03087.png", { 10, 10, 256, 384 } );
+    RenderEngine::Draw( "assets/portaits/03087.png", { 10, 10, 128, 192 } );
 
     _charName.render();
     _levelClass.render();

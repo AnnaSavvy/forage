@@ -42,6 +42,7 @@ bool RenderEngine::Initialize( Point logicalSize, double scaling )
         return false;
     }
 
+    SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "2" );
     SDL_RenderSetScale( _renderer, scaling, scaling );
 
     if ( !StandardStyles::loadAssets() ) {
@@ -86,6 +87,52 @@ Point RenderEngine::GetAnchorPoint( AnchorPoint anchor )
         return { engine._logicalSize._x / 2, engine._logicalSize._y };
     }
     return engine._logicalSize;
+}
+
+Point RenderEngine::GetAnchorPoint( AnchorPoint anchor, int width, int height )
+{
+    switch ( anchor ) {
+    case AnchorPoint::TOP_CENTER:
+        return { ( engine._logicalSize._x - width ) / 2, 0 };
+    case AnchorPoint::TOP_RIGHT:
+        return { ( engine._logicalSize._x - width ), 0 };
+    case AnchorPoint::CENTER_LEFT:
+        return { 0, ( engine._logicalSize._y - height ) / 2 };
+    case AnchorPoint::CENTER:
+        return { ( engine._logicalSize._x - width ) / 2, ( engine._logicalSize._y - height ) / 2 };
+    case AnchorPoint::CENTER_RIGHT:
+        return { ( engine._logicalSize._x - width ), ( engine._logicalSize._y - height ) / 2 };
+    case AnchorPoint::BOTTOM_LEFT:
+        return { 0, engine._logicalSize._y - height };
+    case AnchorPoint::BOTTOM_CENTER:
+        return { ( engine._logicalSize._x - width ) / 2, engine._logicalSize._y - height };
+    case AnchorPoint::BOTTOM_RIGHT:
+        return { engine._logicalSize._x - width, engine._logicalSize._y - height };
+    }
+    return {};
+}
+
+Rect RenderEngine::GetAnchorRect( AnchorPoint anchor, int width, int height )
+{
+    switch ( anchor ) {
+    case AnchorPoint::TOP_CENTER:
+        return { ( engine._logicalSize._x - width ) / 2, 0, width, height };
+    case AnchorPoint::TOP_RIGHT:
+        return { ( engine._logicalSize._x - width ), 0, width, height };
+    case AnchorPoint::CENTER_LEFT:
+        return { 0, ( engine._logicalSize._y - height ) / 2, width, height };
+    case AnchorPoint::CENTER:
+        return { ( engine._logicalSize._x - width ) / 2, ( engine._logicalSize._y - height ) / 2, width, height };
+    case AnchorPoint::CENTER_RIGHT:
+        return { ( engine._logicalSize._x - width ), ( engine._logicalSize._y - height ) / 2, width, height };
+    case AnchorPoint::BOTTOM_LEFT:
+        return { 0, engine._logicalSize._y - height, width, height };
+    case AnchorPoint::BOTTOM_CENTER:
+        return { ( engine._logicalSize._x - width ) / 2, engine._logicalSize._y - height, width, height };
+    case AnchorPoint::BOTTOM_RIGHT:
+        return { engine._logicalSize._x - width, engine._logicalSize._y - height, width, height };
+    }
+    return { 0, 0, width, height };
 }
 
 RenderEngine & RenderEngine::Get()
@@ -180,7 +227,7 @@ SDL_Surface * RenderEngine::GetTextSurface( const std::string & text, StandardFo
         return nullptr;
     }
 
-    return TTF_RenderText_Solid( fontPtr, text.c_str(), *textColor );
+    return TTF_RenderText_Blended( fontPtr, text.c_str(), *textColor );
 }
 
 bool RenderEngine::DrawDestroySurface( SDL_Surface * surface, const Rect & target )

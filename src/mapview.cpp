@@ -37,7 +37,7 @@ void MapView::render() const
     const int xStart = std::max( 0, cameraX / TILESIZE - 1 );
     const int yStart = std::max( 0, cameraY / TILESIZE - 1 );
     int xEnd = xStart + screenSize._x / TILESIZE + 2;
-    int yEnd = yStart + screenSize._y / TILESIZE + 2;
+    int yEnd = yStart + screenSize._y / TILESIZE + 3;
 
     if ( !infiniteScrolling ) {
         if ( xEnd > mapWidth )
