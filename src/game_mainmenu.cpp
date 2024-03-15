@@ -12,10 +12,11 @@ ModeMainMenu::ModeMainMenu()
     : _backgroundMap( 100 )
     , _mapView( true )
     , _title( { 0, 0, RenderEngine::GetScreenSize()._x, 300 }, "Best Damn Game", StandardFont::MENU_HUGE_TITLE, StandardColor::WHITE )
-    , _bNewGame( RenderEngine::GetAnchorRect( AnchorPoint::CENTER, 270, 80 ), "New Game", buttonStyle )
-    , _bLoadGame( RenderEngine::GetAnchorRect( AnchorPoint::CENTER, 270, 80 ).modAdd( 0, 100 ), "Load Game", buttonStyle )
-    , _bOptions( RenderEngine::GetAnchorRect( AnchorPoint::CENTER, 270, 80 ).modAdd( 0, 200 ), "Options", buttonStyle )
-    , _bQuitGame( RenderEngine::GetAnchorRect( AnchorPoint::CENTER, 270, 80 ).modAdd( 0, 300 ), "Quit Game", buttonStyle )
+    , _bNewGame( RenderEngine::GetAnchorRect( AnchorPoint::CENTER, 270, 80 ).modAdd( 0, -30), "New Game", buttonStyle )
+    , _bLoadGame( RenderEngine::GetAnchorRect( AnchorPoint::CENTER, 270, 80 ).modAdd( 0, 60 ), "Load Game", buttonStyle )
+    , _bBattle( RenderEngine::GetAnchorRect( AnchorPoint::CENTER, 270, 80 ).modAdd( 0, 150 ), "Battle", buttonStyle )
+    , _bOptions( RenderEngine::GetAnchorRect( AnchorPoint::CENTER, 270, 80 ).modAdd( 0, 240 ), "Options", buttonStyle )
+    , _bQuitGame( RenderEngine::GetAnchorRect( AnchorPoint::CENTER, 270, 80 ).modAdd( 0, 330 ), "Quit Game", buttonStyle )
 {
     name = GameModeName::MAIN_MENU;
 
@@ -36,8 +37,11 @@ GameModeName ModeMainMenu::handleEvents()
             else if ( _bLoadGame.getRect().contains( mouseClick ) ) {
                 return GameModeName::LOAD_GAME;
             }
-            else if ( _bOptions.getRect().contains( mouseClick ) ) {
+            else if ( _bBattle.getRect().contains( mouseClick ) ) {
                 return GameModeName::BATTLE;
+            }
+            else if ( _bOptions.getRect().contains( mouseClick ) ) {
+                return GameModeName::OPTIONS_SCREEN;
             }
             else if ( _bQuitGame.getRect().contains( mouseClick ) ) {
                 return GameModeName::QUIT_GAME;
@@ -60,6 +64,7 @@ void ModeMainMenu::render()
 
     _bNewGame.render();
     _bLoadGame.render();
+    _bBattle.render();
     _bOptions.render();
     _bQuitGame.render();
 }

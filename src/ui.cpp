@@ -269,7 +269,7 @@ void ProgressBar::render()
         if ( barArea._size._x < 0 ) {
             barArea._size._x = 0;
         }
-        RenderEngine::DrawRect( barArea, StandardColor::HIGHLIGHT_RED );
+        RenderEngine::DrawRect( barArea, StandardColor::DARK_RED );
     }
 
     std::string str = std::to_string( binding.value ) + " / " + std::to_string( binding.maximum );

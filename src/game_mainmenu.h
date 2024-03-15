@@ -13,6 +13,7 @@ class ModeMainMenu : public GameMode
     CenteringLabel _title;
     Button _bNewGame;
     Button _bLoadGame;
+    Button _bBattle;
     Button _bOptions;
     Button _bQuitGame;
 
