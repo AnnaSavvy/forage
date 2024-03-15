@@ -133,7 +133,22 @@ void ModeBuildCalculator::render()
 {
     _title.render();
 
-    RenderEngine::Draw( "assets/portaits/03087.png", { FIRST_ROW, 10, 200, 300 } );
+    std::string picture = "00000.png";
+    CharacterClass charClass = _character.getClass();
+    switch ( charClass ) {
+    case CharacterClass::MARTIAL_STR:
+        picture = "00001.png";
+        break;
+    case CharacterClass::MAGICAL_NATURE:
+        picture = "00003.png";
+        break;
+    case CharacterClass::MARTIAL_AGI:
+        picture = "00002.png";
+        break;
+    default:
+        break;
+    }
+    RenderEngine::Draw( "assets/portaits/" + picture, { FIRST_ROW, 10, 200, 300 } );
 
     _charName.render();
     _levelClass.render();
