@@ -1,15 +1,6 @@
 #pragma once
 #include "ui.h"
 
-class CenteringLabel : public Label
-{
-    int _expectedWidth;
-
-public:
-    CenteringLabel( const Point & position, const std::string & text, int width );
-    virtual void render() override;
-};
-
 class SkillCounter : public UIContainer
 {
 public:

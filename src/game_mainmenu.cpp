@@ -11,11 +11,11 @@ namespace
 ModeMainMenu::ModeMainMenu()
     : _backgroundMap( 100 )
     , _mapView( true )
-    , _title( RenderEngine::GetAnchorPoint( AnchorPoint::TOP_CENTER ).modAdd( -333, 80 ), "Best Damn Game", StandardFont::MENU_HUGE_TITLE, StandardColor::WHITE )
+    , _title( { 0, 0, RenderEngine::GetScreenSize()._x, 300 }, "Best Damn Game", StandardFont::MENU_HUGE_TITLE, StandardColor::WHITE )
     , _bNewGame( RenderEngine::GetAnchorRect( AnchorPoint::CENTER, 270, 80 ), "New Game", buttonStyle )
-    , _bLoadGame( RenderEngine::GetAnchorPoint( AnchorPoint::CENTER, 270, 80 ).modAdd( 0, 100 ), 270, 80, "Load Game", buttonStyle )
-    , _bOptions( RenderEngine::GetAnchorPoint( AnchorPoint::CENTER, 270, 80 ).modAdd( 0, 200 ), 270, 80, "Options", buttonStyle )
-    , _bQuitGame( RenderEngine::GetAnchorPoint( AnchorPoint::CENTER, 270, 80 ).modAdd( 0, 300 ), 270, 80, "Quit Game", buttonStyle )
+    , _bLoadGame( RenderEngine::GetAnchorRect( AnchorPoint::CENTER, 270, 80 ).modAdd( 0, 100 ), "Load Game", buttonStyle )
+    , _bOptions( RenderEngine::GetAnchorRect( AnchorPoint::CENTER, 270, 80 ).modAdd( 0, 200 ), "Options", buttonStyle )
+    , _bQuitGame( RenderEngine::GetAnchorRect( AnchorPoint::CENTER, 270, 80 ).modAdd( 0, 300 ), "Quit Game", buttonStyle )
 {
     name = GameModeName::MAIN_MENU;
 

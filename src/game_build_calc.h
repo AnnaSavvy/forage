@@ -11,7 +11,7 @@ class ModeBuildCalculator : public GameMode
     GameState & _state;
     RPG::Character _character;
 
-    Label _title;
+    CenteringLabel _title;
     Button _bExit;
 
     Label _charName;

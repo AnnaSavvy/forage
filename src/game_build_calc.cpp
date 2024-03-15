@@ -18,23 +18,23 @@ namespace
 
     const Style skillBarStyle{ StandardFont::SMALL, StandardColor::WHITE, StandardColor::DARK_GREY, StandardColor::REALM_PRECISION, 2 };
 
-    constexpr int FIRST_ROW = 20;
-    constexpr int SECOND_ROW = 300;
+    constexpr int FIRST_ROW = 30;
+    constexpr int SECOND_ROW = 400;
 }
 
 ModeBuildCalculator::ModeBuildCalculator( GameState & state )
     : _state( state )
-    , _title( RenderEngine::GetAnchorPoint( AnchorPoint::TOP_CENTER ).modAdd( 100, -70 ), "Character Builer" )
-    , _bExit( RenderEngine::GetAnchorPoint( AnchorPoint::BOTTOM_CENTER ).modAdd( 100, -70 ), 270, 60, "Return", {} )
-    , _bGenerateName( RenderEngine::GetAnchorPoint( AnchorPoint::BOTTOM_CENTER ).modAdd( -100, -70 ), 100, 60, "Generate", {} )
-    , _bNext( RenderEngine::GetAnchorPoint( AnchorPoint::BOTTOM_RIGHT ).modAdd( -110, -70 ), 100, 60, "Next >", {} )
-    , _bPrevious( RenderEngine::GetAnchorPoint( AnchorPoint::BOTTOM_LEFT ).modAdd( 10, -70 ), 100, 60, "< Prev", {} )
-    , _health( { FIRST_ROW, 480, 236, 40 }, _character.getBinding( RPG::CharacterAttributes::HEALTH ), skillBarStyle )
-    , _charName( { FIRST_ROW, 410 }, "Unknown" )
-    , _levelClass( { FIRST_ROW, 440 }, "Level 1 Adventurer" )
-    , _attributes( { FIRST_ROW, 580, 0, 0 } )
-    , _physicalSkills( { SECOND_ROW, 200, 0, 0 } )
-    , _magicalSkills( { SECOND_ROW, 500, 0, 0 } )
+    , _title( { 0, 0, RenderEngine::GetScreenSize()._x, 50 }, "Character Builder" )
+    , _bExit( RenderEngine::GetAnchorRect( AnchorPoint::BOTTOM_RIGHT, 100, 60 ).modAdd( -200, 0 ), "Return", {} )
+    , _bGenerateName( RenderEngine::GetAnchorRect( AnchorPoint::BOTTOM_CENTER, 100, 60 ), "Generate", {} )
+    , _bNext( RenderEngine::GetAnchorRect( AnchorPoint::BOTTOM_RIGHT, 100, 60 ), "Next >", {} )
+    , _bPrevious( RenderEngine::GetAnchorRect( AnchorPoint::BOTTOM_LEFT, 100, 60 ), "< Prev", {} )
+    , _health( { FIRST_ROW, 290, 236, 40 }, _character.getBinding( RPG::CharacterAttributes::HEALTH ), skillBarStyle )
+    , _charName( { FIRST_ROW, 210 }, "Unknown" )
+    , _levelClass( { FIRST_ROW, 250 }, "Level 1 Adventurer" )
+    , _attributes( { FIRST_ROW, 350, 0, 0 } )
+    , _physicalSkills( { SECOND_ROW, 80, 0, 0 } )
+    , _magicalSkills( { SECOND_ROW, 350, 0, 0 } )
 {
     name = GameModeName::BUILD_CALCULATOR;
 
@@ -133,7 +133,7 @@ void ModeBuildCalculator::render()
 {
     _title.render();
 
-    RenderEngine::Draw( "assets/portaits/03087.png", { 10, 10, 128, 192 } );
+    RenderEngine::Draw( "assets/portaits/03087.png", { FIRST_ROW, 10, 200, 300 } );
 
     _charName.render();
     _levelClass.render();

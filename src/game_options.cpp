@@ -1,10 +1,11 @@
 #include "game_options.h"
 #include "character.h"
 #include "input.h"
+#include "renderer.h"
 
 ModeOptions::ModeOptions()
-    : _title( { 50, 10 }, "Options" )
-    , _bExit( 400, 800, 270, 80, "Return" )
+    : _title( { 0, 0, RenderEngine::GetScreenSize()._x, 50 }, "Options" )
+    , _bExit( RenderEngine::GetAnchorRect( AnchorPoint::BOTTOM_RIGHT, 270, 80 ), "Return", {} )
     , _realmPhysical( { 150, 150 }, { 300, 300 } )
     , _realmMagical( { 600, 150 }, { 300, 300 } )
 {

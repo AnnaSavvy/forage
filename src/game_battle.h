@@ -7,7 +7,7 @@
 
 class ModeBattle : public GameMode
 {
-    Label _title;
+    CenteringLabel _title;
     Button _bExit;
     RPG::Arena _arena;
 

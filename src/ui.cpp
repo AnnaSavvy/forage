@@ -112,6 +112,41 @@ void Label::render()
     RenderEngine::DrawText( _text, _rect._pos, _font, _color );
 }
 
+CenteringLabel::CenteringLabel( const Point & position, const std::string & text, int width )
+    : Label( position, text )
+    , _expectedSize( width, 0 )
+{}
+
+CenteringLabel::CenteringLabel( const Rect & dimensions, const std::string & text )
+    : Label( dimensions._pos, text )
+    , _expectedSize( dimensions._size )
+{}
+
+CenteringLabel::CenteringLabel( const Rect & dimensions, const std::string & text, StandardFont font, StandardColor color )
+    : Label( dimensions._pos, text, font, color )
+    , _expectedSize( dimensions._size )
+{}
+
+void CenteringLabel::render()
+{
+    if ( _hidden ) {
+        return;
+    }
+
+    SDL_Surface * surface = RenderEngine::GetTextSurface( _text, _font, _color );
+    if ( surface ) {
+        Rect textRect = _rect;
+        textRect._pos._x += ( _expectedSize._x - surface->w ) / 2;
+        if ( _expectedSize._y > 0 ) {
+            textRect._pos._y += ( _expectedSize._y - surface->h ) / 2;
+        }
+        textRect._size._x = surface->w;
+        textRect._size._y = surface->h;
+
+        RenderEngine::DrawDestroySurface( surface, textRect );
+    }
+}
+
 Window::Window( Rect rect, const std::string & title )
     : UIComponent( rect )
     , _title( title )

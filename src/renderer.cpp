@@ -89,29 +89,6 @@ Point RenderEngine::GetAnchorPoint( AnchorPoint anchor )
     return engine._logicalSize;
 }
 
-Point RenderEngine::GetAnchorPoint( AnchorPoint anchor, int width, int height )
-{
-    switch ( anchor ) {
-    case AnchorPoint::TOP_CENTER:
-        return { ( engine._logicalSize._x - width ) / 2, 0 };
-    case AnchorPoint::TOP_RIGHT:
-        return { ( engine._logicalSize._x - width ), 0 };
-    case AnchorPoint::CENTER_LEFT:
-        return { 0, ( engine._logicalSize._y - height ) / 2 };
-    case AnchorPoint::CENTER:
-        return { ( engine._logicalSize._x - width ) / 2, ( engine._logicalSize._y - height ) / 2 };
-    case AnchorPoint::CENTER_RIGHT:
-        return { ( engine._logicalSize._x - width ), ( engine._logicalSize._y - height ) / 2 };
-    case AnchorPoint::BOTTOM_LEFT:
-        return { 0, engine._logicalSize._y - height };
-    case AnchorPoint::BOTTOM_CENTER:
-        return { ( engine._logicalSize._x - width ) / 2, engine._logicalSize._y - height };
-    case AnchorPoint::BOTTOM_RIGHT:
-        return { engine._logicalSize._x - width, engine._logicalSize._y - height };
-    }
-    return {};
-}
-
 Rect RenderEngine::GetAnchorRect( AnchorPoint anchor, int width, int height )
 {
     switch ( anchor ) {

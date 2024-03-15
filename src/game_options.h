@@ -6,7 +6,7 @@
 
 class ModeOptions : public GameMode
 {
-    Label _title;
+    CenteringLabel _title;
     Button _bExit;
     Chart::Pie _realmPhysical;
     Chart::Pie _realmMagical;

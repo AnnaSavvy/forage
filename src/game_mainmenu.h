@@ -10,7 +10,7 @@ class ModeMainMenu : public GameMode
     WaveMap _backgroundMap;
     MapView _mapView;
 
-    Label _title; 
+    CenteringLabel _title;
     Button _bNewGame;
     Button _bLoadGame;
     Button _bOptions;

@@ -11,7 +11,7 @@ namespace
 }
 
 ModeBattle::ModeBattle( GameState & state )
-    : _title( { 50, 10 }, "Battle" )
+    : _title( { 0, 0, RenderEngine::GetScreenSize()._x, 50 }, "Battle" )
     , _bExit( RenderEngine::GetAnchorRect( AnchorPoint::BOTTOM_RIGHT, 270, 80 ), "Return", {} )
     , _arena( state.playerForce, state.otherForce )
 {

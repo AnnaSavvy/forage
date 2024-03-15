@@ -72,6 +72,7 @@ struct Rect {
     Rect( const Rect & );
 	~Rect() = default;
 	Rect& operator= (const Rect&);
+    Rect & modAdd( int x, int y );
 	bool contains(const Point& pos) const;
 	void iterate(std::function<void(const Point&)>& action, int step = 1);
 	bool iterate(std::function<bool(const Point&)>& action, bool defaultVal, int step = 1);

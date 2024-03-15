@@ -37,7 +37,6 @@ public:
     SDL_Renderer * GetRenderer();
     static Point GetScreenSize();
     static Point GetAnchorPoint( AnchorPoint anchor );
-    static Point GetAnchorPoint( AnchorPoint anchor, int width, int height );
     static Rect GetAnchorRect( AnchorPoint anchor, int width, int height );
     static RenderEngine & Get();
 

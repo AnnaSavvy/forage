@@ -113,6 +113,17 @@ public:
     virtual void render() override;
 };
 
+class CenteringLabel : public Label
+{
+    Point _expectedSize;
+
+public:
+    CenteringLabel( const Point & position, const std::string & text, int width );
+    CenteringLabel( const Rect & dimensions, const std::string & text );
+    CenteringLabel( const Rect & dimensions, const std::string & text, StandardFont font, StandardColor color );
+    virtual void render() override;
+};
+
 // A basic menu element
 class Menu : public UIComponent
 {

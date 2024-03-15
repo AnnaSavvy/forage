@@ -9,28 +9,6 @@ namespace
     const Style skillBarStyle{ StandardFont::SMALL, StandardColor::WHITE, StandardColor::DARK_GREY, StandardColor::REALM_PRECISION, 2 };
 }
 
-CenteringLabel::CenteringLabel( const Point & position, const std::string & text, int width )
-    : Label( position, text )
-    , _expectedWidth( width )
-{}
-
-void CenteringLabel::render()
-{
-    if ( _hidden ) {
-        return;
-    }
-
-    SDL_Surface * surface = RenderEngine::GetTextSurface( _text, _font, _color );
-    if ( surface ) {
-        Rect textRect = _rect;
-        textRect._pos._x += ( _expectedWidth - surface->w ) / 2;
-        textRect._size._x = surface->w;
-        textRect._size._y = surface->h;
-
-        RenderEngine::DrawDestroySurface( surface, textRect );
-    }
-}
-
 SkillCounter::SkillCounter( Point position, int width, std::string description, ValueBinding binding )
     : UIContainer( { position._x, position._y, 0, 0 } )
     , _binding( binding )

@@ -349,6 +349,12 @@ Rect & Rect::operator=( const Rect & rhs )
     return *this;
 }
 
+Rect & Rect::modAdd( int x, int y )
+{
+    _pos.modAdd( x, y );
+    return *this;
+}
+
 bool Rect::contains( const Point & pos ) const
 {
     return pos.in( _pos, _size );
