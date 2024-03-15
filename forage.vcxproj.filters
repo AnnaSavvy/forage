@@ -28,12 +28,6 @@
     <Filter Include="Source Files\gamemodes">
       <UniqueIdentifier>{c5b4ca24-6d44-4aea-b139-cdb582683fd1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\genetics">
-      <UniqueIdentifier>{34cbe77f-0a58-437a-a590-22ce0add8a57}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\genetics">
-      <UniqueIdentifier>{e9630e48-7695-413b-a615-9b05585c6a00}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\rpg">
       <UniqueIdentifier>{784183ca-aea1-40f6-a948-98db9e00e2ed}</UniqueIdentifier>
     </Filter>
@@ -43,8 +37,11 @@
     <Filter Include="Source Files\experimental">
       <UniqueIdentifier>{275f88ef-defc-47e2-99b4-1959c996f870}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\combat">
-      <UniqueIdentifier>{f1f14b46-9ccc-42ed-baa2-10ccafdb5c62}</UniqueIdentifier>
+    <Filter Include="Header Files\experimental\genetics">
+      <UniqueIdentifier>{e9630e48-7695-413b-a615-9b05585c6a00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\experimental\genetics">
+      <UniqueIdentifier>{34cbe77f-0a58-437a-a590-22ce0add8a57}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -91,13 +88,13 @@
       <Filter>Source Files\gamemodes</Filter>
     </ClCompile>
     <ClCompile Include="src\genetics.cpp">
-      <Filter>Source Files\genetics</Filter>
+      <Filter>Source Files\experimental\genetics</Filter>
     </ClCompile>
     <ClCompile Include="src\genetics_protein.cpp">
-      <Filter>Source Files\genetics</Filter>
+      <Filter>Source Files\experimental\genetics</Filter>
     </ClCompile>
     <ClCompile Include="src\genetics_chromosome.cpp">
-      <Filter>Source Files\genetics</Filter>
+      <Filter>Source Files\experimental\genetics</Filter>
     </ClCompile>
     <ClCompile Include="src\game_strategic.cpp">
       <Filter>Source Files\gamemodes</Filter>
@@ -152,9 +149,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\object.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\static.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -234,19 +228,19 @@
       <Filter>Header Files\gamemodes</Filter>
     </ClInclude>
     <ClInclude Include="src\gene.h">
-      <Filter>Header Files\genetics</Filter>
+      <Filter>Header Files\experimental\genetics</Filter>
     </ClInclude>
     <ClInclude Include="src\genetics.h">
-      <Filter>Header Files\genetics</Filter>
+      <Filter>Header Files\experimental\genetics</Filter>
     </ClInclude>
     <ClInclude Include="src\genetics_chromosome.h">
-      <Filter>Header Files\genetics</Filter>
+      <Filter>Header Files\experimental\genetics</Filter>
     </ClInclude>
     <ClInclude Include="src\genetics_protein.h">
-      <Filter>Header Files\genetics</Filter>
+      <Filter>Header Files\experimental\genetics</Filter>
     </ClInclude>
     <ClInclude Include="src\genome.h">
-      <Filter>Header Files\genetics</Filter>
+      <Filter>Header Files\experimental\genetics</Filter>
     </ClInclude>
     <ClInclude Include="src\character.h">
       <Filter>Header Files\rpg</Filter>
@@ -304,6 +298,9 @@
     </ClInclude>
     <ClInclude Include="src\ui_rpg.h">
       <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\object.h">
+      <Filter>Header Files\experimental</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

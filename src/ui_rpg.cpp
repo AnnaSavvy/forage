@@ -60,16 +60,22 @@ AttributeCounter::AttributeCounter( Point position, std::string description, Val
 
 void AttributeCounter::handleClickEvent( const Point & click, int modes )
 {
-    const ValueBinding & binding = _binding.get();
+    ValueBinding & binding = _binding.editValue();
     if ( _items[1]->getRect().contains( click ) ) {
         const int change = modes & InputHandler::MOUSE_RIGHT_CLICKED ? 10 : 1;
         binding.value = std::max( binding.value - change, binding.minimum );
-        _display->setText( std::to_string( binding.value ) );
     }
     else if ( _items[3]->getRect().contains( click ) ) {
         const int big = binding.value == 1 ? 9 : 10;
         const int change = modes & InputHandler::MOUSE_RIGHT_CLICKED ? big : 1;
         binding.value = std::min( binding.value + change, binding.maximum );
-        _display->setText( std::to_string( binding.value ) );
+    }
+}
+
+void AttributeCounter::render()
+{
+    _display->setText( std::to_string( _binding.get().value ) );
+    for ( auto & component : _items ) {
+        component.get()->render();
     }
 }

@@ -26,6 +26,7 @@ class ModeBuildCalculator : public GameMode
     UIContainer _magicalSkills;
 
     void changeCharacter( RPG::Character other );
+    void saveCharacter();
 
 public:
     ModeBuildCalculator( GameState & state );

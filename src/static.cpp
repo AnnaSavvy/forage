@@ -16,10 +16,8 @@ namespace
 const nlohmann::json & GetStaticData( DataFileName file )
 {
     static nlohmann::json j;
-    if ( j.empty() ) {
-        std::ifstream dataStream( dataFiles[static_cast<int>( file )].string );
-        dataStream >> j;
-    }
+    std::ifstream dataStream( dataFiles[static_cast<int>( file )].string );
+    dataStream >> j;
     return j;
 }
 

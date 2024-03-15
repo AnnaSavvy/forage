@@ -62,6 +62,7 @@ ModeBuildCalculator::ModeBuildCalculator( GameState & state )
 
 void ModeBuildCalculator::changeCharacter( RPG::Character other )
 {
+    saveCharacter();
     _character = other;
     _charName.setText( std::to_string( _character.getId() ) );
 
@@ -69,6 +70,16 @@ void ModeBuildCalculator::changeCharacter( RPG::Character other )
 
     const int level = _character.getBinding( RPG::CharacterAttributes::LEVEL ).value;
     _levelClass.setText( "Level " + std::to_string( level ) + " " + CharacterClassToString( _character.getClass() ) );
+}
+
+void ModeBuildCalculator::saveCharacter()
+{
+    for ( auto & unit : _state.units ) {
+        if ( unit.getId() == _character.getId() ) {
+            unit = _character;
+            break;
+        }
+    }
 }
 
 GameModeName ModeBuildCalculator::handleEvents()
@@ -79,12 +90,7 @@ GameModeName ModeBuildCalculator::handleEvents()
         if ( input.isSet( InputHandler::MOUSE_CLICKED ) ) {
             const Point & mouseClick = input.getClickPosition();
             if ( _bExit.getRect().contains( mouseClick ) ) {
-                for ( auto & unit : _state.units ) {
-                    if ( unit.getId() == _character.getId() ) {
-                        unit = _character;
-                        break;
-                    }
-                }
+                saveCharacter();
                 return GameModeName::CANCEL;
             }
             else if ( _bGenerateName.getRect().contains( mouseClick ) ) {

@@ -21,4 +21,5 @@ public:
     AttributeCounter( Point position, std::string description, ValueBinding binding );
 
     void handleClickEvent( const Point & click, int modes ) override;
+    virtual void render() override;
 };
