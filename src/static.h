@@ -5,6 +5,7 @@ enum class DataFileName
 {
     GENERIC_DATA,
     PREGEN_NAMES,
+    OPTIONS,
 };
 
 const nlohmann::json & GetStaticData( DataFileName file );

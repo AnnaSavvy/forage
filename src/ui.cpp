@@ -136,7 +136,9 @@ void CenteringLabel::render()
     SDL_Surface * surface = RenderEngine::GetTextSurface( _text, _font, _color );
     if ( surface ) {
         Rect textRect = _rect;
-        textRect._pos._x += ( _expectedSize._x - surface->w ) / 2;
+        if ( _expectedSize._x > 0 ) {
+            textRect._pos._x += ( _expectedSize._x - surface->w ) / 2;
+        }
         if ( _expectedSize._y > 0 ) {
             textRect._pos._y += ( _expectedSize._y - surface->h ) / 2;
         }

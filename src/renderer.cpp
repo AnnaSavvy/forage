@@ -27,7 +27,7 @@ bool RenderEngine::Initialize( Point logicalSize, double scaling )
         return false;
     }
 
-    _window = SDL_CreateWindow( "Card Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _logicalSize._x * scaling, _logicalSize._y * scaling, SDL_WINDOW_SHOWN );
+    _window = SDL_CreateWindow( "BDG", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _logicalSize._x * scaling, _logicalSize._y * scaling, SDL_WINDOW_SHOWN );
     if ( !_window ) {
         std::cerr << "SDL_CreateWindow error: " << SDL_GetError() << std::endl;
         SDL_Quit();

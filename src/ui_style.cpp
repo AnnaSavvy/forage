@@ -48,7 +48,7 @@ namespace StandardStyles
         colors.clear();
         colors.resize( static_cast<int>( StandardColor::END ) );
 
-        TTF_Font * font = TTF_OpenFont( "assets/font/Roboto-Bold.ttf", 24 );
+        TTF_Font * font = TTF_OpenFont( "assets/font/Roboto-Bold.ttf", 18 );
         if ( !font ) {
             std::cout << "Failed to load font: " << TTF_GetError() << std::endl;
             return false;

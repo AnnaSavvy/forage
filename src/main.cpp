@@ -1,7 +1,11 @@
 #include "game.h"
+#include "static.h"
 
-int main(int argc, char* argv[]) {
-    Game game = { { 1280, 720 } };
+int main( int argc, char * argv[] )
+{
+    const nlohmann::json & data = GetStaticData( DataFileName::OPTIONS );
+
+    Game game = { { data["display"]["resolutionX"], data["display"]["resolutionY"] } };
     game.init();
     game.run();
 

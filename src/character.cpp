@@ -142,23 +142,23 @@ namespace RPG
     {
         switch ( attribute ) {
         case RPG::CharacterAttributes::HEALTH:
-            return { currentHealth, 0, getMaxHealth() };
+            return { currentHealth, -100, getMaxHealth() };
         case RPG::CharacterAttributes::LEVEL:
-            return { level };
+            return { level, 1, 100 };
         case RPG::CharacterAttributes::STRENGTH:
-            return { stats.strength };
+            return { stats.strength, 1, 100 };
         case RPG::CharacterAttributes::DEXTERITY:
-            return { stats.dexterity };
+            return { stats.dexterity, 1, 100 };
         case RPG::CharacterAttributes::AGILITY:
-            return { stats.agility };
+            return { stats.agility, 1, 100 };
         case RPG::CharacterAttributes::CONSTITUTION:
-            return { stats.constitution };
+            return { stats.constitution, 1, 100 };
         case RPG::CharacterAttributes::INTELLIGENCE:
-            return { stats.intelligence };
+            return { stats.intelligence, 1, 100 };
         case RPG::CharacterAttributes::WILLPOWER:
-            return { stats.willpower };
+            return { stats.willpower, 1, 100 };
         case RPG::CharacterAttributes::CHARISMA:
-            return { stats.charisma };
+            return { stats.charisma, 1, 100 };
         case RPG::CharacterAttributes::CLOSE_COMBAT:
             return { skills[Skills::CLOSE_COMBAT] };
         case RPG::CharacterAttributes::RANGED_COMBAT:

@@ -9,7 +9,8 @@ namespace
     {
         DataFileName type;
         const char * string;
-    } dataFiles[] = { { DataFileName::GENERIC_DATA, "data.json" }, { DataFileName::PREGEN_NAMES, "assets/pregen_names.json" } };
+    } dataFiles[]
+        = { { DataFileName::GENERIC_DATA, "data.json" }, { DataFileName::PREGEN_NAMES, "assets/pregen_names.json" }, { DataFileName::OPTIONS, "options.json" } };
 }
 
 const nlohmann::json & GetStaticData( DataFileName file )

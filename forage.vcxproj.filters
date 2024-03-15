@@ -148,7 +148,7 @@
       <Filter>Source Files\rpg</Filter>
     </ClCompile>
     <ClCompile Include="src\ui_rpg.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
