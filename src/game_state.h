@@ -1,9 +1,10 @@
 #pragma once
 
 #include "map.h"
+#include "rng.h"
 #include "rpg_arena.h"
 #include "wave_function.h"
-#include "rng.h"
+
 #include <array>
 
 struct GameState

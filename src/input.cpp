@@ -56,6 +56,21 @@ bool InputHandler::handleEvent()
             case SDLK_RIGHT:
                 _modes |= InputToggle::RIGHT;
                 break;
+            case SDLK_SPACE:
+                _modes |= InputToggle::SPACE;
+                break;
+            case SDLK_LSHIFT:
+            case SDLK_RSHIFT:
+                _modes |= InputToggle::SHIFT;
+                break;
+            case SDLK_LALT:
+            case SDLK_RALT:
+                _modes |= InputToggle::ALT;
+                break;
+            case SDLK_LCTRL:
+            case SDLK_RCTRL:
+                _modes |= InputToggle::CONTROL;
+                break;
             }
             break;
         case SDL_KEYUP:
@@ -71,6 +86,21 @@ bool InputHandler::handleEvent()
                 break;
             case SDLK_RIGHT:
                 _modes &= ~InputToggle::RIGHT;
+                break;
+            case SDLK_SPACE:
+                _modes &= ~InputToggle::SPACE;
+                break;
+            case SDLK_LSHIFT:
+            case SDLK_RSHIFT:
+                _modes &= ~InputToggle::SHIFT;
+                break;
+            case SDLK_LALT:
+            case SDLK_RALT:
+                _modes &= ~InputToggle::ALT;
+                break;
+            case SDLK_LCTRL:
+            case SDLK_RCTRL:
+                _modes &= ~InputToggle::CONTROL;
                 break;
             }
             break;

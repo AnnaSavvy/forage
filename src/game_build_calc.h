@@ -16,6 +16,7 @@ class ModeBuildCalculator : public GameMode
 
     Label _charName;
     Label _levelClass;
+    Label _skillPoints;
     ProgressBar _health;
     Button _bGenerateName;
     Button _bNext;

@@ -5,6 +5,7 @@
 #include "renderer.h"
 #include "rpg_generation.h"
 #include "ui_rpg.h"
+#include <iostream>
 
 namespace
 {
@@ -35,6 +36,7 @@ ModeBuildCalculator::ModeBuildCalculator( GameState & state )
     , _attributes( { FIRST_ROW, 350, 0, 0 } )
     , _physicalSkills( { SECOND_ROW, 80, 0, 0 } )
     , _magicalSkills( { SECOND_ROW, 350, 0, 0 } )
+    , _skillPoints( { SECOND_ROW, 600 }, "Available Skill Points: " )
 {
     name = GameModeName::BUILD_CALCULATOR;
 
@@ -70,6 +72,9 @@ void ModeBuildCalculator::changeCharacter( RPG::Character other )
 
     const int level = _character.getBinding( RPG::CharacterAttributes::LEVEL ).value;
     _levelClass.setText( "Level " + std::to_string( level ) + " " + CharacterClassToString( _character.getClass() ) );
+
+    const int sp = _character.skillPoints();
+    _skillPoints.setText( "Available Skill Points: " + std::to_string( sp ) );
 }
 
 void ModeBuildCalculator::saveCharacter()
@@ -128,6 +133,16 @@ GameModeName ModeBuildCalculator::handleEvents()
                 }
             }
         }
+        else if ( input.isSet( InputHandler::CONTROL ) ) {
+            std::cout << "event";
+            _character.levelUp();
+
+            const int level = _character.getBinding( RPG::CharacterAttributes::LEVEL ).value;
+            _levelClass.setText( "Level " + std::to_string( level ) + " " + CharacterClassToString( _character.getClass() ) );
+
+            const int sp = _character.skillPoints();
+            _skillPoints.setText( "Available Skill Points: " + std::to_string( sp ) );
+        }
         return name;
     }
     return GameModeName::QUIT_GAME;
@@ -164,6 +179,7 @@ void ModeBuildCalculator::render()
     _attributes.render();
     _physicalSkills.render();
     _magicalSkills.render();
+    _skillPoints.render();
 
     _bExit.render();
     _bNext.render();

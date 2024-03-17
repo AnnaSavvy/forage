@@ -59,6 +59,9 @@ namespace RPG
         int skills[Skills::INVALID_SKILL] = { 0 };
         int level = 0;
 
+        double _pointsStats = 0;
+        double _pointsSkills = 0;
+
         static int lastID;
 
     public:
@@ -66,6 +69,23 @@ namespace RPG
         Character( CharacterPreset preset );
 
         CharacterClass getClass() const;
+
+        void levelUp()
+        {
+            level++;
+            _pointsStats += 10;
+            _pointsSkills += 25;
+        }
+
+        double & statPoints()
+        {
+            return _pointsStats;
+        }
+
+        double & skillPoints()
+        {
+            return _pointsSkills;
+        }
 
         int getId() const
         {
