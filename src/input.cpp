@@ -10,6 +10,18 @@ int InputHandler::getModes() const
     return _modes;
 }
 
+void InputHandler::reset()
+{
+    _modes = 0;
+}
+
+bool InputHandler::consume( InputToggle mode )
+{
+    const bool flag = _modes & mode;
+    _modes &= ~mode;
+    return flag;
+}
+
 bool InputHandler::isSet( InputToggle mode ) const
 {
     return _modes & mode;

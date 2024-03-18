@@ -37,6 +37,8 @@ public:
     InputHandler & operator=( const InputHandler & ) = delete;
 
     int getModes() const;
+    void reset();
+    bool consume( InputToggle mode );
     bool isSet( InputToggle mode ) const;
     const Point & getClickPosition() const;
     void setScaling( double windowScaling );

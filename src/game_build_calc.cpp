@@ -133,8 +133,7 @@ GameModeName ModeBuildCalculator::handleEvents()
                 }
             }
         }
-        else if ( input.isSet( InputHandler::CONTROL ) ) {
-            std::cout << "event";
+        else if ( input.consume( InputHandler::SPACE ) ) {
             _character.levelUp();
 
             const int level = _character.getBinding( RPG::CharacterAttributes::LEVEL ).value;

@@ -72,9 +72,11 @@ namespace RPG
 
         void levelUp()
         {
-            level++;
-            _pointsStats += 10;
-            _pointsSkills += 25;
+            if ( level < 20 ) {
+                level++;
+                _pointsStats += 10;
+                _pointsSkills += 25;
+            }
         }
 
         double & statPoints()
