@@ -2,7 +2,7 @@
 
 #include "gamemode.h"
 #include "mapview.h"
-#include "ui.h"
+#include "ui_base.h"
 #include "wave_function.h"
 
 class ModeStrategicView : public GameMode

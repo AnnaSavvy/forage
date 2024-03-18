@@ -3,7 +3,7 @@
 #include "game_state.h"
 #include "gamemode.h"
 #include "rpg_arena.h"
-#include "ui.h"
+#include "ui_base.h"
 
 class ModeBattle : public GameMode
 {

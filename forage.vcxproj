@@ -173,9 +173,9 @@
     <ClCompile Include="src\spell.cpp" />
     <ClCompile Include="src\static.cpp" />
     <ClCompile Include="src\tournament.cpp" />
-    <ClCompile Include="src\ui.cpp" />
-    <ClCompile Include="src\ui_rpg.cpp" />
-    <ClCompile Include="src\ui_style.cpp" />
+    <ClCompile Include="src\ui_base.cpp" />
+    <ClCompile Include="src\ui_components.cpp" />
+    <ClCompile Include="src\ui_styling.cpp" />
     <ClCompile Include="src\unit.cpp" />
     <ClCompile Include="src\village.cpp" />
     <ClCompile Include="src\wave_function.cpp" />
@@ -224,9 +224,9 @@
     <ClInclude Include="src\static.h" />
     <ClInclude Include="src\tournament.h" />
     <ClInclude Include="src\types.h" />
-    <ClInclude Include="src\ui.h" />
-    <ClInclude Include="src\ui_rpg.h" />
-    <ClInclude Include="src\ui_style.h" />
+    <ClInclude Include="src\ui_base.h" />
+    <ClInclude Include="src\ui_components.h" />
+    <ClInclude Include="src\ui_styling.h" />
     <ClInclude Include="src\unit.h" />
     <ClInclude Include="src\unit_villager.h" />
     <ClInclude Include="src\utils.h" />

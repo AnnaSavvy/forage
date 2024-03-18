@@ -1,5 +1,21 @@
 #pragma once
-#include "ui.h"
+#include "ui_base.h"
+#include "binding.h"
+
+class ProgressBar : public UIComponent
+{
+    Style _style;
+
+public:
+    ValueComponent _binding;
+
+    ProgressBar( const Rect & dimensions, ValueBinding binding );
+    ProgressBar( const Rect & dimensions, ValueBinding binding, const Style & style );
+
+    void setStyle( const Style & style );
+    virtual void update( float deltaTime ) override {}
+    virtual void render() override;
+};
 
 class SkillCounter : public UIContainer
 {

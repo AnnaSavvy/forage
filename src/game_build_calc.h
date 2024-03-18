@@ -2,7 +2,7 @@
 
 #include "game_state.h"
 #include "gamemode.h"
-#include "ui.h"
+#include "ui_components.h"
 
 class Character;
 

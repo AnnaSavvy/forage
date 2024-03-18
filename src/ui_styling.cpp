@@ -1,4 +1,4 @@
-#include "ui_style.h"
+#include "ui_styling.h"
 
 #include <SDL.h>
 #include <SDL_image.h>

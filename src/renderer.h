@@ -2,7 +2,7 @@
 #include <string>
 #include "asset_loader.h"
 #include "point.h"
-#include "ui_style.h"
+#include "ui_styling.h"
 
 struct SDL_Window;
 struct SDL_Renderer;

@@ -4,7 +4,7 @@
 #include "input.h"
 #include "renderer.h"
 #include "rpg_generation.h"
-#include "ui_rpg.h"
+
 #include <iostream>
 #include <format>
 
@@ -72,7 +72,7 @@ void ModeBuildCalculator::changeCharacter( RPG::Character other )
     _health._binding.editValue().maximum = _character.getMaxHealth();
 
     const int level = _character.getBinding( RPG::CharacterAttributes::LEVEL ).value;
-    _skillPoints.setText( std::format( "Level {} {}", level, CharacterClassToString( _character.getClass() ) ) );
+    _levelClass.setText( std::format( "Level {} {}", level, CharacterClassToString( _character.getClass() ) ) );
 
     const int sp = _character.skillPoints();
     _skillPoints.setText( std::format( "Available Skill Points: {}", sp ) );
@@ -138,7 +138,7 @@ GameModeName ModeBuildCalculator::handleEvents()
             _character.levelUp();
 
             const int level = _character.getBinding( RPG::CharacterAttributes::LEVEL ).value;
-            _skillPoints.setText( std::format( "Level {} {}", level, CharacterClassToString( _character.getClass() ) ) );
+            _levelClass.setText( std::format( "Level {} {}", level, CharacterClassToString( _character.getClass() ) ) );
 
             const int sp = _character.skillPoints();
             _skillPoints.setText( std::format( "Available Skill Points: {}", sp ) );

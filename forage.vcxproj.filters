@@ -63,7 +63,7 @@
     <ClCompile Include="src\logger.cpp">
       <Filter>Source Files\engine</Filter>
     </ClCompile>
-    <ClCompile Include="src\ui.cpp">
+    <ClCompile Include="src\ui_base.cpp">
       <Filter>Source Files\engine</Filter>
     </ClCompile>
     <ClCompile Include="src\asset_loader.cpp">
@@ -81,7 +81,7 @@
     <ClCompile Include="src\point.cpp">
       <Filter>Source Files\engine</Filter>
     </ClCompile>
-    <ClCompile Include="src\ui_style.cpp">
+    <ClCompile Include="src\ui_styling.cpp">
       <Filter>Source Files\engine</Filter>
     </ClCompile>
     <ClCompile Include="src\game_mainmenu.cpp">
@@ -144,7 +144,7 @@
     <ClCompile Include="src\character_class.cpp">
       <Filter>Source Files\rpg</Filter>
     </ClCompile>
-    <ClCompile Include="src\ui_rpg.cpp">
+    <ClCompile Include="src\ui_components.cpp">
       <Filter>Source Files\engine</Filter>
     </ClCompile>
   </ItemGroup>
@@ -155,7 +155,7 @@
     <ClInclude Include="src\game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ui.h">
+    <ClInclude Include="src\ui_base.h">
       <Filter>Header Files\engine</Filter>
     </ClInclude>
     <ClInclude Include="src\base_game.h">
@@ -209,7 +209,7 @@
     <ClInclude Include="src\utils.h">
       <Filter>Header Files\engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\ui_style.h">
+    <ClInclude Include="src\ui_styling.h">
       <Filter>Header Files\engine</Filter>
     </ClInclude>
     <ClInclude Include="src\game_battle.h">
@@ -296,7 +296,7 @@
     <ClInclude Include="src\character_base.h">
       <Filter>Header Files\rpg</Filter>
     </ClInclude>
-    <ClInclude Include="src\ui_rpg.h">
+    <ClInclude Include="src\ui_components.h">
       <Filter>Header Files\engine</Filter>
     </ClInclude>
     <ClInclude Include="src\object.h">

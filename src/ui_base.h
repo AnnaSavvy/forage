@@ -1,13 +1,11 @@
 #pragma once
 
+#include "point.h"
+#include "ui_styling.h"
+
 #include <memory>
 #include <string>
-#include <unordered_map>
 #include <vector>
-
-#include "binding.h"
-#include "point.h"
-#include "ui_style.h"
 
 class UIComponent
 {
@@ -76,6 +74,17 @@ protected:
     StandardColor _color = StandardColor::WHITE;
 };
 
+class CenteringLabel : public Label
+{
+    Point _expectedSize;
+
+public:
+    CenteringLabel( const Point & position, const std::string & text, int width );
+    CenteringLabel( const Rect & dimensions, const std::string & text );
+    CenteringLabel( const Rect & dimensions, const std::string & text, StandardFont font, StandardColor color );
+    virtual void render() override;
+};
+
 class Button : public UIComponent
 {
     std::string _label;
@@ -96,47 +105,6 @@ public:
     void setHovered( bool value );
     void setStyle( const Style & style );
     void setLabel( const std::string & label );
-};
-
-class ProgressBar : public UIComponent
-{
-    Style _style;
-
-public:
-    ValueComponent _binding;
-
-    ProgressBar( const Rect & dimensions, ValueBinding binding );
-    ProgressBar( const Rect & dimensions, ValueBinding binding, const Style & style );
-
-    void setStyle( const Style & style );
-    virtual void update( float deltaTime ) override {}
-    virtual void render() override;
-};
-
-class CenteringLabel : public Label
-{
-    Point _expectedSize;
-
-public:
-    CenteringLabel( const Point & position, const std::string & text, int width );
-    CenteringLabel( const Rect & dimensions, const std::string & text );
-    CenteringLabel( const Rect & dimensions, const std::string & text, StandardFont font, StandardColor color );
-    virtual void render() override;
-};
-
-// A basic menu element
-class Menu : public UIComponent
-{
-public:
-    Menu();
-
-    void addElement( UIComponent * element );
-
-    virtual void render();
-
-private:
-    std::vector<UIComponent *> _elements;
-    Point _spacing;
 };
 
 class Window : public UIComponent

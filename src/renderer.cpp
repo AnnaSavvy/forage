@@ -5,7 +5,7 @@
 #include <iostream>
 
 #include "SDL2_gfx.h"
-#include "ui_style.h"
+#include "ui_styling.h"
 
 namespace
 {
