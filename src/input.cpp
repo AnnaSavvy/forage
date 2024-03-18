@@ -2,6 +2,7 @@
 
 #include <SDL.h>
 #include <iostream>
+#include <format>
 
 InputHandler::InputHandler() {}
 
@@ -129,7 +130,7 @@ bool InputHandler::handleEvent()
                 break;
             }
 
-            std::cout << "Click " << (int) event.button.button << " at " << event.button.x << "," << event.button.y << std::endl;
+            std::cout << std::format( "Click {} at {}, {}\n", (int)event.button.button, event.button.x, event.button.y );
             _mousePosition._x = event.button.x / _scaling;
             _mousePosition._y = event.button.y / _scaling;
             break;

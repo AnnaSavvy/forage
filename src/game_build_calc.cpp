@@ -6,6 +6,7 @@
 #include "rpg_generation.h"
 #include "ui_rpg.h"
 #include <iostream>
+#include <format>
 
 namespace
 {
@@ -66,15 +67,15 @@ void ModeBuildCalculator::changeCharacter( RPG::Character other )
 {
     saveCharacter();
     _character = other;
-    _charName.setText( std::to_string( _character.getId() ) );
+    _charName.setText( std::format( "{}", _character.getId() ) );
 
     _health._binding.editValue().maximum = _character.getMaxHealth();
 
     const int level = _character.getBinding( RPG::CharacterAttributes::LEVEL ).value;
-    _levelClass.setText( "Level " + std::to_string( level ) + " " + CharacterClassToString( _character.getClass() ) );
+    _skillPoints.setText( std::format( "Level {} {}", level, CharacterClassToString( _character.getClass() ) ) );
 
     const int sp = _character.skillPoints();
-    _skillPoints.setText( "Available Skill Points: " + std::to_string( sp ) );
+    _skillPoints.setText( std::format( "Available Skill Points: {}", sp ) );
 }
 
 void ModeBuildCalculator::saveCharacter()
@@ -137,10 +138,10 @@ GameModeName ModeBuildCalculator::handleEvents()
             _character.levelUp();
 
             const int level = _character.getBinding( RPG::CharacterAttributes::LEVEL ).value;
-            _levelClass.setText( "Level " + std::to_string( level ) + " " + CharacterClassToString( _character.getClass() ) );
+            _skillPoints.setText( std::format( "Level {} {}", level, CharacterClassToString( _character.getClass() ) ) );
 
             const int sp = _character.skillPoints();
-            _skillPoints.setText( "Available Skill Points: " + std::to_string( sp ) );
+            _skillPoints.setText( std::format( "Available Skill Points: {}", sp ) );
         }
         return name;
     }

@@ -6,6 +6,7 @@
 #include <cassert>
 #include <iostream>
 #include <vector>
+#include <format>
 
 namespace StandardStyles
 {
@@ -31,7 +32,7 @@ namespace StandardStyles
     bool loadAssets()
     {
         if ( !ttfInit && TTF_Init() < 0 ) {
-            std::cout << "Error initializing SDL_ttf: " << TTF_GetError() << std::endl;
+            std::cout << std::format( "Error initializing SDL_ttf: {}", TTF_GetError() );
             return false;
         }
         ttfInit = true;
@@ -50,28 +51,28 @@ namespace StandardStyles
 
         TTF_Font * font = TTF_OpenFont( "assets/font/Roboto-Bold.ttf", 18 );
         if ( !font ) {
-            std::cout << "Failed to load font: " << TTF_GetError() << std::endl;
+            std::cout << std::format( "Failed to load font: {}", TTF_GetError() );
             return false;
         }
         fonts[static_cast<int>( StandardFont::REGULAR )] = font;
 
         font = TTF_OpenFont( "assets/font/Deutsch Gothic.ttf", 32 );
         if ( !font ) {
-            std::cout << "Failed to load font: " << TTF_GetError() << std::endl;
+            std::cout << std::format( "Failed to load font: {}", TTF_GetError() );
             return false;
         }
         fonts[static_cast<int>( StandardFont::REGULAR_BOLD )] = font;
 
         font = TTF_OpenFont( "assets/font/Deutsch Gothic.ttf", 72 );
         if ( !font ) {
-            std::cout << "Failed to load font: " << TTF_GetError() << std::endl;
+            std::cout << std::format( "Failed to load font: {}", TTF_GetError() );
             return false;
         }
         fonts[static_cast<int>( StandardFont::MENU_HUGE_TITLE )] = font;
 
         font = TTF_OpenFont( "assets/font/Roboto-Bold.ttf", 14 );
         if ( !font ) {
-            std::cout << "Failed to load font: " << TTF_GetError() << std::endl;
+            std::cout << std::format( "Failed to load font: {}", TTF_GetError() );
             return false;
         }
         fonts[static_cast<int>( StandardFont::SMALL )] = font;

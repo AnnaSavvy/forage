@@ -2,6 +2,7 @@
 
 #include "renderer.h"
 #include <SDL.h>
+#include <format>
 
 UIComponent::UIComponent( const Rect & dimensions )
     : _rect( dimensions )
@@ -272,7 +273,7 @@ void ProgressBar::render()
         RenderEngine::DrawRect( barArea, StandardColor::DARK_RED );
     }
 
-    std::string str = std::to_string( binding.value ) + " / " + std::to_string( binding.maximum );
+    std::string str = std::format( "{} / {}", binding.value, binding.maximum );
     SDL_Surface * surface = RenderEngine::GetTextSurface( str, _style.font, _style.textColor );
     if ( surface ) {
         Rect textRect = _rect;
