@@ -10,13 +10,13 @@
 
 namespace
 {
-    const std::vector<RPG::CharacterAttributes> attributeGroup
-        = { RPG::CharacterAttributes::STRENGTH,     RPG::CharacterAttributes::AGILITY,   RPG::CharacterAttributes::CONSTITUTION, RPG::CharacterAttributes::DEXTERITY,
-            RPG::CharacterAttributes::INTELLIGENCE, RPG::CharacterAttributes::WILLPOWER, RPG::CharacterAttributes::CHARISMA };
-    const std::vector<RPG::CharacterAttributes> physicalGroup = { RPG::CharacterAttributes::CLOSE_COMBAT, RPG::CharacterAttributes::RANGED_COMBAT,
-                                                                  RPG::CharacterAttributes::DODGE, RPG::CharacterAttributes::BLOCK, RPG::CharacterAttributes::STEALTH };
-    const std::vector<RPG::CharacterAttributes> magicalGroup = { RPG::CharacterAttributes::LIFE, RPG::CharacterAttributes::ARCANA, RPG::CharacterAttributes::NATURE,
-                                                                 RPG::CharacterAttributes::CHAOS, RPG::CharacterAttributes::DEATH };
+    const std::vector<CharacterAttributes::Enum> attributeGroup
+        = { CharacterAttributes::STRENGTH,     CharacterAttributes::AGILITY,   CharacterAttributes::CONSTITUTION, CharacterAttributes::DEXTERITY,
+            CharacterAttributes::INTELLIGENCE, CharacterAttributes::WILLPOWER, CharacterAttributes::CHARISMA };
+    const std::vector<CharacterAttributes::Enum> physicalGroup
+        = { CharacterAttributes::CLOSE_COMBAT, CharacterAttributes::RANGED_COMBAT, CharacterAttributes::DODGE, CharacterAttributes::BLOCK, CharacterAttributes::STEALTH };
+    const std::vector<CharacterAttributes::Enum> magicalGroup
+        = { CharacterAttributes::LIFE, CharacterAttributes::ARCANA, CharacterAttributes::NATURE, CharacterAttributes::CHAOS, CharacterAttributes::DEATH };
 
     const Style skillBarStyle{ StandardFont::SMALL, StandardColor::WHITE, StandardColor::DARK_GREY, StandardColor::REALM_PRECISION, 2 };
 
@@ -31,7 +31,7 @@ ModeBuildCalculator::ModeBuildCalculator( GameState & state )
     , _bGenerateName( RenderEngine::GetAnchorRect( AnchorPoint::BOTTOM_CENTER, 100, 60 ), "Generate", {} )
     , _bNext( RenderEngine::GetAnchorRect( AnchorPoint::BOTTOM_RIGHT, 100, 60 ), "Next >", {} )
     , _bPrevious( RenderEngine::GetAnchorRect( AnchorPoint::BOTTOM_LEFT, 100, 60 ), "< Prev", {} )
-    , _health( { FIRST_ROW, 290, 236, 40 }, _character.getBinding( RPG::CharacterAttributes::HEALTH ), skillBarStyle )
+    , _health( { FIRST_ROW, 290, 236, 40 }, _character.getBinding( CharacterAttributes::HEALTH ), skillBarStyle )
     , _charName( { FIRST_ROW, 210 }, "Unknown" )
     , _levelClass( { FIRST_ROW, 250 }, "Level 1 Adventurer" )
     , _attributes( { FIRST_ROW, 350, 0, 0 } )
@@ -77,7 +77,7 @@ void ModeBuildCalculator::changeCharacter( RPG::Character other )
 
     _health._binding.editValue().maximum = _character.getMaxHealth();
 
-    const int level = _character.getBinding( RPG::CharacterAttributes::LEVEL ).value;
+    const int level = _character.getBinding( CharacterAttributes::LEVEL ).value;
     _levelClass.setText( std::format( "Level {} {}", level, CharacterClassToString( _character.getClass() ) ) );
 
     const int sp = _character.skillPoints();
@@ -142,12 +142,6 @@ GameModeName ModeBuildCalculator::handleEvents()
         }
         else if ( input.consume( InputHandler::SPACE ) ) {
             _character.levelUp();
-
-            const int level = _character.getBinding( RPG::CharacterAttributes::LEVEL ).value;
-            _levelClass.setText( std::format( "Level {} {}", level, CharacterClassToString( _character.getClass() ) ) );
-
-            const int sp = _character.skillPoints();
-            _skillPoints.setText( std::format( "Available Skill Points: {}", sp ) );
         }
         return name;
     }
@@ -159,6 +153,12 @@ void ModeBuildCalculator::update( float deltaTime ) {}
 void ModeBuildCalculator::render()
 {
     _title.render();
+
+    const int level = _character.getBinding( CharacterAttributes::LEVEL ).value;
+    _levelClass.setText( std::format( "Level {} {}", level, CharacterClassToString( _character.getClass() ) ) );
+
+    const int sp = _character.skillPoints();
+    _skillPoints.setText( std::format( "Available Skill Points: {}", sp ) );
 
     std::string picture = "00000.png";
     CharacterClass charClass = _character.getClass();

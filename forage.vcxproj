@@ -148,6 +148,7 @@
     <ClCompile Include="src\asset_loader.cpp" />
     <ClCompile Include="src\build_optimizer.cpp" />
     <ClCompile Include="src\character.cpp" />
+    <ClCompile Include="src\character_attributes.cpp" />
     <ClCompile Include="src\character_class.cpp" />
     <ClCompile Include="src\chart.cpp" />
     <ClCompile Include="src\game.cpp" />
@@ -188,6 +189,7 @@
     <ClInclude Include="src\binding.h" />
     <ClInclude Include="src\build_optimizer.h" />
     <ClInclude Include="src\character.h" />
+    <ClInclude Include="src\character_attributes.h" />
     <ClInclude Include="src\character_base.h" />
     <ClInclude Include="src\character_class.h" />
     <ClInclude Include="src\chart.h" />

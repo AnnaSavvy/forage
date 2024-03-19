@@ -32,10 +32,10 @@ namespace RPG
         stats.intelligence = 50;
         stats.strength = 50;
         stats.willpower = 50;
-        level = 4;
+        level = 2;
 
         switch ( preset ) {
-        case RPG::CharacterPreset::MELEE:
+        case CharacterPreset::MELEE:
             stats.strength = 80;
             stats.agility = 60;
             stats.constitution = 65;
@@ -46,7 +46,7 @@ namespace RPG
             skills[Skills::CLOSE_COMBAT] = 30;
             skills[Skills::BLOCK] = 20;
             break;
-        case RPG::CharacterPreset::AGILE:
+        case CharacterPreset::AGILE:
             stats.agility = 70;
             stats.dexterity = 70;
             stats.charisma = 40;
@@ -56,7 +56,7 @@ namespace RPG
             skills[Skills::DODGE] = 20;
             skills[Skills::STEALTH] = 20;
             break;
-        case RPG::CharacterPreset::WIZARD:
+        case CharacterPreset::WIZARD:
             stats.strength = 25;
             stats.agility = 30;
             stats.constitution = 30;
@@ -69,7 +69,7 @@ namespace RPG
             skills[Skills::CHAOS] = 25;
             skills[Skills::DEATH] = 25;
             break;
-        case RPG::CharacterPreset::MONSTER:
+        case CharacterPreset::MONSTER:
             stats.strength = 90;
             stats.constitution = 90;
             stats.dexterity = 40;
@@ -85,22 +85,22 @@ namespace RPG
         currentHealth = getMaxHealth();
     }
 
-    std::string Character::GetSkillName( CharacterAttributes skill )
+    std::string Character::GetSkillName( CharacterAttributes::Enum skill )
     {
         switch ( skill ) {
-        case RPG::CharacterAttributes::STRENGTH:
+        case CharacterAttributes::STRENGTH:
             return "STR";
-        case RPG::CharacterAttributes::DEXTERITY:
+        case CharacterAttributes::DEXTERITY:
             return "DEX";
-        case RPG::CharacterAttributes::AGILITY:
+        case CharacterAttributes::AGILITY:
             return "AGI";
-        case RPG::CharacterAttributes::CONSTITUTION:
+        case CharacterAttributes::CONSTITUTION:
             return "CON";
-        case RPG::CharacterAttributes::INTELLIGENCE:
+        case CharacterAttributes::INTELLIGENCE:
             return "INT";
-        case RPG::CharacterAttributes::WILLPOWER:
+        case CharacterAttributes::WILLPOWER:
             return "WIL";
-        case RPG::CharacterAttributes::CHARISMA:
+        case CharacterAttributes::CHARISMA:
             return "CHA";
         case CharacterAttributes::CLOSE_COMBAT:
             return "Melee";
@@ -138,58 +138,58 @@ namespace RPG
         return "Unknown";
     }
 
-    ValueBinding Character::getBinding( CharacterAttributes attribute )
+    ValueBinding Character::getBinding( CharacterAttributes::Enum attribute )
     {
         switch ( attribute ) {
-        case RPG::CharacterAttributes::HEALTH:
+        case CharacterAttributes::HEALTH:
             return { currentHealth, -100, getMaxHealth() };
-        case RPG::CharacterAttributes::LEVEL:
+        case CharacterAttributes::LEVEL:
             return { level, 1, 100 };
-        case RPG::CharacterAttributes::STRENGTH:
+        case CharacterAttributes::STRENGTH:
             return { stats.strength, 1, 100 };
-        case RPG::CharacterAttributes::DEXTERITY:
+        case CharacterAttributes::DEXTERITY:
             return { stats.dexterity, 1, 100 };
-        case RPG::CharacterAttributes::AGILITY:
+        case CharacterAttributes::AGILITY:
             return { stats.agility, 1, 100 };
-        case RPG::CharacterAttributes::CONSTITUTION:
+        case CharacterAttributes::CONSTITUTION:
             return { stats.constitution, 1, 100 };
-        case RPG::CharacterAttributes::INTELLIGENCE:
+        case CharacterAttributes::INTELLIGENCE:
             return { stats.intelligence, 1, 100 };
-        case RPG::CharacterAttributes::WILLPOWER:
+        case CharacterAttributes::WILLPOWER:
             return { stats.willpower, 1, 100 };
-        case RPG::CharacterAttributes::CHARISMA:
+        case CharacterAttributes::CHARISMA:
             return { stats.charisma, 1, 100 };
-        case RPG::CharacterAttributes::CLOSE_COMBAT:
+        case CharacterAttributes::CLOSE_COMBAT:
             return { skills[Skills::CLOSE_COMBAT] };
-        case RPG::CharacterAttributes::RANGED_COMBAT:
+        case CharacterAttributes::RANGED_COMBAT:
             return { skills[Skills::RANGED_COMBAT] };
-        case RPG::CharacterAttributes::DODGE:
+        case CharacterAttributes::DODGE:
             return { skills[Skills::DODGE] };
-        case RPG::CharacterAttributes::BLOCK:
+        case CharacterAttributes::BLOCK:
             return { skills[Skills::BLOCK] };
-        case RPG::CharacterAttributes::STEALTH:
+        case CharacterAttributes::STEALTH:
             return { skills[Skills::STEALTH] };
-        case RPG::CharacterAttributes::LIFE:
+        case CharacterAttributes::LIFE:
             return { skills[Skills::LIFE] };
-        case RPG::CharacterAttributes::ARCANA:
+        case CharacterAttributes::ARCANA:
             return { skills[Skills::ARCANA] };
-        case RPG::CharacterAttributes::NATURE:
+        case CharacterAttributes::NATURE:
             return { skills[Skills::NATURE] };
-        case RPG::CharacterAttributes::CHAOS:
+        case CharacterAttributes::CHAOS:
             return { skills[Skills::CHAOS] };
-        case RPG::CharacterAttributes::DEATH:
+        case CharacterAttributes::DEATH:
             return { skills[Skills::DEATH] };
-        case RPG::CharacterAttributes::MAGIC_FIRE:
+        case CharacterAttributes::MAGIC_FIRE:
             return { skills[Skills::MAGIC_FIRE] };
-        case RPG::CharacterAttributes::MAGIC_WATER:
+        case CharacterAttributes::MAGIC_WATER:
             return { skills[Skills::MAGIC_WATER] };
-        case RPG::CharacterAttributes::MAGIC_AIR:
+        case CharacterAttributes::MAGIC_AIR:
             return { skills[Skills::MAGIC_AIR] };
-        case RPG::CharacterAttributes::MAGIC_EARTH:
+        case CharacterAttributes::MAGIC_EARTH:
             return { skills[Skills::MAGIC_EARTH] };
-        case RPG::CharacterAttributes::MAGIC_MENTAL:
+        case CharacterAttributes::MAGIC_MENTAL:
             return { skills[Skills::MAGIC_MENTAL] };
-        case RPG::CharacterAttributes::MAGIC_DIVINITY:
+        case CharacterAttributes::MAGIC_DIVINITY:
             return { skills[Skills::MAGIC_DIVINITY] };
         default:
             break;
@@ -197,10 +197,21 @@ namespace RPG
         return { level };
     }
 
-    bool Character::changeAttribute( CharacterAttributes attribute, int change )
+    bool Character::changeAttribute( CharacterAttributes::Enum attribute, int change )
     {
         ValueBinding binding = getBinding( attribute );
-        binding.value = std::max( std::min( binding.value + change, binding.maximum ), binding.minimum );
-        return true;
+
+        const int newValue = std::max( std::min( binding.value + change, binding.maximum ), binding.minimum );
+        int valueChange = newValue - binding.value;
+        if ( CharacterAttributes::IsPrimaryAttribute( attribute ) ) {
+            valueChange = std::min( valueChange, static_cast<int>( _pointsStats ) );
+            _pointsStats -= valueChange;
+        }
+        else if ( CharacterAttributes::IsSkillAttribute( attribute ) ) {
+            valueChange = std::min( valueChange, static_cast<int>( _pointsSkills ) );
+            _pointsSkills -= valueChange;
+        }
+        binding.value += valueChange;
+        return valueChange > 0;
     }
 }

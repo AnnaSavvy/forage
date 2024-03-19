@@ -1,5 +1,6 @@
 #pragma once
 #include "binding.h"
+#include "character_attributes.h"
 #include "character_class.h"
 #include "point.h"
 #include "spell.h"
@@ -18,39 +19,6 @@ namespace RPG
         AGILE,
         WIZARD,
         MONSTER
-    };
-
-    enum class CharacterAttributes
-    {
-        HEALTH,
-        LEVEL,
-
-        STRENGTH,
-        DEXTERITY,
-        AGILITY,
-        CONSTITUTION,
-        INTELLIGENCE,
-        WILLPOWER,
-        CHARISMA,
-
-        CLOSE_COMBAT,
-        RANGED_COMBAT,
-        DODGE,
-        BLOCK,
-        STEALTH,
-
-        LIFE,
-        ARCANA,
-        NATURE,
-        CHAOS,
-        DEATH,
-
-        MAGIC_FIRE,
-        MAGIC_WATER,
-        MAGIC_AIR,
-        MAGIC_EARTH,
-        MAGIC_MENTAL,
-        MAGIC_DIVINITY
     };
 
     class Character : protected Unit
@@ -160,11 +128,11 @@ namespace RPG
             return false;
         }
 
-        bool changeAttribute( CharacterAttributes attribute, int value );
+        bool changeAttribute( CharacterAttributes::Enum attribute, int value );
 
-        static std::string GetSkillName( CharacterAttributes skill );
+        static std::string GetSkillName( CharacterAttributes::Enum skill );
 
-        ValueBinding getBinding( CharacterAttributes attribute );
+        ValueBinding getBinding( CharacterAttributes::Enum attribute );
     };
 
     using CharacterRef = std::reference_wrapper<Character>;

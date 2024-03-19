@@ -147,6 +147,9 @@
     <ClCompile Include="src\ui_components.cpp">
       <Filter>Source Files\engine</Filter>
     </ClCompile>
+    <ClCompile Include="src\character_attributes.cpp">
+      <Filter>Source Files\rpg</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\static.h">
@@ -301,6 +304,9 @@
     </ClInclude>
     <ClInclude Include="src\object.h">
       <Filter>Header Files\experimental</Filter>
+    </ClInclude>
+    <ClInclude Include="src\character_attributes.h">
+      <Filter>Header Files\rpg</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
