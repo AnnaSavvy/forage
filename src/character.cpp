@@ -196,4 +196,11 @@ namespace RPG
         }
         return { level };
     }
+
+    bool Character::changeAttribute( CharacterAttributes attribute, int change )
+    {
+        ValueBinding binding = getBinding( attribute );
+        binding.value = std::max( std::min( binding.value + change, binding.maximum ), binding.minimum );
+        return true;
+    }
 }

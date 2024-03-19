@@ -14,13 +14,22 @@ protected:
     bool _hidden = false;
 
 public:
+    enum ClickBaseEvent : int
+    {
+        NO_EVENT = 0,
+        BASIC_EVENT = 1
+    };
+
     UIComponent( const Rect & dimensions );
     virtual ~UIComponent() = default;
 
     virtual void update( float deltaTime ) = 0;
     virtual void render() = 0;
 
-    virtual void handleClickEvent( const Point & click, int modes ) {}
+    virtual int handleEvent( const Point & click, int event )
+    {
+        return NO_EVENT;
+    }
 
     bool isHidden() const
     {
@@ -48,7 +57,7 @@ public:
 
     virtual void update( float deltaTime );
     virtual void render();
-    virtual void handleClickEvent( const Point & click, int modes );
+    virtual int handleEvent( const Point & click, int event );
 
     void addElement( std::shared_ptr<UIComponent> element );
     virtual std::shared_ptr<UIComponent> getElement( const Point & position );
@@ -98,8 +107,9 @@ public:
     Button( const Point & position, int width, int height, const std::string & label, const Style & style );
     virtual ~Button() = default;
 
-    void update( float deltaTime ) override;
-    void render() override;
+    virtual int handleEvent( const Point & click, int event ) override;
+    virtual void update( float deltaTime ) override;
+    virtual void render() override;
 
     void setPressed( bool value );
     void setHovered( bool value );

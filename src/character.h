@@ -160,6 +160,8 @@ namespace RPG
             return false;
         }
 
+        bool changeAttribute( CharacterAttributes attribute, int value );
+
         static std::string GetSkillName( CharacterAttributes skill );
 
         ValueBinding getBinding( CharacterAttributes attribute );

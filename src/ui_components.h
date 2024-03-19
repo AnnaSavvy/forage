@@ -1,6 +1,12 @@
 #pragma once
-#include "ui_base.h"
 #include "binding.h"
+#include "input.h"
+#include "ui_base.h"
+
+namespace UIC
+{
+    constexpr int HEIGHT = 31;
+}
 
 class ProgressBar : public UIComponent
 {
@@ -17,25 +23,93 @@ public:
     virtual void render() override;
 };
 
+template <typename Lambda>
 class SkillCounter : public UIContainer
 {
+    Lambda _callback;
+
 public:
-    ValueComponent _binding;
+    SkillCounter( Point position, int width, std::string description, ValueBinding binding, Lambda & callback )
+        : UIContainer( { position._x, position._y, 0, 0 } )
+        , _callback( callback )
+    {
+        addElement( std::make_shared<CenteringLabel>( CenteringLabel( { position._x, position._y, 0, 31 }, description ) ) );
+        position.modAdd( 150, 0 );
 
-    SkillCounter( Point position, int width, std::string description, ValueBinding binding );
+        const Style buttonStyle{ StandardFont::REGULAR, StandardColor::WHITE, StandardColor::DARK_GREY, StandardColor::REALM_PRECISION, 2 };
+        addElement( std::make_shared<Button>( Button( { position._x - UIC::HEIGHT - 5, position._y, UIC::HEIGHT, UIC::HEIGHT }, "-", buttonStyle ) ) );
 
-    void handleClickEvent( const Point & click, int modes ) override;
+        addElement(
+            std::make_shared<ProgressBar>( ProgressBar( { position._x, position._y, width, 31 }, binding,
+                                                        { StandardFont::SMALL, StandardColor::WHITE, StandardColor::DARK_GREY, StandardColor::REALM_PRECISION, 2 } ) ) );
+
+        addElement( std::make_shared<Button>( Button( { position._x + width + 5, position._y, 31, 31 }, "+", buttonStyle ) ) );
+    }
+
+    int handleEvent( const Point & click, int event ) override
+    {
+        if ( _items[1]->getRect().contains( click ) ) {
+            const int change = event & InputHandler::MOUSE_RIGHT_CLICKED ? -10 : -1;
+            _callback( change );
+            return UIComponent::BASIC_EVENT;
+        }
+        else if ( _items[3]->getRect().contains( click ) ) {
+            const int change = event & InputHandler::MOUSE_RIGHT_CLICKED ? 10 : 1;
+            _callback( change );
+            return UIComponent::BASIC_EVENT;
+        }
+        return UIComponent::NO_EVENT;
+    }
 };
 
+template <typename Lambda>
 class AttributeCounter : public UIContainer
 {
     CenteringLabel * _display;
+    Lambda _callback;
 
 public:
     ValueComponent _binding;
 
-    AttributeCounter( Point position, std::string description, ValueBinding binding );
+    AttributeCounter( Point position, std::string description, ValueBinding binding, Lambda & callback )
+        : UIContainer( { position._x, position._y, 0, 0 } )
+        , _binding( binding )
+        , _callback( callback )
+    {
+        addElement( std::make_shared<CenteringLabel>( CenteringLabel( { position._x, position._y, 90, UIC::HEIGHT }, description ) ) );
+        position.modAdd( 90, 0 );
 
-    void handleClickEvent( const Point & click, int modes ) override;
-    virtual void render() override;
+        const Style buttonStyle{ StandardFont::REGULAR, StandardColor::WHITE, StandardColor::DARK_GREY, StandardColor::REALM_PRECISION, 2 };
+        addElement( std::make_shared<Button>( Button( { position._x, position._y, UIC::HEIGHT, UIC::HEIGHT }, "-", buttonStyle ) ) );
+
+        position.modAdd( 35, 0 );
+        addElement( std::make_shared<CenteringLabel>( CenteringLabel( { position._x, position._y, 60, UIC::HEIGHT }, std::to_string( binding.value ) ) ) );
+        _display = dynamic_cast<CenteringLabel *>( _items.back().get() );
+
+        position.modAdd( 60, 0 );
+        addElement( std::make_shared<Button>( Button( { position._x, position._y, UIC::HEIGHT, UIC::HEIGHT }, "+", buttonStyle ) ) );
+    }
+
+    int handleEvent( const Point & click, int event ) override
+    {
+        if ( _items[1]->getRect().contains( click ) ) {
+            const int change = event & InputHandler::MOUSE_RIGHT_CLICKED ? -10 : -1;
+            _callback( change );
+            return UIComponent::BASIC_EVENT;
+        }
+        else if ( _items[3]->getRect().contains( click ) ) {
+            const int change = event & InputHandler::MOUSE_RIGHT_CLICKED ? 10 : 1;
+            _callback( change );
+            return UIComponent::BASIC_EVENT;
+        }
+        return UIComponent::NO_EVENT;
+    }
+
+    virtual void render() override
+    {
+        _display->setText( std::to_string( _binding.get().value ) );
+        for ( auto & component : _items ) {
+            component.get()->render();
+        }
+    }
 };

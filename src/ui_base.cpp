@@ -25,14 +25,14 @@ void UIContainer::render()
     }
 }
 
-void UIContainer::handleClickEvent( const Point & click, int modes )
+int UIContainer::handleEvent( const Point & click, int event )
 {
     for ( auto & component : _items ) {
-        if ( component->getRect().contains( click ) ) {
-            component->handleClickEvent( click, modes );
-            break;
+        if ( const int result = component->handleEvent( click, event ) ) {
+            return result;
         }
     }
+    return UIComponent::NO_EVENT;
 }
 
 void UIContainer::addElement( std::shared_ptr<UIComponent> element )
@@ -91,6 +91,14 @@ Button::Button( const Point & position, int width, int height, const std::string
     , _style( style )
 {
     _label = label;
+}
+
+int Button::handleEvent( const Point & click, int event )
+{
+    if ( _rect.contains( click ) ) {
+        return UIComponent::BASIC_EVENT;
+    }
+    return UIComponent::NO_EVENT;
 }
 
 void Button::update( float deltaTime ) {}

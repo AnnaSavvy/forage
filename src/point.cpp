@@ -322,11 +322,14 @@ bool Point::in( const Point & center, double radius ) const
     return sqrt( diff._x + diff._y ) <= radius;
 }
 
+Rect::Rect( const Point & position )
+    : _pos( position )
+{}
+
 Rect::Rect( const Point & pos, const Point & size )
-{
-    _pos = pos;
-    _size = size;
-}
+    : _pos( pos )
+    , _size( size )
+{}
 
 Rect::Rect( int x, int y, int width, int height )
 {

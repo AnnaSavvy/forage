@@ -67,6 +67,7 @@ struct Rect {
     Point _size;
 
 	Rect() = default;
+    Rect( const Point & );
     Rect( const Point &, const Point & );
     Rect( int, int, int, int );
     Rect( const Rect & );

@@ -5,8 +5,8 @@
 #include "renderer.h"
 #include "rpg_generation.h"
 
-#include <iostream>
 #include <format>
+#include <iostream>
 
 namespace
 {
@@ -46,19 +46,25 @@ ModeBuildCalculator::ModeBuildCalculator( GameState & state )
     Point p = _physicalSkills.getRect()._pos;
 
     for ( auto skill : physicalGroup ) {
-        _physicalSkills.addElement( std::make_shared<SkillCounter>( p, 200, RPG::Character::GetSkillName( skill ), _character.getBinding( skill ) ) );
+        auto changeEvent = [this, skill]( int value ) { _character.changeAttribute( skill, value ); };
+        _physicalSkills.addElement(
+            std::make_shared<SkillCounter<decltype( changeEvent )> >( p, 200, RPG::Character::GetSkillName( skill ), _character.getBinding( skill ), changeEvent ) );
         p.modAdd( 0, 40 );
     }
 
     p = _magicalSkills.getRect()._pos;
     for ( auto skill : magicalGroup ) {
-        _magicalSkills.addElement( std::make_shared<SkillCounter>( p, 200, RPG::Character::GetSkillName( skill ), _character.getBinding( skill ) ) );
+        auto changeEvent = [this, skill]( int value ) { _character.changeAttribute( skill, value ); };
+        _magicalSkills.addElement(
+            std::make_shared<SkillCounter<decltype( changeEvent )> >( p, 200, RPG::Character::GetSkillName( skill ), _character.getBinding( skill ), changeEvent ) );
         p.modAdd( 0, 40 );
     }
 
     p = _attributes.getRect()._pos;
     for ( auto attribute : attributeGroup ) {
-        _attributes.addElement( std::make_shared<AttributeCounter>( p, RPG::Character::GetSkillName( attribute ), _character.getBinding( attribute ) ) );
+        auto changeEvent = [this, attribute]( int value ) { _character.changeAttribute( attribute, value ); };
+        _attributes.addElement( std::make_shared<AttributeCounter<decltype( changeEvent )> >( p, RPG::Character::GetSkillName( attribute ),
+                                                                                              _character.getBinding( attribute ), changeEvent ) );
         p.modAdd( 0, 40 );
     }
 }
@@ -103,13 +109,13 @@ GameModeName ModeBuildCalculator::handleEvents()
                 _charName.setText( RPG::Generator::GetCharacterName() );
             }
             else if ( _physicalSkills.getRect().contains( mouseClick ) ) {
-                _physicalSkills.handleClickEvent( mouseClick, input.getModes() & InputHandler::MOUSE_CLICKED );
+                _physicalSkills.handleEvent( mouseClick, input.getModes() );
             }
             else if ( _magicalSkills.getRect().contains( mouseClick ) ) {
-                _magicalSkills.handleClickEvent( mouseClick, input.getModes() & InputHandler::MOUSE_CLICKED );
+                _magicalSkills.handleEvent( mouseClick, input.getModes() );
             }
             else if ( _attributes.getRect().contains( mouseClick ) ) {
-                _attributes.handleClickEvent( mouseClick, input.getModes() & InputHandler::MOUSE_CLICKED );
+                _attributes.handleEvent( mouseClick, input.getModes() );
             }
             else if ( _bNext.getRect().contains( mouseClick ) ) {
                 for ( auto it = _state.units.begin(); it != _state.units.end(); ++it ) {
