@@ -203,15 +203,32 @@ namespace RPG
 
         const int newValue = std::max( std::min( binding.value + change, binding.maximum ), binding.minimum );
         int valueChange = newValue - binding.value;
+        if ( valueChange == 0 ) {
+            return false;
+        }
+
         if ( CharacterAttributes::IsPrimaryAttribute( attribute ) ) {
             valueChange = std::min( valueChange, static_cast<int>( _pointsStats ) );
             _pointsStats -= valueChange;
+            binding.value += valueChange;
         }
         else if ( CharacterAttributes::IsSkillAttribute( attribute ) ) {
-            valueChange = std::min( valueChange, static_cast<int>( _pointsSkills ) );
-            _pointsSkills -= valueChange;
+            const int direction = valueChange < 0 ? - 1 : 1;
+
+            while ( valueChange != 0 ) {
+                const int next = ( direction > 0 ) ? binding.value : binding.value + direction;
+                const int pointCost = ( 1 + next / 20 ) * direction;
+                if ( pointCost > _pointsSkills ) {
+                    break;
+                }
+                valueChange -= direction;
+                _pointsSkills -= pointCost;
+                binding.value += direction;
+            }
         }
-        binding.value += valueChange;
-        return valueChange > 0;
+        else {
+            binding.value += valueChange;
+        }
+        return true;
     }
 }
