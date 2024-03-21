@@ -46,35 +46,25 @@ ModeBuildCalculator::ModeBuildCalculator( GameState & state )
 
     Point p = _physicalSkills.getRect()._pos;
 
+    auto changeEvent = [this]( CharacterAttributes::Enum skill, int value ) {
+        if ( _character.changeAttribute( skill, value ) )
+            modifyEvent();
+    };
+
     for ( auto skill : physicalGroup ) {
-        auto changeEvent = [this, skill]( int value ) {
-            if ( _character.changeAttribute( skill, value ) )
-                modifyEvent();
-        };
-        _physicalSkills.addElement(
-            std::make_shared<SkillCounter<decltype( changeEvent )> >( p, 200, RPG::Character::GetSkillName( skill ), _character.getBinding( skill ), changeEvent ) );
+        _physicalSkills.addElement( std::make_shared<SkillCounter<decltype( changeEvent )> >( p, 200, skill, _character.getBinding( skill ), changeEvent ) );
         p.modAdd( 0, 40 );
     }
 
     p = _magicalSkills.getRect()._pos;
     for ( auto skill : magicalGroup ) {
-        auto changeEvent = [this, skill]( int value ) {
-            if ( _character.changeAttribute( skill, value ) )
-                modifyEvent();
-        };
-        _magicalSkills.addElement(
-            std::make_shared<SkillCounter<decltype( changeEvent )> >( p, 200, RPG::Character::GetSkillName( skill ), _character.getBinding( skill ), changeEvent ) );
+        _magicalSkills.addElement( std::make_shared<SkillCounter<decltype( changeEvent )> >( p, 200, skill, _character.getBinding( skill ), changeEvent ) );
         p.modAdd( 0, 40 );
     }
 
     p = _attributes.getRect()._pos;
     for ( auto attribute : attributeGroup ) {
-        auto changeEvent = [this, attribute]( int value ) {
-            if ( _character.changeAttribute( attribute, value ) )
-                modifyEvent();
-        };
-        _attributes.addElement( std::make_shared<AttributeCounter<decltype( changeEvent )> >( p, RPG::Character::GetSkillName( attribute ),
-                                                                                              _character.getBinding( attribute ), changeEvent ) );
+        _attributes.addElement( std::make_shared<AttributeCounter<decltype( changeEvent )> >( p, attribute, _character.getBinding( attribute ), changeEvent ) );
         p.modAdd( 0, 40 );
     }
 }

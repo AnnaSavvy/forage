@@ -1,5 +1,6 @@
 #pragma once
 #include "binding.h"
+#include "character.h"
 #include "input.h"
 #include "ui_base.h"
 
@@ -27,13 +28,15 @@ template <typename Lambda>
 class SkillCounter : public UIContainer
 {
     Lambda _callback;
+    CharacterAttributes::Enum _skill;
 
 public:
-    SkillCounter( Point position, int width, std::string description, ValueBinding binding, Lambda & callback )
+    SkillCounter( Point position, int width, CharacterAttributes::Enum skill, ValueBinding binding, Lambda & callback )
         : UIContainer( { position._x, position._y, 0, 0 } )
         , _callback( callback )
+        , _skill( skill )
     {
-        addElement( std::make_shared<CenteringLabel>( CenteringLabel( { position._x, position._y, 0, 31 }, description ) ) );
+        addElement( std::make_shared<CenteringLabel>( CenteringLabel( { position._x, position._y, 0, 31 }, RPG::Character::GetSkillName( skill ) ) ) );
         position.modAdd( 150, 0 );
 
         const Style buttonStyle{ StandardFont::REGULAR, StandardColor::WHITE, StandardColor::DARK_GREY, StandardColor::REALM_PRECISION, 2 };
@@ -50,12 +53,12 @@ public:
     {
         if ( _items[1]->getRect().contains( click ) ) {
             const int change = event & InputHandler::MOUSE_RIGHT_CLICKED ? -10 : -1;
-            _callback( change );
+            _callback( _skill, change );
             return UIComponent::BASIC_EVENT;
         }
         else if ( _items[3]->getRect().contains( click ) ) {
             const int change = event & InputHandler::MOUSE_RIGHT_CLICKED ? 10 : 1;
-            _callback( change );
+            _callback( _skill, change );
             return UIComponent::BASIC_EVENT;
         }
         return UIComponent::NO_EVENT;
@@ -67,16 +70,18 @@ class AttributeCounter : public UIContainer
 {
     CenteringLabel * _display;
     Lambda _callback;
+    CharacterAttributes::Enum _attribute;
 
 public:
     ValueComponent _binding;
 
-    AttributeCounter( Point position, std::string description, ValueBinding binding, Lambda & callback )
+    AttributeCounter( Point position, CharacterAttributes::Enum attribute, ValueBinding binding, Lambda & callback )
         : UIContainer( { position._x, position._y, 0, 0 } )
         , _binding( binding )
         , _callback( callback )
+        , _attribute( attribute )
     {
-        addElement( std::make_shared<CenteringLabel>( CenteringLabel( { position._x, position._y, 90, UIC::HEIGHT }, description ) ) );
+        addElement( std::make_shared<CenteringLabel>( CenteringLabel( { position._x, position._y, 90, UIC::HEIGHT }, RPG::Character::GetSkillName( _attribute ) ) ) );
         position.modAdd( 90, 0 );
 
         const Style buttonStyle{ StandardFont::REGULAR, StandardColor::WHITE, StandardColor::DARK_GREY, StandardColor::REALM_PRECISION, 2 };
@@ -94,12 +99,12 @@ public:
     {
         if ( _items[1]->getRect().contains( click ) ) {
             const int change = event & InputHandler::MOUSE_RIGHT_CLICKED ? -10 : -1;
-            _callback( change );
+            _callback( _attribute, change );
             return UIComponent::BASIC_EVENT;
         }
         else if ( _items[3]->getRect().contains( click ) ) {
             const int change = event & InputHandler::MOUSE_RIGHT_CLICKED ? 10 : 1;
-            _callback( change );
+            _callback( _attribute, change );
             return UIComponent::BASIC_EVENT;
         }
         return UIComponent::NO_EVENT;
