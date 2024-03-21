@@ -90,7 +90,6 @@ void ModeBuildCalculator::changeCharacter( RPG::Character other )
 
 void ModeBuildCalculator::modifyEvent()
 {
-    _character.applyChanges();
     _health._binding.editValue().maximum = _character.getMaxHealth();
 
     const int level = _character.getBinding( CharacterAttributes::LEVEL ).value;

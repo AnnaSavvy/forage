@@ -35,8 +35,8 @@ namespace RPG
             stats.charisma = 30;
             stats.intelligence = 20;
 
-            skills[Skills::CLOSE_COMBAT] = 30;
-            skills[Skills::BLOCK] = 20;
+            skills.combat = 30;
+            skills.block = 20;
             break;
         case CharacterPreset::AGILE:
             stats.agility = 70;
@@ -44,9 +44,9 @@ namespace RPG
             stats.charisma = 40;
             stats.intelligence = 30;
 
-            skills[Skills::CLOSE_COMBAT] = 25;
-            skills[Skills::DODGE] = 20;
-            skills[Skills::STEALTH] = 20;
+            skills.combat = 25;
+            skills.dodge = 20;
+            skills.stealth = 20;
             break;
         case CharacterPreset::WIZARD:
             stats.strength = 30;
@@ -54,11 +54,11 @@ namespace RPG
             stats.dexterity = 60;
             stats.intelligence = 80;
 
-            skills[Skills::LIFE] = 25;
-            skills[Skills::ARCANA] = 25;
-            skills[Skills::NATURE] = 25;
-            skills[Skills::CHAOS] = 25;
-            skills[Skills::DEATH] = 25;
+            skills.life = 25;
+            skills.sorcery = 25;
+            skills.nature = 25;
+            skills.chaos = 25;
+            skills.death = 25;
             break;
         case CharacterPreset::MONSTER:
             stats.strength = 90;
@@ -67,13 +67,13 @@ namespace RPG
             stats.charisma = 20;
             stats.intelligence = 10;
 
-            skills[Skills::CLOSE_COMBAT] = 20;
+            skills.combat = 20;
             break;
         default:
             break;
         }
 
-        currentHealth = getMaxHealth();
+        applyChanges();
     }
 
     CharacterClass Character::getClass() const
@@ -90,6 +90,7 @@ namespace RPG
     void Character::applyChanges()
     {
         currentHealth = getMaxHealth();
+        minSkills = skills;
     }
 
     void Character::levelUp()
@@ -176,37 +177,37 @@ namespace RPG
         case CharacterAttributes::CHARISMA:
             return { stats.charisma, 1, 100 };
         case CharacterAttributes::CLOSE_COMBAT:
-            return { skills[Skills::CLOSE_COMBAT] };
+            return { skills.combat, minSkills.combat, 100 };
         case CharacterAttributes::RANGED_COMBAT:
-            return { skills[Skills::RANGED_COMBAT] };
+            return { skills.ranged, minSkills.ranged, 100 };
         case CharacterAttributes::DODGE:
-            return { skills[Skills::DODGE] };
+            return { skills.dodge, minSkills.dodge, 100 };
         case CharacterAttributes::BLOCK:
-            return { skills[Skills::BLOCK] };
+            return { skills.block, minSkills.block, 100 };
         case CharacterAttributes::STEALTH:
-            return { skills[Skills::STEALTH] };
+            return { skills.stealth, minSkills.stealth, 100 };
         case CharacterAttributes::LIFE:
-            return { skills[Skills::LIFE] };
+            return { skills.life, minSkills.life, 100 };
         case CharacterAttributes::ARCANA:
-            return { skills[Skills::ARCANA] };
+            return { skills.sorcery, minSkills.sorcery, 100 };
         case CharacterAttributes::NATURE:
-            return { skills[Skills::NATURE] };
+            return { skills.nature, minSkills.nature, 100 };
         case CharacterAttributes::CHAOS:
-            return { skills[Skills::CHAOS] };
+            return { skills.chaos, minSkills.chaos, 100 };
         case CharacterAttributes::DEATH:
-            return { skills[Skills::DEATH] };
+            return { skills.death, minSkills.death, 100 };
         case CharacterAttributes::MAGIC_FIRE:
-            return { skills[Skills::MAGIC_FIRE] };
+            return { skills.chaos, minSkills.chaos, 100 };
         case CharacterAttributes::MAGIC_WATER:
-            return { skills[Skills::MAGIC_WATER] };
+            return { skills.sorcery, minSkills.sorcery, 100 };
         case CharacterAttributes::MAGIC_AIR:
-            return { skills[Skills::MAGIC_AIR] };
+            return { skills.sorcery, minSkills.sorcery, 100 };
         case CharacterAttributes::MAGIC_EARTH:
-            return { skills[Skills::MAGIC_EARTH] };
+            return { skills.nature, minSkills.nature, 100 };
         case CharacterAttributes::MAGIC_MENTAL:
-            return { skills[Skills::MAGIC_MENTAL] };
+            return { skills.death, minSkills.death, 100 };
         case CharacterAttributes::MAGIC_DIVINITY:
-            return { skills[Skills::MAGIC_DIVINITY] };
+            return { skills.life, minSkills.life, 100 };
         default:
             break;
         }

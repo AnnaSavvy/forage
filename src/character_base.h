@@ -26,30 +26,6 @@ struct Skills
     int nature = 0;
     int chaos = 0;
     int death = 0;
-
-    enum Enum
-    {
-        CLOSE_COMBAT,
-        RANGED_COMBAT,
-        DODGE,
-        BLOCK,
-        STEALTH,
-
-        LIFE,
-        ARCANA,
-        NATURE,
-        CHAOS,
-        DEATH,
-
-        MAGIC_FIRE,
-        MAGIC_WATER,
-        MAGIC_AIR,
-        MAGIC_EARTH,
-        MAGIC_MENTAL,
-        MAGIC_DIVINITY,
-
-        INVALID_SKILL
-    };
 };
 
 struct Unit

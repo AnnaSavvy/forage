@@ -24,7 +24,8 @@ namespace RPG
     class Character : protected Unit
     {
         Stats stats;
-        int skills[Skills::INVALID_SKILL] = { 0 };
+        Skills skills;
+        Skills minSkills;
         int level = 0;
 
         std::string name;
@@ -83,13 +84,13 @@ namespace RPG
 
         int getMagicDamage() const
         {
-            return 1 + ( stats.intelligence + stats.willpower ) / 20;
+            return 1 + ( stats.intelligence + stats.willpower ) / 15;
         }
 
         double calcMagicSuccessChance( Spell spell, int power ) const
         {
             const int difficulty = spell.level * 20 + power * 10;
-            const int skill = skills[Skills::LIFE]; //+ getRealmSkill( spell.realm );
+            const int skill = skills.life; //+ getRealmSkill( spell.realm );
             return skill / difficulty;
         }
 
