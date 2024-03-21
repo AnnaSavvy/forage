@@ -16,6 +16,7 @@ class ModeBuildCalculator : public GameMode
 
     Label _charName;
     Label _levelClass;
+    Label _statPoints;
     Label _skillPoints;
     ProgressBar _health;
     Button _bGenerateName;
@@ -27,6 +28,7 @@ class ModeBuildCalculator : public GameMode
     UIContainer _magicalSkills;
 
     void changeCharacter( RPG::Character other );
+    void modifyEvent();
     void saveCharacter();
 
 public:

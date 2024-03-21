@@ -27,6 +27,8 @@ namespace RPG
         int skills[Skills::INVALID_SKILL] = { 0 };
         int level = 0;
 
+        std::string name;
+
         double _pointsStats = 0;
         double _pointsSkills = 0;
 
@@ -38,14 +40,9 @@ namespace RPG
 
         CharacterClass getClass() const;
 
-        void levelUp()
-        {
-            if ( level < 20 ) {
-                level++;
-                _pointsStats += 10;
-                _pointsSkills += 25;
-            }
-        }
+        void applyChanges();
+
+        void levelUp();
 
         double & statPoints()
         {
@@ -60,6 +57,10 @@ namespace RPG
         int getId() const
         {
             return id;
+        }
+
+        std::string getName() const {
+            return name;
         }
 
         int getInitiative() const

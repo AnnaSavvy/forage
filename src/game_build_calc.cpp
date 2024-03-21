@@ -31,13 +31,14 @@ ModeBuildCalculator::ModeBuildCalculator( GameState & state )
     , _bGenerateName( RenderEngine::GetAnchorRect( AnchorPoint::BOTTOM_CENTER, 100, 60 ), "Generate", {} )
     , _bNext( RenderEngine::GetAnchorRect( AnchorPoint::BOTTOM_RIGHT, 100, 60 ), "Next >", {} )
     , _bPrevious( RenderEngine::GetAnchorRect( AnchorPoint::BOTTOM_LEFT, 100, 60 ), "< Prev", {} )
-    , _health( { FIRST_ROW, 290, 236, 40 }, _character.getBinding( CharacterAttributes::HEALTH ), skillBarStyle )
-    , _charName( { FIRST_ROW, 210 }, "Unknown" )
-    , _levelClass( { FIRST_ROW, 250 }, "Level 1 Adventurer" )
+    , _health( { FIRST_ROW, 300, 236, 35 }, _character.getBinding( CharacterAttributes::HEALTH ), skillBarStyle )
+    , _charName( { FIRST_ROW, 240 }, "Unknown" )
+    , _levelClass( { FIRST_ROW, 270 }, "Level 1 Adventurer" )
     , _attributes( { FIRST_ROW, 350, 0, 0 } )
     , _physicalSkills( { SECOND_ROW, 80, 0, 0 } )
     , _magicalSkills( { SECOND_ROW, 350, 0, 0 } )
-    , _skillPoints( { SECOND_ROW, 600 }, "Available Skill Points: " )
+    , _statPoints( { FIRST_ROW, 635 }, "Points Left: 0" )
+    , _skillPoints( { SECOND_ROW, 635 }, "Skill Points Left: 0" )
 {
     name = GameModeName::BUILD_CALCULATOR;
 
@@ -46,7 +47,10 @@ ModeBuildCalculator::ModeBuildCalculator( GameState & state )
     Point p = _physicalSkills.getRect()._pos;
 
     for ( auto skill : physicalGroup ) {
-        auto changeEvent = [this, skill]( int value ) { _character.changeAttribute( skill, value ); };
+        auto changeEvent = [this, skill]( int value ) {
+            if ( _character.changeAttribute( skill, value ) )
+                modifyEvent();
+        };
         _physicalSkills.addElement(
             std::make_shared<SkillCounter<decltype( changeEvent )> >( p, 200, RPG::Character::GetSkillName( skill ), _character.getBinding( skill ), changeEvent ) );
         p.modAdd( 0, 40 );
@@ -54,7 +58,10 @@ ModeBuildCalculator::ModeBuildCalculator( GameState & state )
 
     p = _magicalSkills.getRect()._pos;
     for ( auto skill : magicalGroup ) {
-        auto changeEvent = [this, skill]( int value ) { _character.changeAttribute( skill, value ); };
+        auto changeEvent = [this, skill]( int value ) {
+            if ( _character.changeAttribute( skill, value ) )
+                modifyEvent();
+        };
         _magicalSkills.addElement(
             std::make_shared<SkillCounter<decltype( changeEvent )> >( p, 200, RPG::Character::GetSkillName( skill ), _character.getBinding( skill ), changeEvent ) );
         p.modAdd( 0, 40 );
@@ -62,7 +69,10 @@ ModeBuildCalculator::ModeBuildCalculator( GameState & state )
 
     p = _attributes.getRect()._pos;
     for ( auto attribute : attributeGroup ) {
-        auto changeEvent = [this, attribute]( int value ) { _character.changeAttribute( attribute, value ); };
+        auto changeEvent = [this, attribute]( int value ) {
+            if ( _character.changeAttribute( attribute, value ) )
+                modifyEvent();
+        };
         _attributes.addElement( std::make_shared<AttributeCounter<decltype( changeEvent )> >( p, RPG::Character::GetSkillName( attribute ),
                                                                                               _character.getBinding( attribute ), changeEvent ) );
         p.modAdd( 0, 40 );
@@ -73,15 +83,24 @@ void ModeBuildCalculator::changeCharacter( RPG::Character other )
 {
     saveCharacter();
     _character = other;
-    _charName.setText( std::format( "{}", _character.getId() ) );
+    _charName.setText( _character.getName() );
 
+    modifyEvent();
+}
+
+void ModeBuildCalculator::modifyEvent()
+{
+    _character.applyChanges();
     _health._binding.editValue().maximum = _character.getMaxHealth();
 
     const int level = _character.getBinding( CharacterAttributes::LEVEL ).value;
     _levelClass.setText( std::format( "Level {} {}", level, CharacterClassToString( _character.getClass() ) ) );
 
     const int sp = _character.skillPoints();
-    _skillPoints.setText( std::format( "Available Skill Points: {}", sp ) );
+    _skillPoints.setText( std::format( "Skill Points Left: {}", sp ) );
+
+    const int ap = _character.statPoints();
+    _statPoints.setText( std::format( "Points Left: {}", ap ) );
 }
 
 void ModeBuildCalculator::saveCharacter()
@@ -89,6 +108,7 @@ void ModeBuildCalculator::saveCharacter()
     for ( auto & unit : _state.units ) {
         if ( unit.getId() == _character.getId() ) {
             unit = _character;
+            unit.applyChanges();
             break;
         }
     }
@@ -142,6 +162,7 @@ GameModeName ModeBuildCalculator::handleEvents()
         }
         else if ( input.consume( InputHandler::SPACE ) ) {
             _character.levelUp();
+            modifyEvent();
         }
         return name;
     }
@@ -153,12 +174,8 @@ void ModeBuildCalculator::update( float deltaTime ) {}
 void ModeBuildCalculator::render()
 {
     _title.render();
-
-    const int level = _character.getBinding( CharacterAttributes::LEVEL ).value;
-    _levelClass.setText( std::format( "Level {} {}", level, CharacterClassToString( _character.getClass() ) ) );
-
-    const int sp = _character.skillPoints();
-    _skillPoints.setText( std::format( "Available Skill Points: {}", sp ) );
+    _bNext.render();
+    _bPrevious.render();
 
     std::string picture = "00000.png";
     CharacterClass charClass = _character.getClass();
@@ -185,9 +202,8 @@ void ModeBuildCalculator::render()
     _attributes.render();
     _physicalSkills.render();
     _magicalSkills.render();
+    _statPoints.render();
     _skillPoints.render();
 
     _bExit.render();
-    _bNext.render();
-    _bPrevious.render();
 }

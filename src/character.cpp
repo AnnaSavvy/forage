@@ -1,4 +1,5 @@
 #include "character.h"
+#include "rpg_generation.h"
 
 namespace RPG
 {
@@ -10,20 +11,11 @@ namespace RPG
         currentHealth = getMaxHealth();
     }
 
-    CharacterClass Character::getClass() const
-    {
-        if ( stats.strength > 60 ) {
-            return CharacterClass::MARTIAL_STR;
-        }
-        else if ( stats.agility > 60 ) {
-            return CharacterClass::MARTIAL_AGI;
-        }
-        return CharacterClass::MAGICAL_NATURE;
-    }
-
     Character::Character( CharacterPreset preset )
     {
         id = lastID++;
+
+        name = Generator::GetCharacterName();
 
         stats.agility = 50;
         stats.charisma = 50;
@@ -38,7 +30,7 @@ namespace RPG
         case CharacterPreset::MELEE:
             stats.strength = 80;
             stats.agility = 60;
-            stats.constitution = 65;
+            stats.constitution = 60;
             stats.dexterity = 60;
             stats.charisma = 30;
             stats.intelligence = 20;
@@ -57,8 +49,7 @@ namespace RPG
             skills[Skills::STEALTH] = 20;
             break;
         case CharacterPreset::WIZARD:
-            stats.strength = 25;
-            stats.agility = 30;
+            stats.strength = 30;
             stats.constitution = 30;
             stats.dexterity = 60;
             stats.intelligence = 80;
@@ -73,7 +64,7 @@ namespace RPG
             stats.strength = 90;
             stats.constitution = 90;
             stats.dexterity = 40;
-            stats.charisma = 10;
+            stats.charisma = 20;
             stats.intelligence = 10;
 
             skills[Skills::CLOSE_COMBAT] = 20;
@@ -83,6 +74,31 @@ namespace RPG
         }
 
         currentHealth = getMaxHealth();
+    }
+
+    CharacterClass Character::getClass() const
+    {
+        if ( stats.strength > 60 ) {
+            return CharacterClass::MARTIAL_STR;
+        }
+        else if ( stats.agility > 60 ) {
+            return CharacterClass::MARTIAL_AGI;
+        }
+        return CharacterClass::MAGICAL_NATURE;
+    }
+
+    void Character::applyChanges()
+    {
+        currentHealth = getMaxHealth();
+    }
+
+    void Character::levelUp()
+    {
+        if ( level < 20 ) {
+            level++;
+            _pointsStats += 10;
+            _pointsSkills += 15 + stats.intelligence / 10;
+        }
     }
 
     std::string Character::GetSkillName( CharacterAttributes::Enum skill )
