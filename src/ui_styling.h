@@ -30,6 +30,11 @@ enum class StandardColor : int
     REALM_DEFENSE,
     REALM_SPEED,
     REALM_PRECISION,
+    TINT_NONE,
+    TINT_MORNING,
+    TINT_EVENING,
+    TINT_NIGHT,
+    TINT_SPECIAL,
     END,
 };
 

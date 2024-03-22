@@ -14,8 +14,13 @@ struct GameState
     RPG::Force otherForce;
     std::vector<RPG::Character> units;
 
-    GameState() : map(32) {
-        const std::array positions { RPG::Force::FRONT, RPG::Force::SIDE, RPG::Force::CENTER, RPG::Force::BACK };
+    double sessionTime = 0;
+    int64_t gameTime = 0; // in seconds
+
+    GameState()
+        : map( 32 )
+    {
+        const std::array positions{ RPG::Force::FRONT, RPG::Force::SIDE, RPG::Force::CENTER, RPG::Force::BACK };
 
         for ( int i = 0; i < 8; ++i ) {
             const int maximum = static_cast<int>( RPG::CharacterPreset::MONSTER );
@@ -28,5 +33,10 @@ struct GameState
                 otherForce.add( units[i], true, positions[i % 4] );
             }
         }
+    }
+
+    void update( float delta )
+    {
+        sessionTime += delta;
     }
 };

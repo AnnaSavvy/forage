@@ -61,6 +61,11 @@ SDL_Renderer * RenderEngine::GetRenderer()
     return _renderer;
 }
 
+void RenderEngine::applyTint( StandardColor tint )
+{
+    _tint = tint;
+}
+
 Point RenderEngine::GetScreenSize()
 {
     return engine._logicalSize;
@@ -123,6 +128,9 @@ bool RenderEngine::Draw( const std::string & image, const Rect & target, bool fl
     if ( !texture ) {
         return false;
     }
+
+    SDL_Color * sdlColor = static_cast<SDL_Color *>( StandardStyles::getColor( engine._tint ) );
+    SDL_SetTextureColorMod( texture, sdlColor->r, sdlColor->g, sdlColor->b );
 
     SDL_Rect rect = convertRect( target );
 

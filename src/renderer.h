@@ -31,16 +31,20 @@ class RenderEngine
     SDL_Window * _window = nullptr;
     SDL_Renderer * _renderer = nullptr;
     Point _logicalSize = { BASE_RESOLUTION_X, BASE_RESOLUTION_Y };
+    StandardColor _tint = StandardColor::TINT_NONE;
 
 public:
     bool Initialize( Point logicalSize, double scaling );
     SDL_Renderer * GetRenderer();
+    void applyTint( StandardColor tint );
+
     static Point GetScreenSize();
     static Point GetAnchorPoint( AnchorPoint anchor );
     static Rect GetAnchorRect( AnchorPoint anchor, int width, int height );
     static RenderEngine & Get();
 
     static bool Draw( const std::string & image, const Rect & target, bool flipped = false );
+    static bool DrawTinted( const std::string & image, const Rect & target, bool flipped = false );
     static bool DrawRect( const Rect & target, StandardColor color );
     static bool DrawStyledRect( const Rect & target, const Style & style );
 

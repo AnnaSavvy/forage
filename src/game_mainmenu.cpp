@@ -6,6 +6,7 @@
 namespace
 {
     const Style buttonStyle{ StandardFont::REGULAR_BOLD, StandardColor::HIGHLIGHT_RED, StandardColor::BLACK, StandardColor::DARK_GREY, 5 };
+    static size_t tintIndex = 0;
 }
 
 ModeMainMenu::ModeMainMenu()
@@ -46,6 +47,12 @@ GameModeName ModeMainMenu::handleEvents()
             else if ( _bQuitGame.getRect().contains( mouseClick ) ) {
                 return GameModeName::QUIT_GAME;
             }
+        }
+        else if ( input.consume(InputHandler::SPACE ) ) {
+            static std::vector<StandardColor> tints
+                = { StandardColor::TINT_MORNING, StandardColor::TINT_NONE, StandardColor::TINT_EVENING, StandardColor::TINT_NIGHT, StandardColor::TINT_SPECIAL };
+            RenderEngine::Get().applyTint( tints[tintIndex] );
+            tintIndex = ( tintIndex + 1 ) % tints.size();
         }
         return name;
     }

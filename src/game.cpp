@@ -103,6 +103,7 @@ void Game::run()
 
 void Game::update( float deltaTime )
 {
+    _state.update( deltaTime );
     _modeStack.top()->update( deltaTime );
 }
 

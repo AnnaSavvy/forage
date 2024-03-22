@@ -92,6 +92,11 @@ namespace StandardStyles
         colors[static_cast<int>( StandardColor::REALM_DEFENSE )] = { 10, 100, 0, 255 };
         colors[static_cast<int>( StandardColor::REALM_SPEED )] = { 10, 0, 100, 255 };
         colors[static_cast<int>( StandardColor::REALM_PRECISION )] = { 230, 180, 25, 255 };
+        colors[static_cast<int>( StandardColor::TINT_NONE )] = { 255, 255, 255, 255 };
+        colors[static_cast<int>( StandardColor::TINT_MORNING )] = { 212, 212, 212, 255 };
+        colors[static_cast<int>( StandardColor::TINT_EVENING )] = { 255, 212, 212, 255 };
+        colors[static_cast<int>( StandardColor::TINT_NIGHT )] = { 128, 128, 128, 255 };
+        colors[static_cast<int>( StandardColor::TINT_SPECIAL )] = { 255, 22, 255, 255 };
 
         return true;
     }
