@@ -3,10 +3,17 @@
 #include "input.h"
 #include "renderer.h"
 
+#include <SDL.h>
+#include <iostream>
+#include <format>
 namespace
 {
     const Style buttonStyle{ StandardFont::REGULAR_BOLD, StandardColor::HIGHLIGHT_RED, StandardColor::BLACK, StandardColor::DARK_GREY, 5 };
+
+    static int colorIndex = 0;
     static size_t tintIndex = 0;
+    static std::vector<StandardColor> tints
+        = { StandardColor::TINT_MORNING, StandardColor::TINT_NONE, StandardColor::TINT_EVENING, StandardColor::TINT_NIGHT, StandardColor::TINT_SPECIAL };
 }
 
 ModeMainMenu::ModeMainMenu()
@@ -53,6 +60,26 @@ GameModeName ModeMainMenu::handleEvents()
                 = { StandardColor::TINT_MORNING, StandardColor::TINT_NONE, StandardColor::TINT_EVENING, StandardColor::TINT_NIGHT, StandardColor::TINT_SPECIAL };
             RenderEngine::Get().applyTint( tints[tintIndex] );
             tintIndex = ( tintIndex + 1 ) % tints.size();
+        }
+        else if ( input.consume( InputHandler::UP ) ) {
+            SDL_Color * sdlColor = static_cast<SDL_Color *>( StandardStyles::getColor( tints[tintIndex] ) );
+            Uint8 * colorPtr = &sdlColor->r + colorIndex;
+            *colorPtr = ( *colorPtr + 1 ) % 255;
+            std::cout << std::format( "Pal #{}: {}, {}, {}\n", tintIndex, sdlColor->r, sdlColor->g, sdlColor->b );
+            RenderEngine::Get().applyTint( tints[tintIndex] );
+        }
+        else if ( input.consume( InputHandler::DOWN ) ) {
+            SDL_Color * sdlColor = static_cast<SDL_Color *>( StandardStyles::getColor( tints[tintIndex] ) );
+            Uint8 * colorPtr = &sdlColor->r + colorIndex;
+            *colorPtr = ( *colorPtr - 1 ) % 255;
+            std::cout << std::format( "Pal #{}: {}, {}, {}\n", tintIndex, sdlColor->r, sdlColor->g, sdlColor->b );
+            RenderEngine::Get().applyTint( tints[tintIndex] );
+        }
+        else if ( input.consume( InputHandler::LEFT ) ) {
+            colorIndex = ( colorIndex - 1 ) % 3;
+        }
+        else if ( input.consume( InputHandler::RIGHT ) ) {
+            colorIndex = ( colorIndex + 1 ) % 3;
         }
         return name;
     }

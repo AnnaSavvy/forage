@@ -4,9 +4,9 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include <cassert>
+#include <format>
 #include <iostream>
 #include <vector>
-#include <format>
 
 namespace StandardStyles
 {
@@ -43,7 +43,6 @@ namespace StandardStyles
                 TTF_CloseFont( sdlFont );
             }
         }
-
         fonts.clear();
         fonts.resize( static_cast<int>( StandardFont::END ) );
         colors.clear();
@@ -93,9 +92,9 @@ namespace StandardStyles
         colors[static_cast<int>( StandardColor::REALM_SPEED )] = { 10, 0, 100, 255 };
         colors[static_cast<int>( StandardColor::REALM_PRECISION )] = { 230, 180, 25, 255 };
         colors[static_cast<int>( StandardColor::TINT_NONE )] = { 255, 255, 255, 255 };
-        colors[static_cast<int>( StandardColor::TINT_MORNING )] = { 212, 212, 212, 255 };
-        colors[static_cast<int>( StandardColor::TINT_EVENING )] = { 255, 212, 212, 255 };
-        colors[static_cast<int>( StandardColor::TINT_NIGHT )] = { 128, 128, 128, 255 };
+        colors[static_cast<int>( StandardColor::TINT_MORNING )] = { 255, 196, 210, 255 };
+        colors[static_cast<int>( StandardColor::TINT_EVENING )] = { 170, 190, 255, 255 };
+        colors[static_cast<int>( StandardColor::TINT_NIGHT )] = { 26, 102, 229, 255 };
         colors[static_cast<int>( StandardColor::TINT_SPECIAL )] = { 255, 22, 255, 255 };
 
         return true;
