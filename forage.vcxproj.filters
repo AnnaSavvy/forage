@@ -43,14 +43,14 @@
     <Filter Include="Source Files\experimental\genetics">
       <UniqueIdentifier>{34cbe77f-0a58-437a-a590-22ce0add8a57}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\state">
+      <UniqueIdentifier>{81de6074-b176-4d5a-97d9-6cbf9c7ac898}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\state">
+      <UniqueIdentifier>{b1508ba6-e67d-4113-ab6b-9c564136ea58}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\wave_function.cpp">
       <Filter>Source Files\experimental</Filter>
     </ClCompile>
@@ -69,14 +69,8 @@
     <ClCompile Include="src\asset_loader.cpp">
       <Filter>Source Files\engine</Filter>
     </ClCompile>
-    <ClCompile Include="src\map.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\input.cpp">
       <Filter>Source Files\engine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\mapview.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\point.cpp">
       <Filter>Source Files\engine</Filter>
@@ -101,9 +95,6 @@
     </ClCompile>
     <ClCompile Include="src\spell.cpp">
       <Filter>Source Files\rpg</Filter>
-    </ClCompile>
-    <ClCompile Include="src\static.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\rng.cpp">
       <Filter>Source Files\engine</Filter>
@@ -150,14 +141,23 @@
     <ClCompile Include="src\character_attributes.cpp">
       <Filter>Source Files\rpg</Filter>
     </ClCompile>
+    <ClCompile Include="src\game.cpp">
+      <Filter>Source Files\state</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>Source Files\state</Filter>
+    </ClCompile>
+    <ClCompile Include="src\map.cpp">
+      <Filter>Source Files\state</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mapview.cpp">
+      <Filter>Source Files\state</Filter>
+    </ClCompile>
+    <ClCompile Include="src\static.cpp">
+      <Filter>Source Files\state</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\static.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\ui_base.h">
       <Filter>Header Files\engine</Filter>
     </ClInclude>
@@ -190,12 +190,6 @@
     </ClInclude>
     <ClInclude Include="src\audio_manager.h">
       <Filter>Header Files\engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\map.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\mapview.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\renderer.h">
       <Filter>Header Files\engine</Filter>
@@ -287,12 +281,6 @@
     <ClInclude Include="src\character_class.h">
       <Filter>Header Files\rpg</Filter>
     </ClInclude>
-    <ClInclude Include="src\game_state.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\assets.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\binding.h">
       <Filter>Header Files\engine</Filter>
     </ClInclude>
@@ -307,6 +295,24 @@
     </ClInclude>
     <ClInclude Include="src\character_attributes.h">
       <Filter>Header Files\rpg</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mapview.h">
+      <Filter>Header Files\state</Filter>
+    </ClInclude>
+    <ClInclude Include="src\map.h">
+      <Filter>Header Files\state</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assets.h">
+      <Filter>Header Files\state</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game.h">
+      <Filter>Header Files\state</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game_state.h">
+      <Filter>Header Files\state</Filter>
+    </ClInclude>
+    <ClInclude Include="src\static.h">
+      <Filter>Header Files\state</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

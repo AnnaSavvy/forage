@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 class MapBase;
 
@@ -7,13 +8,16 @@ class MapView
     int cameraX = 0;
     int cameraY = 0;
     bool infiniteScrolling = false;
+    std::string playerSprite = "";
 
     const MapBase * _map = nullptr;
 
 public:
     MapView() = default;
     MapView( bool infiniteScrolling );
+    void setPlayer( std::string sprite );
     void setMap( const MapBase & map );
     void moveCamera( int x, int y );
+    bool movePlayer( int x, int y );
     void render() const;
 };

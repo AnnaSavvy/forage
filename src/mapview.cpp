@@ -9,6 +9,11 @@ MapView::MapView( bool infiniteScrolling )
     : infiniteScrolling( infiniteScrolling )
 {}
 
+void MapView::setPlayer( std::string sprite )
+{
+    playerSprite = sprite;
+}
+
 void MapView::setMap( const MapBase & map )
 {
     _map = &map;
@@ -20,6 +25,15 @@ void MapView::moveCamera( int x, int y )
 {
     cameraX += x;
     cameraY += y;
+}
+
+bool MapView::movePlayer( int x, int y )
+{
+    const bool movedX = ( cameraX / TILESIZE ) != ( ( cameraX + x ) / TILESIZE );
+    const bool movedY = ( cameraY / TILESIZE ) != ( ( cameraY + y ) / TILESIZE );
+    cameraX += x;
+    cameraY += y;
+    return movedX || movedY;
 }
 
 void MapView::render() const
@@ -84,8 +98,10 @@ void MapView::render() const
         }
     }
 
-    Rect center;
-    center._pos = { screenSize._x / 2, screenSize._y / 2 };
-    center._size = { TILESIZE, TILESIZE };
-    RenderEngine::Draw( "assets/char.png", center );
+    if ( !playerSprite.empty() ) {
+        Rect center;
+        center._pos = { screenSize._x / 2, screenSize._y / 2 };
+        center._size = { TILESIZE, TILESIZE };
+        RenderEngine::Draw( playerSprite, center );
+    }
 }

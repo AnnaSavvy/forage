@@ -2,6 +2,7 @@
 #include "build_optimizer.h"
 #include "input.h"
 #include "renderer.h"
+#include <iostream>
 
 ModeStrategicView::ModeStrategicView()
     : _map( 40 )
@@ -14,6 +15,7 @@ ModeStrategicView::ModeStrategicView()
 
     _map.updateMap();
     _mapView.setMap( _map );
+    _mapView.setPlayer( "assets/char.png" );
 
     _menuPopup.setHidden( true );
 
@@ -88,7 +90,10 @@ void ModeStrategicView::update( float deltaTime )
         if ( _scrollTimer > 1.5 ) {
             cameraSpeed = ( _scrollTimer > 3 ) ? 4 : 3;
         }
-        _mapView.moveCamera( xMove * cameraSpeed, yMove * cameraSpeed );
+
+        if ( _mapView.movePlayer( xMove * cameraSpeed, yMove * cameraSpeed ) ) {
+            std::cout << "Moved" << std::endl;
+        }
     }
     else {
         _scrollTimer = 0.0f;
