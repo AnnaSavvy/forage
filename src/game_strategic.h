@@ -1,5 +1,6 @@
 #pragma once
 
+#include "game_state.h"
 #include "gamemode.h"
 #include "mapview.h"
 #include "ui_base.h"
@@ -7,6 +8,7 @@
 
 class ModeStrategicView : public GameMode
 {
+    GameState _state;
     WaveMap _map;
     MapView _mapView;
 
@@ -18,7 +20,7 @@ class ModeStrategicView : public GameMode
     Window _menuPopup;
 
 public:
-    ModeStrategicView();
+    ModeStrategicView( GameState & state );
     virtual GameModeName handleEvents() override;
     virtual void update( float deltaTime ) override;
     virtual void render() override;

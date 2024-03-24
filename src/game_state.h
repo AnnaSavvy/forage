@@ -15,7 +15,11 @@ struct GameState
     std::vector<RPG::Character> units;
 
     double sessionTime = 0;
-    int64_t gameTime = 0; // in seconds
+    int64_t gameTime = 34 * 60 * 60; // in seconds; starting at Day 1 10:00
+
+    int food = 0;
+    int gold = 0;
+    int resources = 0;
 
     GameState()
         : map( 32 )

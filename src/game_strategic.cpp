@@ -2,10 +2,13 @@
 #include "build_optimizer.h"
 #include "input.h"
 #include "renderer.h"
+#include "rng.h"
+#include <format>
 #include <iostream>
 
-ModeStrategicView::ModeStrategicView()
+ModeStrategicView::ModeStrategicView( GameState & state )
     : _map( 40 )
+    , _state( state )
     , _lResources( { 50, 10 }, "Food: 0, Tools: 0, Gold: 0" )
     , _bOpenMenu( RenderEngine::GetAnchorRect( AnchorPoint::TOP_RIGHT, 200, 80 ), "Menu", {} )
     , _bEndTurn( RenderEngine::GetAnchorRect( AnchorPoint::BOTTOM_RIGHT, 200, 80 ), "End Turn", {} )
@@ -92,7 +95,35 @@ void ModeStrategicView::update( float deltaTime )
         }
 
         if ( _mapView.movePlayer( xMove * cameraSpeed, yMove * cameraSpeed ) ) {
-            std::cout << "Moved" << std::endl;
+            _state.gameTime += 600;
+
+            const int timeInHours = _state.gameTime / 3600;
+            const int hours = ( timeInHours ) % 24;
+            const int days = timeInHours / 24;
+
+            std::cout << std::format( "Day {} {}: Moved to next tile\n", days, hours );
+            if ( hours < 5 ) {
+                RenderEngine::Get().applyTint( StandardColor::TINT_NIGHT );
+            }
+            else if ( hours < 9 ) {
+                RenderEngine::Get().applyTint( StandardColor::TINT_MORNING );
+            }
+            else if ( hours > 19 ) {
+                RenderEngine::Get().applyTint( StandardColor::TINT_EVENING );
+            }
+            else {
+                RenderEngine::Get().applyTint( StandardColor::TINT_NONE );
+            }
+
+            int event = RandomGenerator::Get().next( 0, 10 );
+            switch ( event ) {
+            case 0: {
+                std::cout << std::format( "Day {} {}: Random encounter!\n", days, hours );
+                break;
+            }
+            default:
+                break;
+            }
         }
     }
     else {
