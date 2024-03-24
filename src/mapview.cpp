@@ -21,6 +21,16 @@ void MapView::setMap( const MapBase & map )
     cameraY = 0;
 }
 
+const MapTile * MapView::getPlayerTile() const
+{
+    if ( !_map ) {
+        return nullptr;
+    }
+
+    size_t index = _map->getWidth() * cameraY / 64 + cameraX % 64;
+    return _map->isValid( index ) ? &_map->getTile( index ) : nullptr;
+}
+
 void MapView::moveCamera( int x, int y )
 {
     cameraX += x;

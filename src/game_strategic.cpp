@@ -95,7 +95,20 @@ void ModeStrategicView::update( float deltaTime )
         }
 
         if ( _mapView.movePlayer( xMove * cameraSpeed, yMove * cameraSpeed ) ) {
-            _state.gameTime += 600;
+            const WaveTile * tile = dynamic_cast<const WaveTile *>( _mapView.getPlayerTile() );
+            if ( tile ) {
+                switch ( tile->type ) {
+                case WaveTile::FOREST:
+                    _state.gameTime += 1800;
+                    break;
+                case WaveTile::SAND:
+                    _state.gameTime += 1200;
+                    break;
+                default:
+                    _state.gameTime += 600;
+                    break;
+                }
+            }
 
             const int timeInHours = _state.gameTime / 3600;
             const int hours = ( timeInHours ) % 24;

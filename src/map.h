@@ -23,7 +23,7 @@ protected:
 public:
     size_t getWidth() const;
     size_t getHeight() const;
-    bool isValid( int index ) const;
+    bool isValid( size_t index ) const;
     virtual const MapTile & getTile( size_t index ) const = 0;
 };
 

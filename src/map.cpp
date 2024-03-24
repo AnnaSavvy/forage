@@ -4,7 +4,7 @@
 #include <algorithm>
 
 
-bool MapBase::isValid( int index ) const
+bool MapBase::isValid( size_t index ) const
 {
     return index >= 0 && index < _width * _height;
 }
