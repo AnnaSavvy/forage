@@ -10,4 +10,6 @@ struct Particle
     float lifetime = 0;
     int speed = 0;
     int type = 0;
+
+    void update( float delta );
 };

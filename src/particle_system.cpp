@@ -32,7 +32,7 @@ bool ParticleSystem::add( Particle item )
 void ParticleSystem::update( float deltaTime )
 {
     for ( auto & particle : items ) {
-        particle.lifetime -= deltaTime;
+        particle.update( deltaTime );
     }
 
     cleanupTimer += deltaTime;
