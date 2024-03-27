@@ -4,8 +4,8 @@
 #include "renderer.h"
 
 #include <SDL.h>
-#include <iostream>
 #include <format>
+#include <iostream>
 namespace
 {
     const Style buttonStyle{ StandardFont::REGULAR_BOLD, StandardColor::HIGHLIGHT_RED, StandardColor::BLACK, StandardColor::DARK_GREY, 5 };
@@ -30,6 +30,12 @@ ModeMainMenu::ModeMainMenu()
 
     _backgroundMap.updateMap();
     _mapView.setMap( _backgroundMap );
+
+    Particle one;
+    one.position = { 100, 100 };
+    one.size = 37;
+    one.lifetime = 5;
+    _particles.add( one );
 }
 
 GameModeName ModeMainMenu::handleEvents()
@@ -55,7 +61,7 @@ GameModeName ModeMainMenu::handleEvents()
                 return GameModeName::QUIT_GAME;
             }
         }
-        else if ( input.consume(InputHandler::SPACE ) ) {
+        else if ( input.consume( InputHandler::SPACE ) ) {
             static std::vector<StandardColor> tints
                 = { StandardColor::TINT_MORNING, StandardColor::TINT_NONE, StandardColor::TINT_EVENING, StandardColor::TINT_NIGHT, StandardColor::TINT_SPECIAL };
             RenderEngine::Get().applyTint( tints[tintIndex] );
@@ -89,12 +95,15 @@ GameModeName ModeMainMenu::handleEvents()
 void ModeMainMenu::update( float deltaTime )
 {
     _mapView.moveCamera( 1, 1 );
+    _particles.update( deltaTime );
 }
 
 void ModeMainMenu::render()
 {
     _mapView.render();
     _title.render();
+
+    _particles.render();
 
     _bNewGame.render();
     _bLoadGame.render();
