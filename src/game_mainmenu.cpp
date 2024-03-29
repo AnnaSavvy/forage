@@ -32,18 +32,9 @@ ModeMainMenu::ModeMainMenu()
     _backgroundMap.updateMap();
     _mapView.setMap( _backgroundMap );
 
-    for ( int i = 0; i < 37; i++ ) {
-        Particle one;
-        int x = RandomGenerator::Get().next( 0, 1000 );
-        int y = RandomGenerator::Get().next( 0, 1000 );
-        int x2 = RandomGenerator::Get().next( 0, 1000 );
-        int y2 = RandomGenerator::Get().next( 0, 1000 );
-        one.position = { x, y };
-        one.target = { x2, y2 };
-        one.size = 10;
-        one.lifetime = 10;
-        one.speed = 101;
-        _particles.add( one );
+    for ( int i = 0; i < 9; i++ ) {
+        const int y = 715 * i / 8;
+        _particles.add( { { 640, 360 }, { 1275, y }, 5, 1000, 10 } );
     }
 }
 

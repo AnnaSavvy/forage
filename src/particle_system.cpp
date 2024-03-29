@@ -43,7 +43,7 @@ void ParticleSystem::render()
 {
     for ( auto & particle : items ) {
         if ( particle.lifetime > 0 ) {
-            RenderEngine::DrawRect( { particle.position, { particle.size, particle.size } }, StandardColor::HIGHLIGHT_RED );
+            RenderEngine::DrawRect( particle.getDrawRect(), StandardColor::HIGHLIGHT_RED );
         }
     }
 }
