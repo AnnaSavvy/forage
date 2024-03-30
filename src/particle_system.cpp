@@ -1,9 +1,10 @@
 #include "particle_system.h"
 #include "renderer.h"
+#include "SDL2_gfx.h"
 
 namespace
 {
-    const float CLEANUP_DELAY = 5.0f;
+    const float CLEANUP_DELAY = 100.0f;
 }
 
 void ParticleSystem::cleanup()
@@ -72,7 +73,10 @@ ParticleEmitter::ParticleEmitter( ParticleSystem & system, Point pos, float freq
 void ParticleEmitter::update( float deltaTime ) {
     timer += deltaTime;
     while ( timer > frequency ) {
-        system.add( { position, { 1275, angle * 2 }, 2, 1000, 10 } );
+        const double radians = angle *  M_PI / 180;
+        const int x = position._x + cos( radians ) * distance;
+        const int y = position._y + sin( radians ) * distance;
+        system.add( { position, { x, y }, 10, 1000, 10 } );
 
         angle = ( angle + 10 ) % 360;
         timer -= frequency;

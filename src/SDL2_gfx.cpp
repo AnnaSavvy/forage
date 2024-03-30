@@ -3935,48 +3935,7 @@ namespace SDL
     // reliable in Linux so use SDL_RenderDrawPoints() instead, despite being slower.
     static int renderdrawline( SDL_Renderer * renderer, int x1, int y1, int x2, int y2 )
     {
-        int result;
-#ifndef __EMSCRIPTEN__
-        if ( ( x1 == x2 ) && ( y1 == y2 ) )
-            result = SDL_RenderDrawPoint( renderer, x1, y1 );
-        else if ( y1 == y2 ) {
-            int x;
-            if ( x1 > x2 ) {
-                x = x1;
-                x1 = x2;
-                x2 = x;
-            }
-            SDL_Point * points = (SDL_Point *)malloc( ( x2 - x1 + 1 ) * sizeof( SDL_Point ) );
-            if ( points == NULL )
-                return -1;
-            for ( x = x1; x <= x2; x++ ) {
-                points[x - x1].x = x;
-                points[x - x1].y = y1;
-            }
-            result = SDL_RenderDrawPoints( renderer, points, x2 - x1 + 1 );
-            free( points );
-        }
-        else if ( x1 == x2 ) {
-            int y;
-            if ( y1 > y2 ) {
-                y = y1;
-                y1 = y2;
-                y2 = y;
-            }
-            SDL_Point * points = (SDL_Point *)malloc( ( y2 - y1 + 1 ) * sizeof( SDL_Point ) );
-            if ( points == NULL )
-                return -1;
-            for ( y = y1; y <= y2; y++ ) {
-                points[y - y1].x = x1;
-                points[y - y1].y = y;
-            }
-            result = SDL_RenderDrawPoints( renderer, points, y2 - y1 + 1 );
-            free( points );
-        }
-        else
-#endif
-            result = SDL_RenderDrawLine( renderer, x1, y1, x2, y2 );
-        return result;
+        return SDL_RenderDrawLine( renderer, x1, y1, x2, y2 );
     }
 
     static int hlinecliparc( SDL_Renderer * renderer, int x1, int x2, int y, int xc, int yc, double s, double f )

@@ -29,6 +29,7 @@ class ParticleEmitter
 public:
     float frequency = 0;
     int angle = 0;
+    int distance = 1000;
     Point position;
 
     ParticleEmitter( ParticleSystem & system, Point pos, float frequency );
