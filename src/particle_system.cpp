@@ -29,8 +29,16 @@ bool ParticleSystem::add( Particle item )
     return false;
 }
 
+void ParticleSystem::addEmitter( ParticleEmitter emitter )
+{
+    emitters.push_back( emitter );
+}
+
 void ParticleSystem::update( float deltaTime )
 {
+    for ( auto & emitter : emitters ) {
+        emitter.update( deltaTime );
+    }
     for ( auto & particle : items ) {
         particle.update( deltaTime );
     }
@@ -51,5 +59,29 @@ void ParticleSystem::render()
 void ParticleSystem::reset()
 {
     items.clear();
+    emitters.clear();
     cleanupTimer = 0;
+}
+
+ParticleEmitter::ParticleEmitter( ParticleSystem & system, Point pos, float frequency )
+    : system( system )
+    , position( pos )
+    , frequency( frequency )
+{}
+
+void ParticleEmitter::update( float deltaTime ) {
+    timer += deltaTime;
+    while ( timer > frequency ) {
+        system.add( { position, { 1275, angle * 2 }, 2, 1000, 10 } );
+
+        angle = ( angle + 10 ) % 360;
+        timer -= frequency;
+    }
+}
+
+void ParticleEmitter::reset( float newFrequency )
+{
+    done = false;
+    frequency = newFrequency;
+    timer = 0;
 }

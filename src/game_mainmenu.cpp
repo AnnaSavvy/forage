@@ -36,6 +36,7 @@ ModeMainMenu::ModeMainMenu()
         const int y = 715 * i / 8;
         _particles.add( { { 640, 360 }, { 1275, y }, 5, 1000, 10 } );
     }
+    _particles.addEmitter( ParticleEmitter( _particles, { 640, 360 }, 0.03 ) );
 }
 
 GameModeName ModeMainMenu::handleEvents()
