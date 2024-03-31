@@ -1,6 +1,6 @@
 #include "particle_system.h"
-#include "renderer.h"
 #include "SDL2_gfx.h"
+#include "renderer.h"
 
 namespace
 {
@@ -70,10 +70,11 @@ ParticleEmitter::ParticleEmitter( ParticleSystem & system, Point pos, float freq
     , frequency( frequency )
 {}
 
-void ParticleEmitter::update( float deltaTime ) {
+void ParticleEmitter::update( float deltaTime )
+{
     timer += deltaTime;
     while ( timer > frequency ) {
-        const double radians = angle *  M_PI / 180;
+        const double radians = angle * M_PI / 180;
         const int x = position._x + cos( radians ) * distance;
         const int y = position._y + sin( radians ) * distance;
         system.add( { position, { x, y }, 10, 1000, 10 } );

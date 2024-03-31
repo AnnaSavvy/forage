@@ -31,9 +31,10 @@ void Particle::update( float delta )
     int max = std::max( std::abs( diff._x ), std::abs( diff._y ) );
     if ( max != 0 && max > speed ) {
         // normalize
-        float vectorX = (float)diff._x / max;
-        float vectorY = (float)diff._y / max;
-        position._x += vectorX * speed;
-        position._y += vectorY * speed;
+        const float vectorX = (float)diff._x / max;
+        const float vectorY = (float)diff._y / max;
+        const float speedFactor = sqrtf( vectorX * vectorX + vectorY * vectorY );
+        position._x += vectorX * speed / speedFactor;
+        position._y += vectorY * speed / speedFactor;
     }
 }

@@ -25,39 +25,6 @@ ModeStrategicView::ModeStrategicView( GameState & state )
     Style buttonStyle{ StandardFont::REGULAR_BOLD, StandardColor::HIGHLIGHT_RED, StandardColor::BLACK, StandardColor::DARK_GREY, 5 };
     _bOpenMenu.setStyle( buttonStyle );
     _bEndTurn.setStyle( buttonStyle );
-
-    BuildOrder::City city;
-    city.landPopulation = 24;
-    city.landProduction = 27;
-    city.landGold = 30;
-    city.racialGrowth = -2;
-    city.taxCollectionMode = 3;
-    city.population = 1;
-
-    city.buildings = { BuildOrder::Builders, BuildOrder::Granary };
-
-    std::vector<BuildOrder::Building> buildOrder1
-        = { BuildOrder::Smithy,     BuildOrder::Marketplace,  BuildOrder::Farmers,   BuildOrder::Shrine,     BuildOrder::Library,   BuildOrder::Sages,
-            BuildOrder::University, BuildOrder::Sawmill,      BuildOrder::Foresters, BuildOrder::Temple,     BuildOrder::Parthenon, BuildOrder::Miners,
-            BuildOrder::Bank,       BuildOrder::Mechanicians, BuildOrder::Cathedral, BuildOrder::Alchemists, BuildOrder::Wizards };
-
-    std::vector<BuildOrder::Building> buildOrder2
-        = { BuildOrder::Sawmill, BuildOrder::Smithy,    BuildOrder::Marketplace, BuildOrder::Farmers,    BuildOrder::Foresters,    BuildOrder::Miners,
-            BuildOrder::Shrine,  BuildOrder::Library,   BuildOrder::Sages,       BuildOrder::University, BuildOrder::Mechanicians, BuildOrder::Bank,
-            BuildOrder::Temple,  BuildOrder::Parthenon, BuildOrder::Cathedral,   BuildOrder::Alchemists, BuildOrder::Wizards };
-
-    std::vector<BuildOrder::Building> buildOrder3
-        = { BuildOrder::Smithy,     BuildOrder::Marketplace,  BuildOrder::Farmers, BuildOrder::Sawmill,   BuildOrder::Foresters,
-            BuildOrder::Miners,     BuildOrder::Shrine,       BuildOrder::Library, BuildOrder::Sages,     BuildOrder::University,
-            BuildOrder::Temple,     BuildOrder::Mechanicians, BuildOrder::Bank,    BuildOrder::Parthenon, BuildOrder::Cathedral,
-            BuildOrder::Alchemists, BuildOrder::Wizards,      BuildOrder::Armory,  BuildOrder::Stables,   BuildOrder::Animists };
-
-    BuildOrder::Optimizer optimizer;
-    optimizer.PrintResult( optimizer.executeBuildOrder( city, buildOrder1 ) );
-
-    optimizer.PrintResult( optimizer.executeBuildOrder( city, buildOrder2 ) );
-
-    optimizer.PrintFullHistory( optimizer.executeBuildOrder( city, buildOrder3 ) );
 }
 
 GameModeName ModeStrategicView::handleEvents()
@@ -146,6 +113,8 @@ void ModeStrategicView::update( float deltaTime )
 
 void ModeStrategicView::render()
 {
+    _lResources.setText( std::format( "Food {}, Gold {}, Resources {}", _state.food, _state.gold, _state.resources ) );
+
     _mapView.render();
     _lResources.render();
 
