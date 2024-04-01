@@ -6,6 +6,33 @@
 #include <format>
 #include <iostream>
 
+namespace
+{
+    const float GATHER_TIMER = 5;
+    const float SLEEP_TIMER = 4;
+}
+
+void ModeStrategicView::passTime( int amount )
+{
+    _state.gameTime += amount;
+
+    const int timeInHours = _state.gameTime / 3600;
+    const int hours = ( timeInHours ) % 24;
+
+    if ( hours < 5 ) {
+        RenderEngine::Get().applyTint( StandardColor::TINT_NIGHT );
+    }
+    else if ( hours < 9 ) {
+        RenderEngine::Get().applyTint( StandardColor::TINT_MORNING );
+    }
+    else if ( hours > 19 ) {
+        RenderEngine::Get().applyTint( StandardColor::TINT_EVENING );
+    }
+    else {
+        RenderEngine::Get().applyTint( StandardColor::TINT_NONE );
+    }
+}
+
 ModeStrategicView::ModeStrategicView( GameState & state )
     : _map( 40 )
     , _state( state )
@@ -29,6 +56,10 @@ ModeStrategicView::ModeStrategicView( GameState & state )
 
 GameModeName ModeStrategicView::handleEvents()
 {
+    if ( _eventTimer > 0 ) {
+        return name;
+    }
+
     InputHandler & input = InputHandler::Get();
 
     if ( input.handleEvent() ) {
@@ -42,6 +73,15 @@ GameModeName ModeStrategicView::handleEvents()
                 return GameModeName::CANCEL;
             }
         }
+        else if ( input.consume( InputHandler::KEY_PRESSED ) ) {
+            const char key = input.consumeKey( true );
+            if ( key == 'e' ) {
+                _eventTimer = GATHER_TIMER;
+            }
+            else if ( key == 'q' ) {
+                _eventTimer = SLEEP_TIMER;
+            }
+        }
         return name;
     }
     return GameModeName::QUIT_GAME;
@@ -49,6 +89,13 @@ GameModeName ModeStrategicView::handleEvents()
 
 void ModeStrategicView::update( float deltaTime )
 {
+    if ( _eventTimer > 0 ) {
+        _eventTimer -= deltaTime;
+
+        passTime( 12 * 60 * 60 * deltaTime / SLEEP_TIMER );
+        return;
+    }
+
     InputHandler & input = InputHandler::Get();
 
     // Camera update
@@ -66,13 +113,13 @@ void ModeStrategicView::update( float deltaTime )
             if ( tile ) {
                 switch ( tile->type ) {
                 case WaveTile::FOREST:
-                    _state.gameTime += 1800;
+                    passTime( 1800 );
                     break;
                 case WaveTile::SAND:
-                    _state.gameTime += 1200;
+                    passTime( 1200 );
                     break;
                 default:
-                    _state.gameTime += 600;
+                    passTime( 600 );
                     break;
                 }
             }
@@ -82,18 +129,6 @@ void ModeStrategicView::update( float deltaTime )
             const int days = timeInHours / 24;
 
             std::cout << std::format( "Day {} {}: Moved to next tile\n", days, hours );
-            if ( hours < 5 ) {
-                RenderEngine::Get().applyTint( StandardColor::TINT_NIGHT );
-            }
-            else if ( hours < 9 ) {
-                RenderEngine::Get().applyTint( StandardColor::TINT_MORNING );
-            }
-            else if ( hours > 19 ) {
-                RenderEngine::Get().applyTint( StandardColor::TINT_EVENING );
-            }
-            else {
-                RenderEngine::Get().applyTint( StandardColor::TINT_NONE );
-            }
 
             int event = RandomGenerator::Get().next( 0, 10 );
             switch ( event ) {

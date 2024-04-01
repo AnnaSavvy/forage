@@ -1,8 +1,8 @@
 #include "input.h"
 
 #include <SDL.h>
-#include <iostream>
 #include <format>
+#include <iostream>
 
 InputHandler::InputHandler() {}
 
@@ -21,6 +21,16 @@ bool InputHandler::consume( InputToggle mode )
     const bool flag = _modes & mode;
     _modes &= ~mode;
     return flag;
+}
+
+char InputHandler::consumeKey( bool forceLowercase )
+{
+    char k = (char)_lastKeyPressed;
+    if ( !forceLowercase && isSet( SHIFT ) && k >= SDLK_a && k <= SDLK_z ) {
+        k -= 32;
+    }
+    _lastKeyPressed = SDLK_UNKNOWN;
+    return k;
 }
 
 bool InputHandler::isSet( InputToggle mode ) const
@@ -54,8 +64,6 @@ bool InputHandler::handleEvent()
             }
             break;
         case SDL_KEYDOWN:
-            _modes |= InputToggle::KEY_PRESSED;
-
             switch ( event.key.keysym.sym ) {
             case SDLK_UP:
                 _modes |= InputToggle::UP;
@@ -83,6 +91,10 @@ bool InputHandler::handleEvent()
             case SDLK_LCTRL:
             case SDLK_RCTRL:
                 _modes |= InputToggle::CONTROL;
+                break;
+            default:
+                _modes |= InputToggle::KEY_PRESSED;
+                _lastKeyPressed = event.key.keysym.sym;
                 break;
             }
             break;
@@ -115,10 +127,13 @@ bool InputHandler::handleEvent()
             case SDLK_RCTRL:
                 _modes &= ~InputToggle::CONTROL;
                 break;
+            default:
+                _modes &= ~InputToggle::KEY_PRESSED;
+                break;
             }
             break;
         case SDL_MOUSEBUTTONDOWN: {
-            switch (event.button.button) {
+            switch ( event.button.button ) {
             case SDL_BUTTON_LEFT:
                 _modes |= InputToggle::MOUSE_LEFT_CLICKED;
                 break;

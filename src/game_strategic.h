@@ -13,11 +13,14 @@ class ModeStrategicView : public GameMode
     MapView _mapView;
 
     float _scrollTimer = 0.0f;
+    float _eventTimer = 0.0f;
 
     Label _lResources;
     Button _bOpenMenu;
     Button _bEndTurn;
     Window _menuPopup;
+
+    void passTime( int amount );
 
 public:
     ModeStrategicView( GameState & state );

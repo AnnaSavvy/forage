@@ -30,6 +30,7 @@ public:
         DOWN = 0x2000,
         LEFT = 0x4000,
         RIGHT = 0x8000,
+        KEYBOARD_ACTIVE = 0xFF00 | KEY_PRESSED | SPACE,
         ALL = 0xFFFF
     };
     InputHandler();
@@ -39,6 +40,7 @@ public:
     int getModes() const;
     void reset();
     bool consume( InputToggle mode );
+    char consumeKey( bool forceLowercase = false );
     bool isSet( InputToggle mode ) const;
     const Point & getClickPosition() const;
     void setScaling( double windowScaling );
@@ -48,6 +50,7 @@ public:
 
 private:
     int _modes = InputToggle::NONE;
+    int _lastKeyPressed = 0;
     Point _mousePosition;
     double _scaling = 1.0;
 };
