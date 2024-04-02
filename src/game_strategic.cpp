@@ -8,7 +8,7 @@
 
 namespace
 {
-    const float GATHER_TIMER = 5;
+    const float GATHER_TIMER = 6;
     const float SLEEP_TIMER = 4;
 }
 
@@ -39,7 +39,8 @@ void ModeStrategicView::executeEvent( float deltaTime )
 
     if ( _eventType == MapEventType::SLEEP ) {
         passTime( 12 * 60 * 60 * deltaTime / SLEEP_TIMER );
-    } else if ( _eventType == MapEventType::GATHERING ) {
+    }
+    else if ( _eventType == MapEventType::GATHERING ) {
         passTime( 12 * 60 * 60 * deltaTime / GATHER_TIMER );
         _eventSubtimer += deltaTime;
 
@@ -48,6 +49,7 @@ void ModeStrategicView::executeEvent( float deltaTime )
         if ( _eventSubtimer > subtimer ) {
             _eventSubtimer -= subtimer;
             _state.food++;
+            temporaryUI.addElement( std::make_shared<FlyingText>( RenderEngine::GetScreenSize().modDiv( 2 ).add( 40, 0 ), "+1", 3 ) );
         }
     }
 }
@@ -59,6 +61,7 @@ ModeStrategicView::ModeStrategicView( GameState & state )
     , _bOpenMenu( RenderEngine::GetAnchorRect( AnchorPoint::TOP_RIGHT, 200, 80 ), "Menu", {} )
     , _bEndTurn( RenderEngine::GetAnchorRect( AnchorPoint::BOTTOM_RIGHT, 200, 80 ), "End Turn", {} )
     , _menuPopup( RenderEngine::GetAnchorRect( AnchorPoint::CENTER, 400, 50 ), "Menu" )
+    , temporaryUI( {} )
 {
     name = GameModeName::NEW_GAME;
 
@@ -111,6 +114,8 @@ GameModeName ModeStrategicView::handleEvents()
 
 void ModeStrategicView::update( float deltaTime )
 {
+    temporaryUI.update( deltaTime );
+
     if ( hasEventRunning() ) {
         executeEvent( deltaTime );
         return;
@@ -177,11 +182,12 @@ void ModeStrategicView::render()
         if ( _eventType == MapEventType::SLEEP ) {
             RenderEngine::Get().DrawText( "Zz..", RenderEngine::GetScreenSize().modDiv( 2 ) );
         }
-        else if( _eventType == MapEventType::GATHERING )
-        {
+        else if ( _eventType == MapEventType::GATHERING ) {
             RenderEngine::Get().DrawText( "E", RenderEngine::GetScreenSize().modDiv( 2 ) );
         }
     }
+
+    temporaryUI.render();
 
     _bOpenMenu.render();
     _bEndTurn.render();
@@ -191,5 +197,5 @@ void ModeStrategicView::render()
 
 bool ModeStrategicView::hasEventRunning() const
 {
-    return _eventTimer >0;
+    return _eventTimer > 0;
 }

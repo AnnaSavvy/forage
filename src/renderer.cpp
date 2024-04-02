@@ -231,6 +231,24 @@ bool RenderEngine::DrawDestroySurface( SDL_Surface * surface, const Rect & targe
     return success;
 }
 
+bool RenderEngine::DrawDestroyAlphaSurface( SDL_Surface * surface, const Rect & target, int alpha )
+{
+    if ( !surface ) {
+        return false;
+    }
+
+    SDL_Texture * textTexture = SDL_CreateTextureFromSurface( engine._renderer, surface );
+
+    SDL_SetTextureAlphaMod( textTexture, alpha );
+
+    SDL_Rect textRect = { target._pos._x, target._pos._y, target._size._x, target._size._y };
+    const bool success = SDL_RenderCopy( engine._renderer, textTexture, NULL, &textRect ) == 0;
+    SDL_FreeSurface( surface );
+    SDL_DestroyTexture( textTexture );
+
+    return success;
+}
+
 bool RenderEngine::DrawPieSlice( const Rect & target, double startAngle, double endAngle, StandardColor color )
 {
     SDL_Color * pieColor = static_cast<SDL_Color *>( StandardStyles::getColor( color ) );

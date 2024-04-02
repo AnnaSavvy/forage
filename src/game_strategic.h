@@ -23,6 +23,7 @@ class ModeStrategicView : public GameMode
     float _eventTimer = 0.0f;
     float _eventSubtimer = 0.0f;
     MapEventType _eventType = MapEventType::NO_EVENT;
+    UIContainer temporaryUI;
 
     Label _lResources;
     Button _bOpenMenu;

@@ -23,7 +23,7 @@ public:
     UIComponent( const Rect & dimensions );
     virtual ~UIComponent() = default;
 
-    virtual void update( float deltaTime ) = 0;
+    virtual void update( float deltaTime ){};
     virtual void render() = 0;
 
     virtual int handleEvent( const Point & click, int event )
@@ -55,13 +55,14 @@ protected:
 public:
     UIContainer( const Rect & dimensions );
 
-    virtual void update( float deltaTime );
+    virtual void update( float deltaTime ) override;
     virtual void render();
     virtual int handleEvent( const Point & click, int event );
 
     void addElement( std::shared_ptr<UIComponent> element );
     virtual std::shared_ptr<UIComponent> getElement( const Point & position );
     void updateRect();
+    void purgeHidden();
 };
 
 // A basic text label element
@@ -73,8 +74,6 @@ public:
 
     void setColor( StandardColor color );
     virtual void setText( const std::string & text );
-
-    virtual void update( float deltaTime ) override {}
     virtual void render() override;
 
 protected:
@@ -94,6 +93,20 @@ public:
     virtual void render() override;
 };
 
+class FlyingText : public Label
+{
+    float timer = 0;
+    float toCompletion = 0;
+
+public:
+    FlyingText( const Point & position, const std::string & text, float delay );
+    FlyingText( const Point & position, const std::string & text, float delay, StandardFont font, StandardColor color );
+
+    virtual void render() override;
+    virtual void update( float deltaTime ) override;
+    bool isDone() const;
+};
+
 class Button : public UIComponent
 {
     std::string _label;
@@ -108,7 +121,6 @@ public:
     virtual ~Button() = default;
 
     virtual int handleEvent( const Point & click, int event ) override;
-    virtual void update( float deltaTime ) override;
     virtual void render() override;
 
     void setPressed( bool value );

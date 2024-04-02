@@ -73,6 +73,17 @@ void UIContainer::updateRect()
     }
 }
 
+void UIContainer::purgeHidden()
+{
+    std::vector<std::shared_ptr<UIComponent> > purged;
+    for ( auto & item : _items ) {
+        if ( !item->isHidden() ) {
+            purged.push_back( std::move( item ) );
+        }
+    }
+    _items = purged;
+}
+
 Button::Button( int x, int y, int width, int height, const std::string & label )
     : UIComponent( { x, y, width, height } )
 {
@@ -100,8 +111,6 @@ int Button::handleEvent( const Point & click, int event )
     }
     return UIComponent::NO_EVENT;
 }
-
-void Button::update( float deltaTime ) {}
 
 void Button::render()
 {
@@ -293,4 +302,47 @@ std::shared_ptr<UIComponent> Window::getElement( const Point & click )
         }
     }
     return nullptr;
+}
+
+FlyingText::FlyingText( const Point & position, const std::string & text, float delay )
+    : Label( position, text )
+    , toCompletion( delay )
+{}
+
+FlyingText::FlyingText( const Point & position, const std::string & text, float delay, StandardFont font, StandardColor color )
+    : Label( position, text, font, color )
+    , toCompletion( delay )
+{}
+
+void FlyingText::render()
+{
+    if ( !isDone() ) {
+        const float progress = timer / toCompletion;
+
+        SDL_Surface * surface = RenderEngine::GetTextSurface( _text, _font, _color );
+        if ( surface ) {
+            const int offset = surface->h + 20;
+            const int alpha = 255 - ( 254 * progress );
+
+            Rect textRect = _rect;
+            textRect._pos._y -= offset * progress;
+            textRect._size._x = surface->w;
+            textRect._size._y = surface->h;
+
+            RenderEngine::DrawDestroyAlphaSurface( surface, textRect, alpha );
+        }
+    }
+}
+
+void FlyingText::update( float deltaTime )
+{
+    timer += deltaTime;
+    if ( isDone() ) {
+        _hidden = true;
+    }
+}
+
+bool FlyingText::isDone() const
+{
+    return timer > toCompletion;
 }
