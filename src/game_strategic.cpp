@@ -33,6 +33,25 @@ void ModeStrategicView::passTime( int amount )
     }
 }
 
+void ModeStrategicView::executeEvent( float deltaTime )
+{
+    _eventTimer -= deltaTime;
+
+    if ( _eventType == MapEventType::SLEEP ) {
+        passTime( 12 * 60 * 60 * deltaTime / SLEEP_TIMER );
+    } else if ( _eventType == MapEventType::GATHERING ) {
+        passTime( 12 * 60 * 60 * deltaTime / GATHER_TIMER );
+        _eventSubtimer += deltaTime;
+
+        const int basedOnSkill = 10;
+        const float subtimer = GATHER_TIMER / basedOnSkill;
+        if ( _eventSubtimer > subtimer ) {
+            _eventSubtimer -= subtimer;
+            _state.food++;
+        }
+    }
+}
+
 ModeStrategicView::ModeStrategicView( GameState & state )
     : _map( 40 )
     , _state( state )
@@ -56,7 +75,7 @@ ModeStrategicView::ModeStrategicView( GameState & state )
 
 GameModeName ModeStrategicView::handleEvents()
 {
-    if ( _eventTimer > 0 ) {
+    if ( hasEventRunning() ) {
         return name;
     }
 
@@ -77,9 +96,12 @@ GameModeName ModeStrategicView::handleEvents()
             const char key = input.consumeKey( true );
             if ( key == 'e' ) {
                 _eventTimer = GATHER_TIMER;
+                _eventSubtimer = 0.0f;
+                _eventType = MapEventType::GATHERING;
             }
             else if ( key == 'q' ) {
                 _eventTimer = SLEEP_TIMER;
+                _eventType = MapEventType::SLEEP;
             }
         }
         return name;
@@ -89,10 +111,8 @@ GameModeName ModeStrategicView::handleEvents()
 
 void ModeStrategicView::update( float deltaTime )
 {
-    if ( _eventTimer > 0 ) {
-        _eventTimer -= deltaTime;
-
-        passTime( 12 * 60 * 60 * deltaTime / SLEEP_TIMER );
+    if ( hasEventRunning() ) {
+        executeEvent( deltaTime );
         return;
     }
 
@@ -153,8 +173,23 @@ void ModeStrategicView::render()
     _mapView.render();
     _lResources.render();
 
+    if ( hasEventRunning() ) {
+        if ( _eventType == MapEventType::SLEEP ) {
+            RenderEngine::Get().DrawText( "Zz..", RenderEngine::GetScreenSize().modDiv( 2 ) );
+        }
+        else if( _eventType == MapEventType::GATHERING )
+        {
+            RenderEngine::Get().DrawText( "E", RenderEngine::GetScreenSize().modDiv( 2 ) );
+        }
+    }
+
     _bOpenMenu.render();
     _bEndTurn.render();
 
     _menuPopup.render();
+}
+
+bool ModeStrategicView::hasEventRunning() const
+{
+    return _eventTimer >0;
 }
