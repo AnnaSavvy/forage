@@ -28,13 +28,13 @@ void Particle::update( float delta )
     lifetime -= delta;
 
     Point diff = target - position;
-    int max = std::max( std::abs( diff._x ), std::abs( diff._y ) );
+    int max = std::max( std::abs( diff.x ), std::abs( diff.y ) );
     if ( max != 0 && max > speed ) {
         // normalize
-        const float vectorX = (float)diff._x / max;
-        const float vectorY = (float)diff._y / max;
+        const float vectorX = (float)diff.x / max;
+        const float vectorY = (float)diff.y / max;
         const float speedFactor = sqrtf( vectorX * vectorX + vectorY * vectorY );
-        position._x += vectorX * speed / speedFactor;
-        position._y += vectorY * speed / speedFactor;
+        position.x += vectorX * speed / speedFactor;
+        position.y += vectorY * speed / speedFactor;
     }
 }

@@ -38,10 +38,10 @@ void ProgressBar::render()
         RenderEngine::DrawRect( _rect, _style.borderColor );
 
         Rect innerArea = _rect;
-        innerArea._pos._x += _style.borderWidth;
-        innerArea._pos._y += _style.borderWidth;
-        innerArea._size._x -= _style.borderWidth * 2;
-        innerArea._size._y -= _style.borderWidth * 2;
+        innerArea.pos.x += _style.borderWidth;
+        innerArea.pos.y += _style.borderWidth;
+        innerArea.size.x -= _style.borderWidth * 2;
+        innerArea.size.y -= _style.borderWidth * 2;
         RenderEngine::DrawRect( innerArea, _style.backgroundColor );
     }
     else {
@@ -52,13 +52,13 @@ void ProgressBar::render()
     const double ratio = std::min( static_cast<double>( binding.value ) / binding.maximum, 1.0 );
     if ( ratio > 0.0001 ) {
         Rect barArea = _rect;
-        barArea._pos._x += _style.borderWidth;
-        barArea._pos._y += _style.borderWidth;
-        barArea._size._y -= _style.borderWidth * 2;
-        barArea._size._x -= _style.borderWidth * 2;
-        barArea._size._x *= ratio;
-        if ( barArea._size._x < 0 ) {
-            barArea._size._x = 0;
+        barArea.pos.x += _style.borderWidth;
+        barArea.pos.y += _style.borderWidth;
+        barArea.size.y -= _style.borderWidth * 2;
+        barArea.size.x -= _style.borderWidth * 2;
+        barArea.size.x *= ratio;
+        if ( barArea.size.x < 0 ) {
+            barArea.size.x = 0;
         }
         RenderEngine::DrawRect( barArea, StandardColor::DARK_RED );
     }
@@ -67,10 +67,10 @@ void ProgressBar::render()
     SDL_Surface * surface = RenderEngine::GetTextSurface( str, _style.font, _style.textColor );
     if ( surface ) {
         Rect textRect = _rect;
-        textRect._pos._x += ( _rect._size._x - surface->w ) / 2;
-        textRect._pos._y += ( _rect._size._y - surface->h ) / 2;
-        textRect._size._x = surface->w;
-        textRect._size._y = surface->h;
+        textRect.pos.x += ( _rect.size.x - surface->w ) / 2;
+        textRect.pos.y += ( _rect.size.y - surface->h ) / 2;
+        textRect.size.x = surface->w;
+        textRect.size.y = surface->h;
 
         RenderEngine::DrawDestroySurface( surface, textRect );
     }

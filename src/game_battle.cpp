@@ -11,7 +11,7 @@ namespace
 }
 
 ModeBattle::ModeBattle( GameState & state )
-    : _title( { 0, 0, RenderEngine::GetScreenSize()._x, 50 }, "Battle" )
+    : _title( { 0, 0, RenderEngine::GetScreenSize().x, 50 }, "Battle" )
     , _bExit( RenderEngine::GetAnchorRect( AnchorPoint::BOTTOM_RIGHT, 270, 80 ), "Return", {} )
     , _arena( state.playerForce, state.otherForce )
 {
@@ -57,16 +57,16 @@ void ModeBattle::render()
 
     const int tileSize = BATTLE_TILE + PADDING;
 
-    Rect target = { ( screenSize._x - BATTLE_TILE ) / 2, ( screenSize._y - BATTLE_TILE ) / 2, tileSize, tileSize };
-    target._pos._x -= tileSize * 6;
-    target._pos._y -= tileSize * 3;
+    Rect target = { ( screenSize.x - BATTLE_TILE ) / 2, ( screenSize.y - BATTLE_TILE ) / 2, tileSize, tileSize };
+    target.pos.x -= tileSize * 6;
+    target.pos.y -= tileSize * 3;
     for ( int i = 0; i < 6; i++ ) {
         for ( int j = 0; j < 11; j++ ) {
-            target._pos._x += tileSize;
+            target.pos.x += tileSize;
             RenderEngine::Draw( j % 2 ? "assets/plains.png" : "assets/forest.png", target );
         }
-        target._pos._x -= tileSize * 11;
-        target._pos._y += tileSize;
+        target.pos.x -= tileSize * 11;
+        target.pos.y += tileSize;
     }
 
     renderForce( left, false );
@@ -81,19 +81,19 @@ void ModeBattle::renderForce( const RPG::Force & target, bool mirror )
     const Point & screenSize = RenderEngine::GetScreenSize();
     const std::vector<RPG::Force::Position> positions = { RPG::Force::FRONT, RPG::Force::SIDE, RPG::Force::CENTER, RPG::Force::BACK };
 
-    Rect drawArea = { { ( screenSize._x - BATTLE_TILE ) / 2, ( screenSize._y - BATTLE_TILE ) / 2 }, { BATTLE_TILE, BATTLE_TILE } };
+    Rect drawArea = { { ( screenSize.x - BATTLE_TILE ) / 2, ( screenSize.y - BATTLE_TILE ) / 2 }, { BATTLE_TILE, BATTLE_TILE } };
 
     for ( auto & position : positions ) {
         const int offset = ( mirror ) ? BATTLE_TILE + PADDING : -BATTLE_TILE - PADDING;
-        drawArea._pos._x += offset;
+        drawArea.pos.x += offset;
 
         auto units = target.getCharacters( position );
         if ( !units.empty() ) {
             const RPG::BattleUnit & unit = units.front().get();
             RenderEngine::Draw( unit.getSprite(), drawArea, mirror );
-            Point textPosition = drawArea._pos;
+            Point textPosition = drawArea.pos;
             if ( mirror ) {
-                textPosition._x += BATTLE_TILE - 22;
+                textPosition.x += BATTLE_TILE - 22;
             }
             RenderEngine::DrawText( std::to_string( unit.getCurrentHealth() ), textPosition );
         }

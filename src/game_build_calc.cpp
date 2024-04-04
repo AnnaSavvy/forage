@@ -26,7 +26,7 @@ namespace
 
 ModeBuildCalculator::ModeBuildCalculator( GameState & state )
     : _state( state )
-    , _title( { 0, 0, RenderEngine::GetScreenSize()._x, 50 }, "Character Builder" )
+    , _title( { 0, 0, RenderEngine::GetScreenSize().x, 50 }, "Character Builder" )
     , _bExit( RenderEngine::GetAnchorRect( AnchorPoint::BOTTOM_RIGHT, 100, 60 ).modAdd( -200, 0 ), "Return", {} )
     , _bGenerateName( RenderEngine::GetAnchorRect( AnchorPoint::BOTTOM_CENTER, 100, 60 ), "Generate", {} )
     , _bNext( RenderEngine::GetAnchorRect( AnchorPoint::BOTTOM_RIGHT, 100, 60 ), "Next >", {} )
@@ -44,7 +44,7 @@ ModeBuildCalculator::ModeBuildCalculator( GameState & state )
 
     changeCharacter( _state.units.front() );
 
-    Point p = _physicalSkills.getRect()._pos;
+    Point p = _physicalSkills.getRect().pos;
 
     auto changeEvent = [this]( CharacterAttributes::Enum skill, int value ) {
         if ( _character.changeAttribute( skill, value ) )
@@ -56,13 +56,13 @@ ModeBuildCalculator::ModeBuildCalculator( GameState & state )
         p.modAdd( 0, 40 );
     }
 
-    p = _magicalSkills.getRect()._pos;
+    p = _magicalSkills.getRect().pos;
     for ( auto skill : magicalGroup ) {
         _magicalSkills.addElement( std::make_shared<SkillCounter<decltype( changeEvent )> >( p, 200, skill, _character.getBinding( skill ), changeEvent ) );
         p.modAdd( 0, 40 );
     }
 
-    p = _attributes.getRect()._pos;
+    p = _attributes.getRect().pos;
     for ( auto attribute : attributeGroup ) {
         _attributes.addElement( std::make_shared<AttributeCounter<decltype( changeEvent )> >( p, attribute, _character.getBinding( attribute ), changeEvent ) );
         p.modAdd( 0, 40 );

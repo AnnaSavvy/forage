@@ -10,6 +10,15 @@ namespace
 {
     const float GATHER_TIMER = 6;
     const float SLEEP_TIMER = 4;
+
+    class RandomEncounter : public Window
+    {
+        RandomEncounter()
+            : Window( {}, "Random Encounter" )
+        {
+
+        }
+    };
 }
 
 void ModeStrategicView::passTime( int amount )

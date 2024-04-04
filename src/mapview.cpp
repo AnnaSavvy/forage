@@ -60,8 +60,8 @@ void MapView::render() const
 
     const int xStart = std::max( 0, cameraX / TILESIZE - 1 );
     const int yStart = std::max( 0, cameraY / TILESIZE - 1 );
-    int xEnd = xStart + screenSize._x / TILESIZE + 2;
-    int yEnd = yStart + screenSize._y / TILESIZE + 3;
+    int xEnd = xStart + screenSize.x / TILESIZE + 2;
+    int yEnd = yStart + screenSize.y / TILESIZE + 3;
 
     if ( !infiniteScrolling ) {
         if ( xEnd > mapWidth )
@@ -75,8 +75,8 @@ void MapView::render() const
         for ( int x = xStart; x < xEnd; x++ ) {
             const int offset = ( x % 2 ) ? TILESIZE / 2 : 0;
 
-            target._pos._x = x * TILESIZE - cameraX;
-            target._pos._y = y * TILESIZE + offset - cameraY;
+            target.pos.x = x * TILESIZE - cameraX;
+            target.pos.y = y * TILESIZE + offset - cameraY;
 
             const int xCoord = infiniteScrolling ? x % mapWidth : x;
             const int yCoord = infiniteScrolling ? y % mapWidth : y;
@@ -110,8 +110,8 @@ void MapView::render() const
 
     if ( !playerSprite.empty() ) {
         Rect center;
-        center._pos = { screenSize._x / 2, screenSize._y / 2 };
-        center._size = { TILESIZE, TILESIZE };
+        center.pos = { screenSize.x / 2, screenSize.y / 2 };
+        center.size = { TILESIZE, TILESIZE };
         RenderEngine::Draw( playerSprite, center );
     }
 }

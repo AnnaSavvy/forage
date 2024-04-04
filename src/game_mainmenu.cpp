@@ -20,7 +20,7 @@ namespace
 ModeMainMenu::ModeMainMenu()
     : _backgroundMap( 100 )
     , _mapView( true )
-    , _title( { 0, 0, RenderEngine::GetScreenSize()._x, 300 }, "Best Damn Game", StandardFont::MENU_HUGE_TITLE, StandardColor::WHITE )
+    , _title( { 0, 0, RenderEngine::GetScreenSize().x, 300 }, "Best Damn Game", StandardFont::MENU_HUGE_TITLE, StandardColor::WHITE )
     , _bNewGame( RenderEngine::GetAnchorRect( AnchorPoint::CENTER, 270, 70 ), "New Game", buttonStyle )
     , _bLoadGame( RenderEngine::GetAnchorRect( AnchorPoint::CENTER, 270, 70 ).modAdd( 0, 80 ), "Load Game", buttonStyle )
     , _bBattle( RenderEngine::GetAnchorRect( AnchorPoint::CENTER, 270, 70 ).modAdd( 0, 160 ), "Quick Battle", buttonStyle )

@@ -4,186 +4,186 @@
 
 Point::Point()
 {
-    _x = 0;
-    _y = 0;
+    x = 0;
+    y = 0;
 }
 
 Point::Point( int priority )
 {
     int rev = reverseSummation( priority );
     int sum = summation( rev );
-    _y = priority - sum;
-    _x = rev - _y;
+    y = priority - sum;
+    x = rev - y;
 }
 
 Point::Point( int x, int y )
 {
-    _x = x;
-    _y = y;
+    this->x = x;
+    this->y = y;
 }
 
 Point::Point( const Point & rhs )
 {
-    _x = rhs._x;
-    _y = rhs._y;
+    x = rhs.x;
+    y = rhs.y;
 }
 
 Point::~Point() {}
 
 Point & Point::set( int x, int y )
 {
-    _x = x;
-    _y = y;
+    this->x = x;
+    this->y = y;
     return *this;
 }
 
 Point & Point::modAdd( int x, int y )
 {
-    _x += x;
-    _y += y;
+    this->x += x;
+    this->y += y;
     return *this;
 }
 
 Point & Point::modSub( int x, int y )
 {
-    _x -= x;
-    _y -= y;
+    this->x -= x;
+    this->y -= y;
     return *this;
 }
 
 Point & Point::modMul( int mod )
 {
-    _x *= mod;
-    _y *= mod;
+    x *= mod;
+    y *= mod;
     return *this;
 }
 
 Point & Point::modDiv( int mod )
 {
-    _x /= mod;
-    _y /= mod;
+    x /= mod;
+    y /= mod;
     return *this;
 }
 
 Point & Point::modInv()
 {
-    _x = -_x;
-    _y = -_y;
+    x = -x;
+    y = -y;
     return *this;
 }
 
 Point Point::add( int x, int y ) const
 {
-    return Point( _x + x, _y + y );
+    return Point( this->x + x, this->y + y );
 }
 
 Point Point::sub( int x, int y ) const
 {
-    return Point( _x - x, _y - y );
+    return Point( this->x - x, this->y - y );
 }
 
 Point Point::mul( int mod ) const
 {
-    return Point( _x * mod, _y * mod );
+    return Point( x * mod, y * mod );
 }
 
 Point Point::div( int mod ) const
 {
-    return Point( _x / mod, _y / mod );
+    return Point( x / mod, y / mod );
 }
 
 Point Point::inv() const
 {
-    return Point( -_x, -_y );
+    return Point( -x, -y );
 }
 
 Point Point::absDiff( const Point & pos ) const
 {
-    return Point( abs( _x - pos._x ), abs( _y - pos._y ) );
+    return Point( abs( x - pos.x ), abs( y - pos.y ) );
 }
 
 Point & Point::operator=( const Point & rhs )
 {
-    _x = rhs._x;
-    _y = rhs._y;
+    x = rhs.x;
+    y = rhs.y;
     return *this;
 }
 
 Point & Point::operator+=( const Point & rhs )
 {
-    _x += rhs._x;
-    _y += rhs._y;
+    x += rhs.x;
+    y += rhs.y;
     return *this;
 }
 
 Point & Point::operator-=( const Point & rhs )
 {
-    _x -= rhs._x;
-    _y -= rhs._y;
+    x -= rhs.x;
+    y -= rhs.y;
     return *this;
 }
 
 Point Point::operator+( const Point & rhs ) const
 {
-    return Point( _x + rhs._x, _y + rhs._y );
+    return Point( x + rhs.x, y + rhs.y );
 }
 
 Point Point::operator-( const Point & rhs ) const
 {
-    return Point( _x - rhs._x, _y - rhs._y );
+    return Point( x - rhs.x, y - rhs.y );
 }
 
 Point Point::operator*( const Point & rhs ) const
 {
-    return Point( _x * rhs._x, _y * rhs._y );
+    return Point( x * rhs.x, y * rhs.y );
 }
 
 Point Point::operator*( int mod ) const
 {
-    return Point( _x * mod, _y * mod );
+    return Point( x * mod, y * mod );
 }
 
 Point Point::operator*( double mod ) const
 {
-    return Point( _x * mod, _y * mod );
+    return Point( x * mod, y * mod );
 }
 
 Point Point::operator/( const Point & rhs ) const
 {
-    return Point( _x / rhs._x, _y / rhs._y );
+    return Point( x / rhs.x, y / rhs.y );
 }
 
 Point Point::operator/( int mod ) const
 {
-    return Point( _x / mod, _y / mod );
+    return Point( x / mod, y / mod );
 }
 
 Point Point::operator/( double mod ) const
 {
-    return Point( _x / mod, _y / mod );
+    return Point( x / mod, y / mod );
 }
 
 Point Point::operator%( int limit ) const
 {
-    return Point( _x % limit, _y % limit );
+    return Point( x % limit, y % limit );
 }
 
 bool Point::operator==( const Point & rhs ) const
 {
-    return _x == rhs._x && _y == rhs._y;
+    return x == rhs.x && y == rhs.y;
 }
 
 bool Point::operator!=( const Point & rhs ) const
 {
-    return _x != rhs._x || _y != rhs._y;
+    return x != rhs.x || y != rhs.y;
 }
 
 bool Point::rectLessThan( const Point & rhs ) const
 {
-    if ( _x <= rhs._x && _y < rhs._y ) {
+    if ( x <= rhs.x && y < rhs.y ) {
         return true;
     }
-    else if ( _x < rhs._x && _y <= rhs._y ) {
+    else if ( x < rhs.x && y <= rhs.y ) {
         return true;
     }
     return false;
@@ -192,10 +192,10 @@ bool Point::rectLessThan( const Point & rhs ) const
 
 bool Point::rectMoreThan( const Point & rhs ) const
 {
-    if ( _x >= rhs._x && _y > rhs._y ) {
+    if ( x >= rhs.x && y > rhs.y ) {
         return true;
     }
-    else if ( _x > rhs._x && _y >= rhs._y ) {
+    else if ( x > rhs.x && y >= rhs.y ) {
         return true;
     }
     return false;
@@ -204,107 +204,107 @@ bool Point::rectMoreThan( const Point & rhs ) const
 
 bool Point::operator<( const Point & rhs ) const
 {
-    if ( _x != rhs._x )
-        return _x < rhs._x;
-    return _y < rhs._y;
+    if ( x != rhs.x )
+        return x < rhs.x;
+    return y < rhs.y;
 }
 
 bool Point::operator>( const Point & rhs ) const
 {
-    if ( _x != rhs._x )
-        return _x > rhs._x;
-    return _y > rhs._y;
+    if ( x != rhs.x )
+        return x > rhs.x;
+    return y > rhs.y;
 }
 
 bool Point::operator<( int val ) const
 {
-    return _x < val && _y < val;
+    return x < val && y < val;
 }
 
 bool Point::operator>( int val ) const
 {
-    return _x > val && _y > val;
+    return x > val && y > val;
 }
 
 size_t Point::operator()( const Point & k ) const
 {
-    return summation( _x + _y ) + _y;
+    return summation( x + y ) + y;
 }
 
 int Point::toRenderPriority() const
 {
-    return summation( _x + _y ) + _y;
+    return summation( x + y ) + y;
 }
 
 int Point::toRenderPriority( const Point & size ) const
 {
-    double x = _x + ( size._x - 1 ) / 2.0;
-    double y = _y + ( size._y - 1 ) / 2.0;
-    return summation( x + y ) + y;
+    double xD = x + ( size.x - 1 ) / 2.0;
+    double yD = y + ( size.y - 1 ) / 2.0;
+    return summation( xD + yD ) + yD;
 }
 
 int Point::toID( int xMax ) const
 {
-    return _y * xMax + _x;
+    return y * xMax + x;
 }
 
 Point Point::toIso() const
 {
-    return Point( _x - _y, ( _x + _y ) / 2 );
+    return Point( x - y, ( x + y ) / 2 );
 }
 
 Point Point::toMap() const
 {
-    return Point( ( 2 * _y + _x ) / 2, ( 2 * _y - _x ) / 2 );
+    return Point( ( 2 * y + x ) / 2, ( 2 * y - x ) / 2 );
 }
 
 Point Point::limit( int limit ) const
 {
-    int x, y;
+    int newX, newY;
 
-    if ( _x < 0 ) {
-        x = std::max( _x, -limit );
+    if ( x < 0 ) {
+        newX = std::max( x, -limit );
     }
     else {
-        x = std::min( _x, limit );
+        newX = std::min( x, limit );
     }
 
-    if ( _y < 0 ) {
-        y = std::max( _y, -limit );
+    if ( y < 0 ) {
+        newY = std::max( y, -limit );
     }
     else {
-        y = std::min( _y, limit );
+        newY = std::min( y, limit );
     }
 
-    return Point( x, y );
+    return Point( newX, newY );
 }
 
 void Point::iterate( int max, int min, int step )
 {
-    _x += step;
-    if ( _x >= max ) {
-        _y += step;
-        _x = min;
+    x += step;
+    if ( x >= max ) {
+        y += step;
+        x = min;
     }
 }
 
 void Point::convertToIso()
 {
-    _x -= _y;
-    _y = ( _x + _y ) / 2;
+    x -= y;
+    y = ( x + y ) / 2;
 }
 
 void Point::convertToMap()
 {
-    _x = ( 2 * _y + _x ) / 2;
-    _y = ( 2 * _y - _x ) / 2;
+    x = ( 2 * y + x ) / 2;
+    y = ( 2 * y - x ) / 2;
 }
 
 bool Point::in( const Point & pos, const Point & size ) const
 {
     Point max = pos + size;
 
-    if ( _x < pos._x || _y < pos._y || _x > max._x || _y > max._y ) {
+    if ( x < pos.x || y < pos.y || x > max.x || y > max.y ) {
         return false;
     }
     return true;
@@ -312,62 +312,62 @@ bool Point::in( const Point & pos, const Point & size ) const
 
 bool Point::in( const Rect & area ) const
 {
-    return in( area._pos, area._size );
+    return in( area.pos, area.size );
 }
 
 bool Point::in( const Point & center, double radius ) const
 {
     Point diff = absDiff( center );
     diff = diff * diff;
-    return sqrt( diff._x + diff._y ) <= radius;
+    return sqrt( diff.x + diff.y ) <= radius;
 }
 
 Rect::Rect( const Point & position )
-    : _pos( position )
+    : pos( position )
 {}
 
-Rect::Rect( const Point & pos, const Point & size )
-    : _pos( pos )
-    , _size( size )
+Rect::Rect( const Point & position, const Point & size )
+    : pos( position )
+    , size( size )
 {}
 
 Rect::Rect( int x, int y, int width, int height )
 {
-    _pos._x = x;
-    _pos._y = y;
-    _size._x = width;
-    _size._y = height;
+    pos.x = x;
+    pos.y = y;
+    size.x = width;
+    size.y = height;
 }
 
 Rect::Rect( const Rect & rhs )
 {
-    _pos = rhs._pos;
-    _size = rhs._size;
+    pos = rhs.pos;
+    size = rhs.size;
 }
 
 Rect & Rect::operator=( const Rect & rhs )
 {
-    _pos = rhs._pos;
-    _size = rhs._size;
+    pos = rhs.pos;
+    size = rhs.size;
     return *this;
 }
 
 Rect & Rect::modAdd( int x, int y )
 {
-    _pos.modAdd( x, y );
+    pos.modAdd( x, y );
     return *this;
 }
 
-bool Rect::contains( const Point & pos ) const
+bool Rect::contains( const Point & position ) const
 {
-    return pos.in( _pos, _size );
+    return position.in( pos, size );
 }
 
 void Rect::iterate( std::function<void( const Point & )> & action, int step )
 {
-    Point last = _pos + _size, current;
+    Point last = pos + size, current;
 
-    for ( current = _pos; current._x < last._x && current._y < last._y; current.iterate( last._x, _pos._x, step ) ) {
+    for ( current = pos; current.x < last.x && current.y < last.y; current.iterate( last.x, pos.x, step ) ) {
         action( current );
     }
 }
@@ -375,9 +375,9 @@ void Rect::iterate( std::function<void( const Point & )> & action, int step )
 bool Rect::iterate( std::function<bool( const Point & )> & action, bool defaultVal, int step )
 {
     bool retval = defaultVal;
-    Point last = _pos + _size, current;
+    Point last = pos + size, current;
 
-    for ( current = _pos; current._x < last._x && current._y < last._y; current.iterate( last._x, _pos._x, step ) ) {
+    for ( current = pos; current.x < last.x && current.y < last.y; current.iterate( last.x, pos.x, step ) ) {
         if ( action( current ) != defaultVal ) {
             retval = !retval;
             break;

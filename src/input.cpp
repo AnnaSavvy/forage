@@ -146,8 +146,8 @@ bool InputHandler::handleEvent()
             }
 
             std::cout << std::format( "Click {} at {}, {}\n", (int)event.button.button, event.button.x, event.button.y );
-            _mousePosition._x = event.button.x / _scaling;
-            _mousePosition._y = event.button.y / _scaling;
+            _mousePosition.x = event.button.x / _scaling;
+            _mousePosition.y = event.button.y / _scaling;
             break;
         }
         default:

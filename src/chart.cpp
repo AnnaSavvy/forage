@@ -14,7 +14,7 @@ Chart::Pie::Pie( const Point & center, const Point & size, const std::vector<Dat
 
 bool Chart::Pie::handleClick( const Point & target )
 {
-    const double radians = atan2( ( _rect._pos._y + _rect._size._y / 2 ) - target._y, ( _rect._pos._x + _rect._size._x / 2 ) - target._x );
+    const double radians = atan2( ( _rect.pos.y + _rect.size.y / 2 ) - target.y, ( _rect.pos.x + _rect.size.x / 2 ) - target.x );
     double clickAngle = radians * 180 / M_PI - 180;
     double startAngle = ( 180.0 / _data.size() + 90 ) * -1;
     if ( clickAngle < startAngle )
@@ -75,10 +75,10 @@ void Chart::Pie::render()
         DataPoint & dp = _data[id];
         const double endAngle = startAngle + dp.value * 360;
         Rect target;
-        target._pos._x = _rect._pos._x + _rect._size._x / 2;
-        target._pos._y = _rect._pos._y + _rect._size._y / 2;
-        target._size._x = _rect._size._x / 2 + dp.offset;
-        target._size._y = _rect._size._y / 2 + dp.offset;
+        target.pos.x = _rect.pos.x + _rect.size.x / 2;
+        target.pos.y = _rect.pos.y + _rect.size.y / 2;
+        target.size.x = _rect.size.x / 2 + dp.offset;
+        target.size.y = _rect.size.y / 2 + dp.offset;
         RenderEngine::DrawPieSlice( target, startAngle, endAngle, dp.color );
         startAngle = endAngle;
     }

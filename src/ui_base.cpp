@@ -55,20 +55,20 @@ void UIContainer::updateRect()
 {
     for ( const auto & component : _items ) {
         const Rect & dimensions = component.get()->getRect();
-        if ( dimensions._pos._x < _rect._pos._x ) {
-            _rect._pos._x = dimensions._pos._x;
+        if ( dimensions.pos.x < _rect.pos.x ) {
+            _rect.pos.x = dimensions.pos.x;
         }
-        if ( dimensions._pos._y < _rect._pos._y ) {
-            _rect._pos._y = dimensions._pos._y;
+        if ( dimensions.pos.y < _rect.pos.y ) {
+            _rect.pos.y = dimensions.pos.y;
         }
 
-        Point bottomRight = dimensions._pos + dimensions._size;
-        Point diff = bottomRight - ( _rect._pos + _rect._size );
-        if ( diff._x > 0 ) {
-            _rect._size._x += diff._x;
+        Point bottomRight = dimensions.pos + dimensions.size;
+        Point diff = bottomRight - ( _rect.pos + _rect.size );
+        if ( diff.x > 0 ) {
+            _rect.size.x += diff.x;
         }
-        if ( diff._y > 0 ) {
-            _rect._size._y += diff._y;
+        if ( diff.y > 0 ) {
+            _rect.size.y += diff.y;
         }
     }
 }
@@ -98,7 +98,7 @@ Button::Button( const Rect & dimensions, const std::string & label, const Style 
 }
 
 Button::Button( const Point & position, int width, int height, const std::string & label, const Style & style )
-    : UIComponent( { position._x, position._y, width, height } )
+    : UIComponent( { position.x, position.y, width, height } )
     , _style( style )
 {
     _label = label;
@@ -122,10 +122,10 @@ void Button::render()
         RenderEngine::DrawRect( _rect, _style.borderColor );
 
         Rect innerArea = _rect;
-        innerArea._pos._x += _style.borderWidth;
-        innerArea._pos._y += _style.borderWidth;
-        innerArea._size._x -= _style.borderWidth * 2;
-        innerArea._size._y -= _style.borderWidth * 2;
+        innerArea.pos.x += _style.borderWidth;
+        innerArea.pos.y += _style.borderWidth;
+        innerArea.size.x -= _style.borderWidth * 2;
+        innerArea.size.y -= _style.borderWidth * 2;
         RenderEngine::DrawRect( innerArea, _style.backgroundColor );
     }
     else {
@@ -135,10 +135,10 @@ void Button::render()
     SDL_Surface * surface = RenderEngine::GetTextSurface( _label, _style.font, _style.textColor );
     if ( surface ) {
         Rect textRect = _rect;
-        textRect._pos._x += ( _rect._size._x - surface->w ) / 2;
-        textRect._pos._y += ( _rect._size._y - surface->h ) / 2;
-        textRect._size._x = surface->w;
-        textRect._size._y = surface->h;
+        textRect.pos.x += ( _rect.size.x - surface->w ) / 2;
+        textRect.pos.y += ( _rect.size.y - surface->h ) / 2;
+        textRect.size.x = surface->w;
+        textRect.size.y = surface->h;
 
         RenderEngine::DrawDestroySurface( surface, textRect );
     }
@@ -192,7 +192,7 @@ void Label::render()
         return;
     }
 
-    RenderEngine::DrawText( _text, _rect._pos, _font, _color );
+    RenderEngine::DrawText( _text, _rect.pos, _font, _color );
 }
 
 CenteringLabel::CenteringLabel( const Point & position, const std::string & text, int width )
@@ -201,13 +201,13 @@ CenteringLabel::CenteringLabel( const Point & position, const std::string & text
 {}
 
 CenteringLabel::CenteringLabel( const Rect & dimensions, const std::string & text )
-    : Label( dimensions._pos, text )
-    , _expectedSize( dimensions._size )
+    : Label( dimensions.pos, text )
+    , _expectedSize( dimensions.size )
 {}
 
 CenteringLabel::CenteringLabel( const Rect & dimensions, const std::string & text, StandardFont font, StandardColor color )
-    : Label( dimensions._pos, text, font, color )
-    , _expectedSize( dimensions._size )
+    : Label( dimensions.pos, text, font, color )
+    , _expectedSize( dimensions.size )
 {}
 
 void CenteringLabel::render()
@@ -219,14 +219,14 @@ void CenteringLabel::render()
     SDL_Surface * surface = RenderEngine::GetTextSurface( _text, _font, _color );
     if ( surface ) {
         Rect textRect = _rect;
-        if ( _expectedSize._x > 0 ) {
-            textRect._pos._x += ( _expectedSize._x - surface->w ) / 2;
+        if ( _expectedSize.x > 0 ) {
+            textRect.pos.x += ( _expectedSize.x - surface->w ) / 2;
         }
-        if ( _expectedSize._y > 0 ) {
-            textRect._pos._y += ( _expectedSize._y - surface->h ) / 2;
+        if ( _expectedSize.y > 0 ) {
+            textRect.pos.y += ( _expectedSize.y - surface->h ) / 2;
         }
-        textRect._size._x = surface->w;
-        textRect._size._y = surface->h;
+        textRect.size.x = surface->w;
+        textRect.size.y = surface->h;
 
         RenderEngine::DrawDestroySurface( surface, textRect );
     }
@@ -256,10 +256,10 @@ void Window::render()
         RenderEngine::DrawRect( _rect, _style.borderColor );
 
         Rect innerArea = _rect;
-        innerArea._pos._x += _style.borderWidth;
-        innerArea._pos._y += _style.borderWidth;
-        innerArea._size._x -= _style.borderWidth * 2;
-        innerArea._size._y -= _style.borderWidth * 2;
+        innerArea.pos.x += _style.borderWidth;
+        innerArea.pos.y += _style.borderWidth;
+        innerArea.size.x -= _style.borderWidth * 2;
+        innerArea.size.y -= _style.borderWidth * 2;
         RenderEngine::DrawRect( innerArea, _style.backgroundColor );
     }
     else {
@@ -269,10 +269,10 @@ void Window::render()
     SDL_Surface * surface = RenderEngine::GetTextSurface( _title, _style.font, _style.textColor );
     if ( surface ) {
         Rect textRect = _rect;
-        textRect._pos._x += ( _rect._size._x - surface->w ) / 2;
-        textRect._pos._y += _style.paddingY;
-        textRect._size._x = surface->w;
-        textRect._size._y = surface->h;
+        textRect.pos.x += ( _rect.size.x - surface->w ) / 2;
+        textRect.pos.y += _style.paddingY;
+        textRect.size.x = surface->w;
+        textRect.size.y = surface->h;
 
         RenderEngine::DrawDestroySurface( surface, textRect );
     }
@@ -325,9 +325,9 @@ void FlyingText::render()
             const int alpha = 255 - ( 254 * progress );
 
             Rect textRect = _rect;
-            textRect._pos._y -= offset * progress;
-            textRect._size._x = surface->w;
-            textRect._size._y = surface->h;
+            textRect.pos.y -= offset * progress;
+            textRect.size.x = surface->w;
+            textRect.size.y = surface->h;
 
             RenderEngine::DrawDestroyAlphaSurface( surface, textRect, alpha );
         }

@@ -14,7 +14,7 @@ namespace
 
 SDL_Rect convertRect( const Rect & rect )
 {
-    return { rect._pos._x, rect._pos._y, rect._size._x, rect._size._y };
+    return { rect.pos.x, rect.pos.y, rect.size.x, rect.size.y };
 }
 
 bool RenderEngine::Initialize( Point logicalSize, double scaling )
@@ -27,7 +27,7 @@ bool RenderEngine::Initialize( Point logicalSize, double scaling )
         return false;
     }
 
-    _window = SDL_CreateWindow( "BDG", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _logicalSize._x * scaling, _logicalSize._y * scaling, SDL_WINDOW_SHOWN );
+    _window = SDL_CreateWindow( "BDG", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _logicalSize.x * scaling, _logicalSize.y * scaling, SDL_WINDOW_SHOWN );
     if ( !_window ) {
         std::cerr << "SDL_CreateWindow error: " << SDL_GetError() << std::endl;
         SDL_Quit();
@@ -77,19 +77,19 @@ Point RenderEngine::GetAnchorPoint( AnchorPoint anchor )
     case AnchorPoint::TOP_LEFT:
         return {};
     case AnchorPoint::TOP_CENTER:
-        return { engine._logicalSize._x / 2, 0 };
+        return { engine._logicalSize.x / 2, 0 };
     case AnchorPoint::TOP_RIGHT:
-        return { engine._logicalSize._x, 0 };
+        return { engine._logicalSize.x, 0 };
     case AnchorPoint::CENTER_LEFT:
-        return { 0, engine._logicalSize._y / 2 };
+        return { 0, engine._logicalSize.y / 2 };
     case AnchorPoint::CENTER:
         return engine._logicalSize.div( 2 );
     case AnchorPoint::CENTER_RIGHT:
-        return { engine._logicalSize._x, engine._logicalSize._y / 2 };
+        return { engine._logicalSize.x, engine._logicalSize.y / 2 };
     case AnchorPoint::BOTTOM_LEFT:
-        return { 0, engine._logicalSize._y };
+        return { 0, engine._logicalSize.y };
     case AnchorPoint::BOTTOM_CENTER:
-        return { engine._logicalSize._x / 2, engine._logicalSize._y };
+        return { engine._logicalSize.x / 2, engine._logicalSize.y };
     }
     return engine._logicalSize;
 }
@@ -98,21 +98,21 @@ Rect RenderEngine::GetAnchorRect( AnchorPoint anchor, int width, int height )
 {
     switch ( anchor ) {
     case AnchorPoint::TOP_CENTER:
-        return { ( engine._logicalSize._x - width ) / 2, 0, width, height };
+        return { ( engine._logicalSize.x - width ) / 2, 0, width, height };
     case AnchorPoint::TOP_RIGHT:
-        return { ( engine._logicalSize._x - width ), 0, width, height };
+        return { ( engine._logicalSize.x - width ), 0, width, height };
     case AnchorPoint::CENTER_LEFT:
-        return { 0, ( engine._logicalSize._y - height ) / 2, width, height };
+        return { 0, ( engine._logicalSize.y - height ) / 2, width, height };
     case AnchorPoint::CENTER:
-        return { ( engine._logicalSize._x - width ) / 2, ( engine._logicalSize._y - height ) / 2, width, height };
+        return { ( engine._logicalSize.x - width ) / 2, ( engine._logicalSize.y - height ) / 2, width, height };
     case AnchorPoint::CENTER_RIGHT:
-        return { ( engine._logicalSize._x - width ), ( engine._logicalSize._y - height ) / 2, width, height };
+        return { ( engine._logicalSize.x - width ), ( engine._logicalSize.y - height ) / 2, width, height };
     case AnchorPoint::BOTTOM_LEFT:
-        return { 0, engine._logicalSize._y - height, width, height };
+        return { 0, engine._logicalSize.y - height, width, height };
     case AnchorPoint::BOTTOM_CENTER:
-        return { ( engine._logicalSize._x - width ) / 2, engine._logicalSize._y - height, width, height };
+        return { ( engine._logicalSize.x - width ) / 2, engine._logicalSize.y - height, width, height };
     case AnchorPoint::BOTTOM_RIGHT:
-        return { engine._logicalSize._x - width, engine._logicalSize._y - height, width, height };
+        return { engine._logicalSize.x - width, engine._logicalSize.y - height, width, height };
     }
     return { 0, 0, width, height };
 }
@@ -192,7 +192,7 @@ int RenderEngine::DrawText( const std::string & text, const Point & target, Stan
 
     SDL_Texture * textTexture = SDL_CreateTextureFromSurface( engine._renderer, textSurface );
 
-    SDL_Rect textRect = { target._x, target._y, textSurface->w, textSurface->h };
+    SDL_Rect textRect = { target.x, target.y, textSurface->w, textSurface->h };
     const bool success = SDL_RenderCopy( engine._renderer, textTexture, NULL, &textRect ) == 0;
     SDL_FreeSurface( textSurface );
     SDL_DestroyTexture( textTexture );
@@ -223,7 +223,7 @@ bool RenderEngine::DrawDestroySurface( SDL_Surface * surface, const Rect & targe
 
     SDL_Texture * textTexture = SDL_CreateTextureFromSurface( engine._renderer, surface );
 
-    SDL_Rect textRect = { target._pos._x, target._pos._y, target._size._x, target._size._y };
+    SDL_Rect textRect = { target.pos.x, target.pos.y, target.size.x, target.size.y };
     const bool success = SDL_RenderCopy( engine._renderer, textTexture, NULL, &textRect ) == 0;
     SDL_FreeSurface( surface );
     SDL_DestroyTexture( textTexture );
@@ -241,7 +241,7 @@ bool RenderEngine::DrawDestroyAlphaSurface( SDL_Surface * surface, const Rect & 
 
     SDL_SetTextureAlphaMod( textTexture, alpha );
 
-    SDL_Rect textRect = { target._pos._x, target._pos._y, target._size._x, target._size._y };
+    SDL_Rect textRect = { target.pos.x, target.pos.y, target.size.x, target.size.y };
     const bool success = SDL_RenderCopy( engine._renderer, textTexture, NULL, &textRect ) == 0;
     SDL_FreeSurface( surface );
     SDL_DestroyTexture( textTexture );
@@ -255,7 +255,7 @@ bool RenderEngine::DrawPieSlice( const Rect & target, double startAngle, double 
     if ( !pieColor ) {
         return false;
     }
-    return SDL::aaFilledPieRGBA( engine._renderer, target._pos._x, target._pos._y, target._size._x, target._size._y, startAngle, endAngle, false, pieColor->r,
+    return SDL::aaFilledPieRGBA( engine._renderer, target.pos.x, target.pos.y, target.size.x, target.size.y, startAngle, endAngle, false, pieColor->r,
                                  pieColor->g, pieColor->b, pieColor->a )
            == 0;
 }
