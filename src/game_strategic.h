@@ -19,6 +19,7 @@ class ModeStrategicView : public GameMode
     WaveMap _map;
     MapView _mapView;
 
+    bool _hotkeysShown = true;
     float _scrollTimer = 0.0f;
     float _eventTimer = 0.0f;
     float _eventSubtimer = 0.0f;

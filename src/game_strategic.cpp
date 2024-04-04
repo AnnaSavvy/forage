@@ -3,8 +3,10 @@
 #include "input.h"
 #include "renderer.h"
 #include "rng.h"
+
 #include <format>
 #include <iostream>
+#include <SDL_scancode.h>
 
 namespace
 {
@@ -13,6 +15,9 @@ namespace
 
     class RandomEncounter : public Window
     {
+
+
+    public:
         RandomEncounter()
             : Window( {}, "Random Encounter" )
         {
@@ -115,6 +120,9 @@ GameModeName ModeStrategicView::handleEvents()
                 _eventTimer = SLEEP_TIMER;
                 _eventType = MapEventType::SLEEP;
             }
+            else if ( key == SDL_SCANCODE_F1 ) {
+                _hotkeysShown = !_hotkeysShown;
+            }
         }
         return name;
     }
@@ -194,6 +202,12 @@ void ModeStrategicView::render()
         else if ( _eventType == MapEventType::GATHERING ) {
             RenderEngine::Get().DrawText( "E", RenderEngine::GetScreenSize().modDiv( 2 ) );
         }
+    }
+
+    if ( _hotkeysShown ) {
+        RenderEngine::Get().DrawText( "F1 to hide hotkeys", { 10, 200 }, StandardFont::SMALL );
+        RenderEngine::Get().DrawText( "Q to sleep", { 10, 230 }, StandardFont::SMALL );
+        RenderEngine::Get().DrawText( "E to interact", { 10, 250 }, StandardFont::SMALL );
     }
 
     temporaryUI.render();
