@@ -1,14 +1,15 @@
 #pragma once
 #include "json.hpp"
 
+struct DialogTree;
+
 enum class DataFileName
 {
     GENERIC_DATA,
     PREGEN_NAMES,
     OPTIONS,
+    DIALOG,
 };
-
-const nlohmann::json & GetStaticData( DataFileName file );
 
 struct PregenCharacterName
 {
@@ -17,3 +18,6 @@ struct PregenCharacterName
 
     static std::vector<PregenCharacterName> GetPresets();
 };
+
+const nlohmann::json & GetStaticData( DataFileName file );
+DialogTree GetDialogTree();

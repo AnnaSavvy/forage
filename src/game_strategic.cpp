@@ -3,6 +3,7 @@
 #include "input.h"
 #include "renderer.h"
 #include "rng.h"
+#include "static.h"
 
 #include <SDL_scancode.h>
 #include <format>
@@ -78,28 +79,7 @@ ModeStrategicView::ModeStrategicView( GameState & state )
     _bOpenMenu.setStyle( buttonStyle );
     _bEndTurn.setStyle( buttonStyle );
 
-    dialog.root.text = "The party stumbles upon a group of goblins raiding a nearby village or caravan.";
-
-    DialogOption option1;
-    option1.description = "Option 1. Check STR";
-    option1.goodOutcome = std::make_unique<DialogNode>();
-    option1.goodOutcome->reward.value = 10;
-    option1.goodOutcome->text = "Good job! You passed STR check!";
-    dialog.root.options.push_back( std::move( option1 ) );
-
-    DialogOption option2;
-    option2.description = "Option 2. Check CHA";
-    option2.goodOutcome = std::make_unique<DialogNode>();
-    option2.goodOutcome->reward.value = -5;
-    option2.goodOutcome->text = "Oh no! You lost!";
-    dialog.root.options.push_back( std::move( option2 ) );
-
-    DialogOption option3;
-    option3.description = "Option 3. Run away";
-    option3.goodOutcome = std::make_unique<DialogNode>();
-    option3.goodOutcome->text = "You ran away and got no reward";
-    dialog.root.options.push_back( std::move( option3 ) );
-
+    dialog = GetDialogTree();
     encounterWindow.setup( dialog.root );
 }
 
@@ -260,13 +240,30 @@ void RandomEncounter::setup( const DialogNode & node )
 
         yOffset += 70;
     }
+
+    if ( currentNode->reward.value != 0 ) {
+        std::string rewardText = std::format( "Your reward: {} gold!", currentNode->reward.value );
+        addComponent( std::make_shared<CenteringLabel>( CenteringLabel( { _rect.pos.x + 50, _rect.pos.y + 150, 700, 0 }, rewardText ) ) );
+    }
 }
 
 int RandomEncounter::handleEvent( const Point & click, int event )
 {
     for ( size_t index = 0; index < _components.size(); index++ ) {
         if ( const int result = _components[index]->handleEvent( click, event ) ) {
-            setup( *currentNode->options.at( index - 1 ).goodOutcome );
+            const DialogOption & option = currentNode->options.at( index - 1 );
+
+            bool failedCheck = false;
+            if ( option.difficulty ) {
+                failedCheck = RandomGenerator::Get().next( 1, 20 ) < option.difficulty;
+            }
+
+            if ( failedCheck && option.badOutcome ) {
+                setup( *option.badOutcome );
+            }
+            else if ( option.goodOutcome ) {
+                setup( *option.goodOutcome );
+            }
             return result;
         }
     }
