@@ -14,14 +14,35 @@ namespace
                       { DataFileName::PREGEN_NAMES, "assets/pregen_names.json" },
                       { DataFileName::OPTIONS, "options.json" },
                       { DataFileName::DIALOG, "assets/dialog.json" } };
+
+    std::map<DataFileName, nlohmann::json> jsonCache;
+
+    template <typename T>
+    bool readNonEmpty( const nlohmann::json & jsonObject, std::string key, T & out )
+    {
+        if ( jsonObject.contains( key ) ) {
+            jsonObject.at( key ).get_to( out );
+            return true;
+        }
+        return false;
+    }
 }
 
 const nlohmann::json & GetStaticData( DataFileName file )
 {
-    static nlohmann::json j;
+    auto it = jsonCache.find( file );
+    if ( it != jsonCache.end() ) {
+        return it->second;
+    }
+
+    static nlohmann::json emptyJson;
     std::ifstream dataStream( dataFiles[static_cast<int>( file )].string );
-    dataStream >> j;
-    return j;
+    if ( dataStream.good() ) {
+        it = jsonCache.emplace( file, nlohmann::json::parse( dataStream, nullptr, true, true ) ).first;
+        return it->second;
+    }
+    // missing a file, assert ?
+    return emptyJson;
 }
 
 void to_json( nlohmann::json & j, const PregenCharacterName & p )
@@ -31,8 +52,8 @@ void to_json( nlohmann::json & j, const PregenCharacterName & p )
 
 void from_json( const nlohmann::json & j, PregenCharacterName & p )
 {
-    j.at( "firstNames" ).get_to( p.firstNames );
-    j.at( "lastNames" ).get_to( p.lastNames );
+    readNonEmpty( j, "firstNames", p.firstNames );
+    readNonEmpty( j, "lastNames", p.lastNames );
 }
 
 std::vector<PregenCharacterName> PregenCharacterName::GetPresets()
@@ -57,9 +78,9 @@ void to_json( nlohmann::json & j, const Reward & r )
 
 void from_json( const nlohmann::json & j, Reward & r )
 {
-    j.at( "type" ).get_to( r.type );
-    j.at( "value" ).get_to( r.value );
-    j.at( "metadata" ).get_to( r.metadata );
+    readNonEmpty( j, "type", r.type );
+    readNonEmpty( j, "value", r.value );
+    readNonEmpty( j, "metadata", r.metadata );
 }
 
 void to_json( nlohmann::json & j, const DialogOption & o )
@@ -69,9 +90,9 @@ void to_json( nlohmann::json & j, const DialogOption & o )
 
 void from_json( const nlohmann::json & j, DialogOption & o )
 {
-    j.at( "check" ).get_to( o.check );
-    j.at( "difficulty" ).get_to( o.difficulty );
-    j.at( "description" ).get_to( o.description );
+    readNonEmpty( j, "check", o.check );
+    readNonEmpty( j, "difficulty", o.difficulty );
+    readNonEmpty( j, "description", o.description );
 
     auto good = j.find( "goodOutcome" );
     if ( good != j.end() ) {
@@ -99,7 +120,7 @@ void to_json( nlohmann::json & j, const DialogNode & n )
 
 void from_json( const nlohmann::json & j, DialogNode & n )
 {
-    j.at( "text" ).get_to( n.text );
+    readNonEmpty( j, "text", n.text );
     auto rewardIt = j.find( "reward" );
     if ( rewardIt != j.end() ) {
         n.reward = rewardIt.value().template get<Reward>();
@@ -115,9 +136,11 @@ DialogTree GetDialogTree()
     DialogTree retval;
     auto json = GetStaticData( DataFileName::DIALOG );
 
-    for ( auto & encounter : json.at( "encounters" ) ) {
-        retval.root = encounter.template get<DialogNode>();
-        break;
+    if ( json.contains( "encounters" ) ) {
+        for ( auto & encounter : json.at( "encounters" ) ) {
+            retval.root = encounter.template get<DialogNode>();
+            break;
+        }
     }
 
     return retval;
