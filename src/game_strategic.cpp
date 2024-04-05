@@ -4,26 +4,14 @@
 #include "renderer.h"
 #include "rng.h"
 
+#include <SDL_scancode.h>
 #include <format>
 #include <iostream>
-#include <SDL_scancode.h>
 
 namespace
 {
     const float GATHER_TIMER = 6;
     const float SLEEP_TIMER = 4;
-
-    class RandomEncounter : public Window
-    {
-
-
-    public:
-        RandomEncounter()
-            : Window( {}, "Random Encounter" )
-        {
-
-        }
-    };
 }
 
 void ModeStrategicView::passTime( int amount )
@@ -76,6 +64,7 @@ ModeStrategicView::ModeStrategicView( GameState & state )
     , _bEndTurn( RenderEngine::GetAnchorRect( AnchorPoint::BOTTOM_RIGHT, 200, 80 ), "End Turn", {} )
     , _menuPopup( RenderEngine::GetAnchorRect( AnchorPoint::CENTER, 400, 50 ), "Menu" )
     , temporaryUI( {} )
+    , encounterWindow( dialog )
 {
     name = GameModeName::NEW_GAME;
 
@@ -88,6 +77,30 @@ ModeStrategicView::ModeStrategicView( GameState & state )
     Style buttonStyle{ StandardFont::REGULAR_BOLD, StandardColor::HIGHLIGHT_RED, StandardColor::BLACK, StandardColor::DARK_GREY, 5 };
     _bOpenMenu.setStyle( buttonStyle );
     _bEndTurn.setStyle( buttonStyle );
+
+    dialog.root.text = "The party stumbles upon a group of goblins raiding a nearby village or caravan.";
+
+    DialogOption option1;
+    option1.description = "Option 1. Check STR";
+    option1.goodOutcome = std::make_unique<DialogNode>();
+    option1.goodOutcome->reward.value = 10;
+    option1.goodOutcome->text = "Good job! You passed STR check!";
+    dialog.root.options.push_back( std::move( option1 ) );
+
+    DialogOption option2;
+    option2.description = "Option 2. Check CHA";
+    option2.goodOutcome = std::make_unique<DialogNode>();
+    option2.goodOutcome->reward.value = -5;
+    option2.goodOutcome->text = "Oh no! You lost!";
+    dialog.root.options.push_back( std::move( option2 ) );
+
+    DialogOption option3;
+    option3.description = "Option 3. Run away";
+    option3.goodOutcome = std::make_unique<DialogNode>();
+    option3.goodOutcome->text = "You ran away and got no reward";
+    dialog.root.options.push_back( std::move( option3 ) );
+
+    encounterWindow.setup( dialog.root );
 }
 
 GameModeName ModeStrategicView::handleEvents()
@@ -107,6 +120,9 @@ GameModeName ModeStrategicView::handleEvents()
             else if ( _bEndTurn.getRect().contains( mouseClick ) ) {
                 // trigger update
                 return GameModeName::CANCEL;
+            }
+            else if ( encounterWindow.getRect().contains( mouseClick ) ) {
+                encounterWindow.handleEvent( mouseClick, input.getModes() );
             }
         }
         else if ( input.consume( InputHandler::KEY_PRESSED ) ) {
@@ -216,9 +232,43 @@ void ModeStrategicView::render()
     _bEndTurn.render();
 
     _menuPopup.render();
+    encounterWindow.render();
 }
 
 bool ModeStrategicView::hasEventRunning() const
 {
     return _eventTimer > 0;
+}
+
+RandomEncounter::RandomEncounter( const DialogTree & dialog )
+    : Window( RenderEngine::GetAnchorRect( AnchorPoint::CENTER, 800, 600 ), "Random Encounter" )
+    , dialog( dialog )
+{
+    setup( dialog.root );
+}
+
+void RandomEncounter::setup( const DialogNode & node )
+{
+    _components.clear();
+    currentNode = &node;
+    addComponent( std::make_shared<CenteringLabel>( CenteringLabel( { _rect.pos.x + 10, _rect.pos.y + 40, 780, 0 }, node.text ) ) );
+
+    static const Style buttonStyle{ StandardFont::REGULAR, StandardColor::WHITE, StandardColor::DARK_GREY, StandardColor::REALM_PRECISION, 2 };
+    int yOffset = 380;
+    for ( auto & option : node.options ) {
+        addComponent( std::make_shared<Button>( Button( { _rect.pos.x + 75, _rect.pos.y + yOffset, 650, 50 }, option.description, buttonStyle ) ) );
+
+        yOffset += 70;
+    }
+}
+
+int RandomEncounter::handleEvent( const Point & click, int event )
+{
+    for ( size_t index = 0; index < _components.size(); index++ ) {
+        if ( const int result = _components[index]->handleEvent( click, event ) ) {
+            setup( *currentNode->options.at( index - 1 ).goodOutcome );
+            return result;
+        }
+    }
+    return UIComponent::NO_EVENT;
 }

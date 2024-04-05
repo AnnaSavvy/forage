@@ -196,6 +196,7 @@
     <ClInclude Include="src\character_class.h" />
     <ClInclude Include="src\chart.h" />
     <ClInclude Include="src\component.h" />
+    <ClInclude Include="src\dialog.h" />
     <ClInclude Include="src\game.h" />
     <ClInclude Include="src\gamemode.h" />
     <ClInclude Include="src\game_battle.h" />

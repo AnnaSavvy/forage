@@ -7,6 +7,13 @@
 
 #include <array>
 
+struct PlayerParty
+{
+    int food = 0;
+    int gold = 0;
+    int resources = 0;
+};
+
 struct GameState
 {
     WaveMap map;

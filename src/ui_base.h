@@ -56,8 +56,8 @@ public:
     UIContainer( const Rect & dimensions );
 
     virtual void update( float deltaTime ) override;
-    virtual void render();
-    virtual int handleEvent( const Point & click, int event );
+    virtual void render() override;
+    virtual int handleEvent( const Point & click, int event ) override;
 
     void addElement( std::shared_ptr<UIComponent> element );
     virtual std::shared_ptr<UIComponent> getElement( const Point & position );
@@ -135,15 +135,15 @@ public:
     Window( Rect rect, const std::string & title );
     ~Window();
 
-    void update( float deltaTime );
-    void render();
+    void update( float deltaTime ) override;
+    void render() override;
 
     void setStyle( const Style & style );
     void addComponent( std::shared_ptr<UIComponent> component );
 
     std::shared_ptr<UIComponent> getElement( const Point & click );
 
-private:
+protected:
     Style _style;
     std::string _title;
     std::vector<std::shared_ptr<UIComponent> > _components;
