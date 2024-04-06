@@ -1,29 +1,17 @@
 #pragma once
 
-#include "dialog.h"
 #include "game_state.h"
 #include "gamemode.h"
 #include "mapview.h"
 #include "ui_base.h"
 #include "wave_function.h"
 
-class RandomEncounter : public Window
-{
-    const DialogTree & dialog;
-    const DialogNode * currentNode = nullptr;
-
-public:
-    RandomEncounter( const DialogTree & dialog );
-
-    void setup( const DialogNode & node );
-    int handleEvent( const Point & click, int event ) override;
-};
-
 class ModeStrategicView : public GameMode
 {
     enum class MapEventType
     {
         NO_EVENT,
+        ENCOUNTER,
         SLEEP,
         GATHERING,
     };
@@ -38,8 +26,7 @@ class ModeStrategicView : public GameMode
     float _eventSubtimer = 0.0f;
     MapEventType _eventType = MapEventType::NO_EVENT;
     UIContainer temporaryUI;
-    DialogTree dialog;
-    RandomEncounter encounterWindow;
+    std::unique_ptr<Window> activeWindow = nullptr;
 
     Label _lResources;
     Button _bOpenMenu;

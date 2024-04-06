@@ -17,7 +17,8 @@ public:
     enum ClickBaseEvent : int
     {
         NO_EVENT = 0,
-        BASIC_EVENT = 1
+        BASIC_EVENT = 1,
+        CLOSE_WINDOW = 2
     };
 
     UIComponent( const Rect & dimensions );

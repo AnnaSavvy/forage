@@ -1,5 +1,6 @@
 #include "game_strategic.h"
 #include "build_optimizer.h"
+#include "dialog.h"
 #include "input.h"
 #include "renderer.h"
 #include "rng.h"
@@ -13,6 +14,19 @@ namespace
 {
     const float GATHER_TIMER = 6;
     const float SLEEP_TIMER = 4;
+
+    class RandomEncounter : public Window
+    {
+        GameState & gameState;
+        DialogTree dialog;
+        const DialogNode * currentNode = nullptr;
+
+    public:
+        RandomEncounter( GameState & state, DialogTree dialog );
+
+        void setup( const DialogNode & node );
+        int handleEvent( const Point & click, int event ) override;
+    };
 }
 
 void ModeStrategicView::passTime( int amount )
@@ -51,9 +65,13 @@ void ModeStrategicView::executeEvent( float deltaTime )
         const float subtimer = GATHER_TIMER / basedOnSkill;
         if ( _eventSubtimer > subtimer ) {
             _eventSubtimer -= subtimer;
-            _state.food++;
+            _state.player.food++;
             temporaryUI.addElement( std::make_shared<FlyingText>( RenderEngine::GetScreenSize().modDiv( 2 ).add( 40, 0 ), "+1", 3 ) );
         }
+    }
+
+    if ( _eventTimer <= 0 ) {
+        _eventType = MapEventType::NO_EVENT;
     }
 }
 
@@ -65,7 +83,6 @@ ModeStrategicView::ModeStrategicView( GameState & state )
     , _bEndTurn( RenderEngine::GetAnchorRect( AnchorPoint::BOTTOM_RIGHT, 200, 80 ), "End Turn", {} )
     , _menuPopup( RenderEngine::GetAnchorRect( AnchorPoint::CENTER, 400, 50 ), "Menu" )
     , temporaryUI( {} )
-    , encounterWindow( dialog )
 {
     name = GameModeName::NEW_GAME;
 
@@ -78,17 +95,10 @@ ModeStrategicView::ModeStrategicView( GameState & state )
     Style buttonStyle{ StandardFont::REGULAR_BOLD, StandardColor::HIGHLIGHT_RED, StandardColor::BLACK, StandardColor::DARK_GREY, 5 };
     _bOpenMenu.setStyle( buttonStyle );
     _bEndTurn.setStyle( buttonStyle );
-
-    dialog = GetDialogTree();
-    encounterWindow.setup( dialog.root );
 }
 
 GameModeName ModeStrategicView::handleEvents()
 {
-    if ( hasEventRunning() ) {
-        return name;
-    }
-
     InputHandler & input = InputHandler::Get();
 
     if ( input.handleEvent() ) {
@@ -101,11 +111,15 @@ GameModeName ModeStrategicView::handleEvents()
                 // trigger update
                 return GameModeName::CANCEL;
             }
-            else if ( encounterWindow.getRect().contains( mouseClick ) ) {
-                encounterWindow.handleEvent( mouseClick, input.getModes() );
+            else if ( activeWindow && activeWindow->getRect().contains( mouseClick ) ) {
+                int status = activeWindow->handleEvent( mouseClick, input.getModes() );
+                if ( status == UIComponent::CLOSE_WINDOW ) {
+                    activeWindow = nullptr;
+                    _eventType = MapEventType::NO_EVENT;
+                }
             }
         }
-        else if ( input.consume( InputHandler::KEY_PRESSED ) ) {
+        else if ( !hasEventRunning() && input.consume( InputHandler::KEY_PRESSED ) ) {
             const char key = input.consumeKey( true );
             if ( key == 'e' ) {
                 _eventTimer = GATHER_TIMER;
@@ -129,8 +143,12 @@ void ModeStrategicView::update( float deltaTime )
 {
     temporaryUI.update( deltaTime );
 
-    if ( hasEventRunning() ) {
+    if ( _eventTimer > 0 ) {
         executeEvent( deltaTime );
+        return;
+    }
+
+    if ( hasEventRunning() ) {
         return;
     }
 
@@ -172,6 +190,8 @@ void ModeStrategicView::update( float deltaTime )
             switch ( event ) {
             case 0: {
                 std::cout << std::format( "Day {} {}: Random encounter!\n", days, hours );
+                _eventType = MapEventType::ENCOUNTER;
+                activeWindow = std::make_unique<RandomEncounter>( _state, GetDialogTree() );
                 break;
             }
             default:
@@ -186,7 +206,7 @@ void ModeStrategicView::update( float deltaTime )
 
 void ModeStrategicView::render()
 {
-    _lResources.setText( std::format( "Food {}, Gold {}, Resources {}", _state.food, _state.gold, _state.resources ) );
+    _lResources.setText( std::format( "Food {}, Gold {}, Resources {}", _state.player.food, _state.player.gold, _state.player.resources ) );
 
     _mapView.render();
     _lResources.render();
@@ -211,27 +231,32 @@ void ModeStrategicView::render()
     _bOpenMenu.render();
     _bEndTurn.render();
 
-    _menuPopup.render();
-    encounterWindow.render();
+    if ( activeWindow ) {
+        activeWindow->render();
+    }
 }
 
 bool ModeStrategicView::hasEventRunning() const
 {
-    return _eventTimer > 0;
+    return _eventType != MapEventType::NO_EVENT;
 }
 
-RandomEncounter::RandomEncounter( const DialogTree & dialog )
+RandomEncounter::RandomEncounter( GameState & state, DialogTree dialog )
     : Window( RenderEngine::GetAnchorRect( AnchorPoint::CENTER, 800, 600 ), "Random Encounter" )
-    , dialog( dialog )
+    , gameState( state )
+    , dialog( std::move( dialog ) )
 {
-    setup( dialog.root );
+    setup( this->dialog.root );
 }
 
 void RandomEncounter::setup( const DialogNode & node )
 {
     _components.clear();
     currentNode = &node;
-    addComponent( std::make_shared<CenteringLabel>( CenteringLabel( { _rect.pos.x + 10, _rect.pos.y + 40, 780, 0 }, node.text ) ) );
+
+    gameState.recieveReward( currentNode->reward );
+
+    addComponent( std::make_shared<CenteringLabel>( CenteringLabel( { _rect.pos.x + 10, _rect.pos.y + 100, 780, 0 }, node.text ) ) );
 
     static const Style buttonStyle{ StandardFont::REGULAR, StandardColor::WHITE, StandardColor::DARK_GREY, StandardColor::REALM_PRECISION, 2 };
     int yOffset = 380;
@@ -239,6 +264,10 @@ void RandomEncounter::setup( const DialogNode & node )
         addComponent( std::make_shared<Button>( Button( { _rect.pos.x + 75, _rect.pos.y + yOffset, 650, 50 }, option.description, buttonStyle ) ) );
 
         yOffset += 70;
+    }
+
+    if ( node.options.empty() ) {
+        addComponent( std::make_shared<Button>( Button( { _rect.pos.x + 75, _rect.pos.y + 500, 650, 50 }, "Close dialog", buttonStyle ) ) );
     }
 
     if ( currentNode->reward.value != 0 ) {
@@ -251,6 +280,10 @@ int RandomEncounter::handleEvent( const Point & click, int event )
 {
     for ( size_t index = 0; index < _components.size(); index++ ) {
         if ( const int result = _components[index]->handleEvent( click, event ) ) {
+            if ( currentNode->options.empty() ) {
+                return UIComponent::CLOSE_WINDOW;
+            }
+
             const DialogOption & option = currentNode->options.at( index - 1 );
 
             bool failedCheck = false;

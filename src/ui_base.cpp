@@ -235,7 +235,12 @@ void CenteringLabel::render()
 Window::Window( Rect rect, const std::string & title )
     : UIComponent( rect )
     , _title( title )
-{}
+{
+    _style.font = StandardFont::REGULAR_BOLD;
+    _style.borderWidth = 4;
+    _style.borderColor = StandardColor::REALM_PRECISION;
+    _style.paddingY = 5;
+}
 
 Window::~Window() {}
 
