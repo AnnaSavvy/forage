@@ -7,7 +7,18 @@ struct DialogNode;
 
 struct Reward
 {
-    int type = 0; // resources, exp, items, quest, location uncovered
+    enum class Type
+    {
+        NONE,
+        EXPERIENCE,
+        RESOURCES,
+        BATTLE,
+        ITEMS,
+        QUEST,
+        LOCATION
+    } type
+        = Type::NONE;
+
     int value = 0; // amount or distance
     int metadata = 0; // resource id or item id or location type or quest type
 };

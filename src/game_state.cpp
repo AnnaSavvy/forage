@@ -27,7 +27,7 @@ void GameState::update( float delta )
 void GameState::recieveReward( const Reward & reward )
 {
     switch ( reward.type ) {
-    case 0:
+    case Reward::Type::RESOURCES:
         player.gold += reward.value;
         break;
     default:

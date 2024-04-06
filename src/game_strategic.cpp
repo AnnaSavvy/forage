@@ -17,12 +17,12 @@ namespace
 
     class RandomEncounter : public Window
     {
-        GameState & gameState;
+        std::function<void(const Reward &)> resultCallback;
         DialogTree dialog;
         const DialogNode * currentNode = nullptr;
 
     public:
-        RandomEncounter( GameState & state, DialogTree dialog );
+        RandomEncounter( DialogTree dialog, std::function<void( const Reward & )> callback );
 
         void setup( const DialogNode & node );
         int handleEvent( const Point & click, int event ) override;
@@ -72,6 +72,15 @@ void ModeStrategicView::executeEvent( float deltaTime )
 
     if ( _eventTimer <= 0 ) {
         _eventType = MapEventType::NO_EVENT;
+    }
+}
+
+void ModeStrategicView::processReward( const Reward & reward )
+{
+    if ( reward.type == Reward::Type::BATTLE ) {
+    }
+    else {
+        _state.recieveReward( reward );
     }
 }
 
@@ -191,7 +200,7 @@ void ModeStrategicView::update( float deltaTime )
             case 0: {
                 std::cout << std::format( "Day {} {}: Random encounter!\n", days, hours );
                 _eventType = MapEventType::ENCOUNTER;
-                activeWindow = std::make_unique<RandomEncounter>( _state, GetDialogTree() );
+                activeWindow = std::make_unique<RandomEncounter>( GetDialogTree(), std::bind( &ModeStrategicView::processReward, this, std::placeholders::_1 ) );
                 break;
             }
             default:
@@ -241,9 +250,9 @@ bool ModeStrategicView::hasEventRunning() const
     return _eventType != MapEventType::NO_EVENT;
 }
 
-RandomEncounter::RandomEncounter( GameState & state, DialogTree dialog )
+RandomEncounter::RandomEncounter( DialogTree dialog, std::function<void( const Reward & )> callback )
     : Window( RenderEngine::GetAnchorRect( AnchorPoint::CENTER, 800, 600 ), "Random Encounter" )
-    , gameState( state )
+    , resultCallback( callback )
     , dialog( std::move( dialog ) )
 {
     setup( this->dialog.root );
@@ -254,7 +263,7 @@ void RandomEncounter::setup( const DialogNode & node )
     _components.clear();
     currentNode = &node;
 
-    gameState.recieveReward( currentNode->reward );
+    resultCallback( currentNode->reward );
 
     addComponent( std::make_shared<CenteringLabel>( CenteringLabel( { _rect.pos.x + 10, _rect.pos.y + 100, 780, 0 }, node.text ) ) );
 

@@ -35,6 +35,7 @@ class ModeStrategicView : public GameMode
 
     void passTime( int amount );
     void executeEvent( float deltaTime );
+    void processReward( const Reward & reward );
 
 public:
     ModeStrategicView( GameState & state );
