@@ -10,9 +10,10 @@ bool RandomGenerator::roll( double chance )
         return true;
 
     std::uniform_real_distribution<double> distribution( 0.0, 1.0 );
-    return distribution( engine ) < chance;
+    return distribution( engine ) < chance / 100;
 }
 
+// inclusive
 uint32_t RandomGenerator::next( int minimum, int maximum )
 {
     std::uniform_int_distribution<uint32_t> distribution( minimum, maximum );

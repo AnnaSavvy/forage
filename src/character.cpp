@@ -51,8 +51,8 @@ namespace RPG
         case CharacterPreset::WIZARD:
             stats.strength = 30;
             stats.constitution = 30;
-            stats.dexterity = 60;
             stats.intelligence = 80;
+            stats.willpower = 80;
 
             skills.life = 25;
             skills.sorcery = 25;
@@ -230,7 +230,7 @@ namespace RPG
             binding.value += valueChange;
         }
         else if ( CharacterAttributes::IsSkillAttribute( attribute ) ) {
-            const int direction = valueChange < 0 ? - 1 : 1;
+            const int direction = valueChange < 0 ? -1 : 1;
 
             while ( valueChange != 0 ) {
                 const int next = ( direction > 0 ) ? binding.value : binding.value + direction;

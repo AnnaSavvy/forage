@@ -7,6 +7,8 @@
 
 namespace RPG
 {
+    const int PlayerLevelLimit = 20;
+
     enum class AttackSource
     {
         PHYSICAL,
@@ -60,7 +62,8 @@ namespace RPG
             return id;
         }
 
-        std::string getName() const {
+        std::string getName() const
+        {
             return name;
         }
 
@@ -78,13 +81,22 @@ namespace RPG
 
         int getAttackDamage( bool isRanged ) const
         {
+            const int effectiveLevel = std::min( level, PlayerLevelLimit );
+            const double levelCurve = ( sqrt( effectiveLevel * PlayerLevelLimit ) + effectiveLevel * 9 ) / 10;
+
+            const int weaponPower = levelCurve * 100 / 40 + 1;
+            const int skillValue = 100; // skills.combat;
+
             const int statValue = isRanged ? ( stats.strength + stats.dexterity ) / 2 : stats.strength;
-            return 1 + statValue / 10;
+            const int statBonus = statValue / 10 - 5;
+
+            return std::max( 1, statBonus + weaponPower * skillValue / 100 );
         }
 
         int getMagicDamage() const
         {
-            return 1 + ( stats.intelligence + stats.willpower ) / 15;
+            const int effectiveLevel = std::min( level, PlayerLevelLimit );
+            return 1 + ( stats.intelligence + stats.willpower ) * effectiveLevel / 45 + effectiveLevel * 3 / 2;
         }
 
         double calcMagicSuccessChance( Spell spell, int power ) const
@@ -101,7 +113,9 @@ namespace RPG
 
         int getMaxHealth() const
         {
-            return 1 + ( stats.constitution / 6 + 1 ) * level;
+            const int effectiveLevel = std::min( level, PlayerLevelLimit );
+            const int firstLevelHP = 2 + stats.constitution / 5;
+            return firstLevelHP + stats.constitution * effectiveLevel / 7 + effectiveLevel;
         }
 
         bool isDead() const

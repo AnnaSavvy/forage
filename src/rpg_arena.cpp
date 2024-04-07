@@ -126,7 +126,7 @@ namespace RPG
             if ( !list.empty() ) {
                 const int damage = currentUnit.getMagicDamage();
                 list.front().get().recieveDamage( AttackSource::MAGIC, damage );
-                std::cout << "Spell babah " << list.front().get().getId() << " takes " << damage << std::endl;
+                std::cout << "Spell effect " << list.front().get().getId() << " takes " << damage << std::endl;
             }
             break;
         }

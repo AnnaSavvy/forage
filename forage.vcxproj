@@ -185,6 +185,7 @@
     <ClCompile Include="src\wave_function.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="equipment.h" />
     <ClInclude Include="src\assets.h" />
     <ClInclude Include="src\asset_loader.h" />
     <ClInclude Include="src\audio_manager.h" />
