@@ -11,10 +11,10 @@ GameState::GameState()
         units.emplace_back( static_cast<RPG::CharacterPreset>( RandomGenerator::Get().next( 0, maximum ) ) );
 
         if ( i < 4 ) {
-            playerForce.add( units[i], false, positions[i % 4] );
+            battle.playerForce.add( units[i], false, positions[i % 4] );
         }
         else {
-            otherForce.add( units[i], true, positions[i % 4] );
+            battle.otherForce.add( units[i], true, positions[i % 4] );
         }
     }
 }

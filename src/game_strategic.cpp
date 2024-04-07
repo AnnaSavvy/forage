@@ -78,6 +78,9 @@ void ModeStrategicView::executeEvent( float deltaTime )
 void ModeStrategicView::processReward( const Reward & reward )
 {
     if ( reward.type == Reward::Type::BATTLE ) {
+        _state.battle.difficulty = reward.value;
+        _state.battle.variety = reward.metadata;
+        runBattle = true;
     }
     else {
         _state.recieveReward( reward );
@@ -108,6 +111,11 @@ ModeStrategicView::ModeStrategicView( GameState & state )
 
 GameModeName ModeStrategicView::handleEvents()
 {
+    if ( runBattle ) {
+        runBattle = false;
+        return GameModeName::BATTLE;
+    }
+
     InputHandler & input = InputHandler::Get();
 
     if ( input.handleEvent() ) {
