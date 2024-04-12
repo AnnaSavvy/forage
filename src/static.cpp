@@ -1,5 +1,6 @@
 #include "static.h"
 #include "dialog.h"
+#include "character.h"
 
 #include <fstream>
 #include <iomanip>
@@ -28,7 +29,7 @@ namespace
     }
 }
 
-const nlohmann::json & GetStaticData( DataFileName file )
+const nlohmann::json & Data::GetStaticData( DataFileName file )
 {
     auto it = jsonCache.find( file );
     if ( it != jsonCache.end() ) {
@@ -56,7 +57,7 @@ void from_json( const nlohmann::json & j, PregenCharacterName & p )
     readNonEmpty( j, "lastNames", p.lastNames );
 }
 
-std::vector<PregenCharacterName> PregenCharacterName::GetPresets()
+std::vector<PregenCharacterName> Data::GetPresets()
 {
     std::vector<PregenCharacterName> retval;
     auto json = GetStaticData( DataFileName::PREGEN_NAMES );
@@ -131,7 +132,14 @@ void from_json( const nlohmann::json & j, DialogNode & n )
     }
 }
 
-DialogTree GetDialogTree()
+std::vector<CharacterPreset> Data::GetCharacterPresets()
+{
+    std::vector<CharacterPreset> retval;
+    retval.push_back( {} );
+    return retval;
+}
+
+DialogTree Data::GetDialogTree()
 {
     DialogTree retval;
     auto json = GetStaticData( DataFileName::DIALOG );

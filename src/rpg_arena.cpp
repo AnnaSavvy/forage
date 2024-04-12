@@ -106,7 +106,7 @@ namespace RPG
         case Action::SKILL: {
             auto list = targets.modifyCharacters( Force::Position::ALL );
             if ( !list.empty() ) {
-                const int damage = currentUnit.getAttackDamage( false );
+                const int damage = currentUnit.getWeaponDamage();
                 list.front().get().recieveDamage( AttackSource::PHYSICAL, damage );
                 std::cout << "Melee attack! " << list.front().get().getId() << " takes " << damage << std::endl;
             }
@@ -115,7 +115,7 @@ namespace RPG
         case Action::RANGED: {
             auto list = targets.modifyCharacters( Force::Position::ALL );
             if ( !list.empty() ) {
-                const int damage = currentUnit.getAttackDamage( true );
+                const int damage = currentUnit.getWeaponDamage();
                 list.front().get().recieveDamage( AttackSource::PHYSICAL, damage );
                 std::cout << "Ranged attack! " << list.front().get().getId() << " takes " << damage << std::endl;
             }

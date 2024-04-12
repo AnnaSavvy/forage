@@ -8,7 +8,7 @@ Village::Village()
 {
     _name = "Inino";
 
-    const nlohmann::json & data = GetStaticData( DataFileName::PREGEN_NAMES );
+    const nlohmann::json & data = Data::GetStaticData( DataFileName::PREGEN_NAMES );
     _inventory.resize( data["resourceCategory"].size(), 0 );
     _resources.resize( data["resource"].size(), 0 );
 
@@ -20,7 +20,7 @@ Village::Village()
 void Village::printStatus()
 {
     int totalScore = 0;
-    const nlohmann::json & data = GetStaticData( DataFileName::PREGEN_NAMES );
+    const nlohmann::json & data = Data::GetStaticData( DataFileName::PREGEN_NAMES );
 
     printLine( "*** " + _name + " ***" );
     printLine( "Current villagers: " + std::to_string( _villagers.size() ) );
@@ -67,7 +67,7 @@ void Village::update()
     }
 
     // Recalculate category totals
-    const auto & resourceData = GetStaticData( DataFileName::PREGEN_NAMES )["resource"];
+    const auto & resourceData = Data::GetStaticData( DataFileName::PREGEN_NAMES )["resource"];
     for ( auto & res : resourceData ) {
         const int id = res["id"].get<int>();
         const int categoryID = res["category"].get<int>();

@@ -185,7 +185,6 @@
     <ClCompile Include="src\wave_function.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="equipment.h" />
     <ClInclude Include="src\assets.h" />
     <ClInclude Include="src\asset_loader.h" />
     <ClInclude Include="src\audio_manager.h" />
@@ -199,6 +198,7 @@
     <ClInclude Include="src\chart.h" />
     <ClInclude Include="src\component.h" />
     <ClInclude Include="src\dialog.h" />
+    <ClInclude Include="src\equipment.h" />
     <ClInclude Include="src\game.h" />
     <ClInclude Include="src\gamemode.h" />
     <ClInclude Include="src\game_battle.h" />

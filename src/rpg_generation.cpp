@@ -5,7 +5,7 @@
 std::string RPG::Generator::GetCharacterName()
 {
     std::string name;
-    auto presets = PregenCharacterName::GetPresets();
+    auto presets = Data::GetPresets();
 
     if ( presets.empty() )
         return name;

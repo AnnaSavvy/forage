@@ -2,8 +2,17 @@
 #include "binding.h"
 #include "character_attributes.h"
 #include "character_class.h"
+#include "equipment.h"
 #include "point.h"
 #include "spell.h"
+
+struct CharacterPreset
+{
+    int levelLimit = 1;
+    WeaponType weapon = WeaponType::MELEE;
+    Stats statsOverride;
+    Skills skillsOverride;
+};
 
 namespace RPG
 {
@@ -13,14 +22,6 @@ namespace RPG
     {
         PHYSICAL,
         MAGIC
-    };
-
-    enum class CharacterPreset
-    {
-        MELEE,
-        AGILE,
-        WIZARD,
-        MONSTER
     };
 
     class Character : protected Unit
@@ -34,6 +35,8 @@ namespace RPG
 
         double _pointsStats = 0;
         double _pointsSkills = 0;
+
+        WeaponType weapon = WeaponType::MELEE;
 
         static int lastID;
 
@@ -79,15 +82,15 @@ namespace RPG
             return ( count > 0 ) ? count : 1;
         }
 
-        int getAttackDamage( bool isRanged ) const
+        int getWeaponDamage() const
         {
             const int effectiveLevel = std::min( level, PlayerLevelLimit );
             const double levelCurve = ( sqrt( effectiveLevel * PlayerLevelLimit ) + effectiveLevel * 9 ) / 10;
 
-            const int weaponPower = levelCurve * 100 / 40 + 1;
+            const int weaponPower = levelCurve * 2.5 + 1;
             const int skillValue = 100; // skills.combat;
 
-            const int statValue = isRanged ? ( stats.strength + stats.dexterity ) / 2 : stats.strength;
+            const int statValue = weapon == WeaponType::RANGED ? ( stats.strength + stats.dexterity ) / 2 : stats.strength;
             const int statBonus = statValue / 10 - 5;
 
             return std::max( 1, statBonus + weaponPower * skillValue / 100 );

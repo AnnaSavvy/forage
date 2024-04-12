@@ -163,7 +163,7 @@
       <Filter>Source Files\engine</Filter>
     </ClCompile>
     <ClCompile Include="src\game_state.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\state</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -332,8 +332,8 @@
     <ClInclude Include="src\dialog.h">
       <Filter>Header Files\engine</Filter>
     </ClInclude>
-    <ClInclude Include="equipment.h">
-      <Filter>Source Files\rpg</Filter>
+    <ClInclude Include="src\equipment.h">
+      <Filter>Header Files\rpg</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -2,6 +2,7 @@
 #include "json.hpp"
 
 struct DialogTree;
+struct CharacterPreset;
 
 enum class DataFileName
 {
@@ -15,9 +16,12 @@ struct PregenCharacterName
 {
     std::vector<std::string> firstNames;
     std::vector<std::string> lastNames;
-
-    static std::vector<PregenCharacterName> GetPresets();
 };
 
-const nlohmann::json & GetStaticData( DataFileName file );
-DialogTree GetDialogTree();
+namespace Data
+{
+    std::vector<CharacterPreset> GetCharacterPresets();
+    DialogTree GetDialogTree();
+    const nlohmann::json & GetStaticData( DataFileName file );
+    std::vector<PregenCharacterName> GetPresets();
+}

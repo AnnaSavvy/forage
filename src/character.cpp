@@ -26,53 +26,6 @@ namespace RPG
         stats.willpower = 50;
         level = 2;
 
-        switch ( preset ) {
-        case CharacterPreset::MELEE:
-            stats.strength = 80;
-            stats.agility = 60;
-            stats.constitution = 60;
-            stats.dexterity = 60;
-            stats.charisma = 30;
-            stats.intelligence = 20;
-
-            skills.combat = 30;
-            skills.block = 20;
-            break;
-        case CharacterPreset::AGILE:
-            stats.agility = 70;
-            stats.dexterity = 70;
-            stats.charisma = 40;
-            stats.intelligence = 30;
-
-            skills.combat = 25;
-            skills.dodge = 20;
-            skills.stealth = 20;
-            break;
-        case CharacterPreset::WIZARD:
-            stats.strength = 30;
-            stats.constitution = 30;
-            stats.intelligence = 80;
-            stats.willpower = 80;
-
-            skills.life = 25;
-            skills.sorcery = 25;
-            skills.nature = 25;
-            skills.chaos = 25;
-            skills.death = 25;
-            break;
-        case CharacterPreset::MONSTER:
-            stats.strength = 90;
-            stats.constitution = 90;
-            stats.dexterity = 40;
-            stats.charisma = 20;
-            stats.intelligence = 10;
-
-            skills.combat = 20;
-            break;
-        default:
-            break;
-        }
-
         applyChanges();
     }
 

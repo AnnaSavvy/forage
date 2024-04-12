@@ -208,7 +208,7 @@ void ModeStrategicView::update( float deltaTime )
             case 0: {
                 std::cout << std::format( "Day {} {}: Random encounter!\n", days, hours );
                 _eventType = MapEventType::ENCOUNTER;
-                activeWindow = std::make_unique<RandomEncounter>( GetDialogTree(), std::bind( &ModeStrategicView::processReward, this, std::placeholders::_1 ) );
+                activeWindow = std::make_unique<RandomEncounter>( Data::GetDialogTree(), std::bind( &ModeStrategicView::processReward, this, std::placeholders::_1 ) );
                 break;
             }
             default:

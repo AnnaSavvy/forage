@@ -3,7 +3,7 @@
 
 int main( int argc, char * argv[] )
 {
-    const nlohmann::json & data = GetStaticData( DataFileName::OPTIONS );
+    const nlohmann::json & data = Data::GetStaticData( DataFileName::OPTIONS );
 
     Point resolution = { 1280, 720 };
     if ( data.is_object() ) {
