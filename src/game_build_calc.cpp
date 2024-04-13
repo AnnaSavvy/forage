@@ -42,7 +42,7 @@ ModeBuildCalculator::ModeBuildCalculator( GameState & state )
 {
     name = GameModeName::BUILD_CALCULATOR;
 
-    changeCharacter( _state.units.front() );
+    changeCharacter( _state.player.units.front() );
 
     Point p = _physicalSkills.getRect().pos;
 
@@ -94,7 +94,7 @@ void ModeBuildCalculator::modifyEvent()
 
 void ModeBuildCalculator::saveCharacter()
 {
-    for ( auto & unit : _state.units ) {
+    for ( auto & unit : _state.player.units ) {
         if ( unit.getId() == _character.getId() ) {
             unit = _character;
             unit.applyChanges();
@@ -127,10 +127,10 @@ GameModeName ModeBuildCalculator::handleEvents()
                 _attributes.handleEvent( mouseClick, input.getModes() );
             }
             else if ( _bNext.getRect().contains( mouseClick ) ) {
-                for ( auto it = _state.units.begin(); it != _state.units.end(); ++it ) {
+                for ( auto it = _state.player.units.begin(); it != _state.player.units.end(); ++it ) {
                     if ( it->getId() == _character.getId() ) {
                         it++;
-                        if ( it != _state.units.end() ) {
+                        if ( it != _state.player.units.end() ) {
                             changeCharacter( *it );
                         }
                         break;
@@ -138,9 +138,9 @@ GameModeName ModeBuildCalculator::handleEvents()
                 }
             }
             else if ( _bPrevious.getRect().contains( mouseClick ) ) {
-                for ( auto it = _state.units.begin(); it != _state.units.end(); ++it ) {
+                for ( auto it = _state.player.units.begin(); it != _state.player.units.end(); ++it ) {
                     if ( it->getId() == _character.getId() ) {
-                        if ( it != _state.units.begin() ) {
+                        if ( it != _state.player.units.begin() ) {
                             it--;
                             changeCharacter( *it );
                         }

@@ -72,6 +72,11 @@ namespace RPG
             return name;
         }
 
+        int getLevel() const
+        {
+            return level;
+        }
+
         int getInitiative() const
         {
             return 100 + ( stats.agility + stats.dexterity ) / 2;

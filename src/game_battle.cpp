@@ -32,6 +32,12 @@ GameModeName ModeBattle::handleEvents()
                 _arena.executeTurn();
             }
         }
+        else if ( input.consume( InputHandler::KEY_PRESSED ) ) {
+            const char key = input.consumeKey( true );
+            if ( key == '1' ) {
+
+            }
+        }
         return name;
     }
     return GameModeName::QUIT_GAME;

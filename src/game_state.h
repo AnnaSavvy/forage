@@ -14,6 +14,9 @@ struct PlayerParty
     int food = 0;
     int gold = 0;
     int resources = 0;
+    std::vector<RPG::Character> units;
+
+    double getPartyLevel() const;
 };
 
 struct BattleState
@@ -31,7 +34,6 @@ struct GameState
     BattleState battle;
 
     WaveMap map;
-    std::vector<RPG::Character> units;
 
     double sessionTime = 0;
     int64_t gameTime = 34 * 60 * 60; // in seconds; starting at Day 1 10:00

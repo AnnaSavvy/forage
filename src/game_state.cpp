@@ -10,13 +10,13 @@ GameState::GameState()
     const auto presets = Data::GetCharacterPresets();
 
     for ( int i = 0; i < 8; ++i ) {
-        units.emplace_back( RandomGenerator::Get().randomElement( presets ) );
+        player.units.emplace_back( RandomGenerator::Get().randomElement( presets ) );
 
         if ( i < 4 ) {
-            battle.playerForce.add( units[i], false, positions[i % 4] );
+            battle.playerForce.add( player.units[i], false, positions[i % 4] );
         }
         else {
-            battle.otherForce.add( units[i], true, positions[i % 4] );
+            battle.otherForce.add( player.units[i], true, positions[i % 4] );
         }
     }
 }
@@ -35,4 +35,16 @@ void GameState::recieveReward( const Reward & reward )
     default:
         break;
     }
+}
+
+double PlayerParty::getPartyLevel() const
+{
+    if ( units.empty() ) {
+        return 0;
+    }
+    double sum = 0.0;
+    for ( const auto & unit : units ) {
+        sum += unit.getLevel();
+    }
+    return sum / units.size();
 }
