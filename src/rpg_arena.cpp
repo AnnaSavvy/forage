@@ -74,29 +74,37 @@ namespace RPG
         return retval;
     }
 
+    void Arena::newTurn()
+    {
+        initiativeList = getInitiativeList();
+        currentUnit = initiativeList.begin();
+    }
+
     bool Arena::executeTurn()
     {
+        if ( currentUnit == initiativeList.end() ) {
+            newTurn();
+            if ( initiativeList.empty() ) {
+                return false;
+            }
+        }
+
         auto list = getInitiativeList();
         if ( list.empty() ) {
             return false;
         }
 
-        for ( BattleUnitRef unit : list ) {
-            executeAction( unit, unit.get().getAction() );
-            if ( complete ) {
-                return false;
-            }
-        }
+        executeAction( *currentUnit, currentUnit->get().getAction() );
+        ++currentUnit;
 
-        return true;
+        return complete ? false : true;
     }
 
     bool Arena::executeAction( BattleUnit & currentUnit, Action action )
     {
         // check if still possible
-        if ( false ) {
-            // determine the alternative
-            // action = fallback;
+        if ( currentUnit.isDead() ) {
+            return false;
         }
 
         RPG::Force & targets = currentUnit.rightSide ? attackers : defenders;
@@ -175,7 +183,7 @@ namespace RPG
     BattleUnit * Arena::getUnitByIndex( int index )
     {
         if ( index < 0 ) {
-            return currentUnit.second;
+            return &currentUnit->get();
         }
         const std::vector<Force::Position> dLayout = { Force::Position::BACK,  Force::Position::CENTER, Force::Position::SIDE,   Force::Position::FRONT,
                                                        Force::Position::FRONT, Force::Position::SIDE,   Force::Position::CENTER, Force::Position::BACK };

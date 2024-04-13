@@ -77,13 +77,17 @@ namespace RPG
         Force attackers;
         Force defenders;
 
-        std::pair<int, BattleUnit *> currentUnit;
+        std::vector<BattleUnitRef> initiativeList;
+        std::vector<BattleUnitRef>::iterator currentUnit;
         bool complete = false;
+
+        void newTurn();
 
     public:
         Arena( Force atk, Force def )
             : attackers( atk )
             , defenders( def )
+            , currentUnit( initiativeList.begin() )
         {}
 
         bool executeTurn();
