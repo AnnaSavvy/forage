@@ -4,13 +4,13 @@
 
 struct Stats
 {
-    int strength = 0;
-    int dexterity = 0;
-    int agility = 0;
-    int constitution = 0;
-    int intelligence = 0;
-    int willpower = 0;
-    int charisma = 0;
+    int strength = 40;
+    int dexterity = 40;
+    int agility = 40;
+    int constitution = 40;
+    int intelligence = 40;
+    int willpower = 40;
+    int charisma = 40;
 };
 
 struct Skills

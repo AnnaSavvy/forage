@@ -8,6 +8,7 @@ enum class DataFileName
 {
     GENERIC_DATA,
     PREGEN_NAMES,
+    PREGEN_CHARACTERS,
     OPTIONS,
     DIALOG,
 };

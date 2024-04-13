@@ -10,7 +10,7 @@ GameState::GameState()
     const auto presets = Data::GetCharacterPresets();
 
     for ( int i = 0; i < 8; ++i ) {
-        units.emplace_back( RandomGenerator::Get().randomElement(presets) );
+        units.emplace_back( RandomGenerator::Get().randomElement( presets ) );
 
         if ( i < 4 ) {
             battle.playerForce.add( units[i], false, positions[i % 4] );

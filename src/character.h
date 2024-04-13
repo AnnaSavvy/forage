@@ -8,8 +8,10 @@
 
 struct CharacterPreset
 {
+    int startingLevel = 1;
     int levelLimit = 1;
     WeaponType weapon = WeaponType::MELEE;
+    std::string name;
     Stats statsOverride;
     Skills skillsOverride;
 };

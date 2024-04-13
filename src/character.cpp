@@ -15,15 +15,10 @@ namespace RPG
     {
         id = lastID++;
 
-        name = Generator::GetCharacterName();
+        name = preset.name;
 
-        stats.agility = 50;
-        stats.charisma = 50;
-        stats.constitution = 50;
-        stats.dexterity = 50;
-        stats.intelligence = 50;
-        stats.strength = 50;
-        stats.willpower = 50;
+        stats = preset.statsOverride;
+        skills = preset.skillsOverride;
         level = 2;
 
         applyChanges();
@@ -49,10 +44,14 @@ namespace RPG
     void Character::levelUp()
     {
         if ( level < 20 ) {
-            level++;
             _pointsStats += 10;
             _pointsSkills += 15 + stats.intelligence / 10;
         }
+        else {
+            _pointsStats += 3;
+            _pointsSkills += 5;
+        }
+        level++;
     }
 
     std::string Character::GetSkillName( CharacterAttributes::Enum skill )

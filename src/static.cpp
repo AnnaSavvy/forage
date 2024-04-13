@@ -1,6 +1,6 @@
 #include "static.h"
-#include "dialog.h"
 #include "character.h"
+#include "dialog.h"
 
 #include <fstream>
 #include <iomanip>
@@ -13,6 +13,7 @@ namespace
         const char * string;
     } dataFiles[] = { { DataFileName::GENERIC_DATA, "data.json" },
                       { DataFileName::PREGEN_NAMES, "assets/pregen_names.json" },
+                      { DataFileName::PREGEN_CHARACTERS, "assets/pregen_characters.json" },
                       { DataFileName::OPTIONS, "options.json" },
                       { DataFileName::DIALOG, "assets/dialog.json" } };
 
@@ -132,13 +133,6 @@ void from_json( const nlohmann::json & j, DialogNode & n )
     }
 }
 
-std::vector<CharacterPreset> Data::GetCharacterPresets()
-{
-    std::vector<CharacterPreset> retval;
-    retval.push_back( {} );
-    return retval;
-}
-
 DialogTree Data::GetDialogTree()
 {
     DialogTree retval;
@@ -151,5 +145,97 @@ DialogTree Data::GetDialogTree()
         }
     }
 
+    return retval;
+}
+
+void to_json( nlohmann::json & j, const WeaponType & n )
+{
+    std::string weapon;
+    switch ( n ) {
+    case WeaponType::MELEE:
+        weapon = "melee";
+        break;
+    case WeaponType::RANGED:
+        weapon = "ranged";
+        break;
+    case WeaponType::FINESSE:
+        weapon = "finesse";
+        break;
+    case WeaponType::MAGIC:
+        weapon = "magic";
+        break;
+    default:
+        break;
+    }
+    j = nlohmann::json{ weapon };
+}
+
+void from_json( const nlohmann::json & j, WeaponType & n )
+{
+    std::string weapon;
+    readNonEmpty( j, "weapon", weapon );
+
+    if ( weapon == "melee" ) {
+        n = WeaponType::MELEE;
+    }
+    else if ( weapon == "ranged" ) {
+        n = WeaponType::RANGED;
+    }
+    else if ( weapon == "finesse" ) {
+        n = WeaponType::FINESSE;
+    }
+    else if ( weapon == "magic" ) {
+        n = WeaponType::MAGIC;
+    }
+}
+
+void to_json( nlohmann::json & j, const Stats & n )
+{
+    j = nlohmann::json{ { "strength", n.strength },         { "dexterity", n.dexterity }, { "agility", n.agility },  { "constitution", n.constitution },
+                        { "intelligence", n.intelligence }, { "willpower", n.willpower }, { "charisma", n.charisma } };
+}
+
+void from_json( const nlohmann::json & j, Stats & n )
+{
+    readNonEmpty( j, "strength", n.strength );
+    readNonEmpty( j, "dexterity", n.dexterity );
+    readNonEmpty( j, "agility", n.agility );
+    readNonEmpty( j, "constitution", n.constitution );
+    readNonEmpty( j, "intelligence", n.intelligence );
+    readNonEmpty( j, "willpower", n.willpower );
+    readNonEmpty( j, "charisma", n.charisma );
+}
+
+void to_json( nlohmann::json & j, const CharacterPreset & n )
+{
+    j = nlohmann::json{ { "name", n.name }, { "startingLevel", n.startingLevel }, { "levelLimit", n.levelLimit } };
+}
+
+void from_json( const nlohmann::json & j, CharacterPreset & n )
+{
+    readNonEmpty( j, "name", n.name );
+    readNonEmpty( j, "startingLevel", n.startingLevel );
+    readNonEmpty( j, "levelLimit", n.levelLimit );
+    readNonEmpty( j, "weapon", n.weapon );
+    auto statsIt = j.find( "statsOverride" );
+    if ( statsIt != j.end() ) {
+        n.statsOverride = statsIt.value().template get<Stats>();
+    }
+}
+
+std::vector<CharacterPreset> Data::GetCharacterPresets()
+{
+    std::vector<CharacterPreset> retval;
+    auto json = GetStaticData( DataFileName::PREGEN_CHARACTERS );
+
+    if ( json.contains( "enemies" ) ) {
+        for ( auto & group : json.at( "enemies" ) ) {
+            if ( group.contains( "presets" ) ) {
+                for ( auto & preset : group.at( "presets" ) ) {
+                    retval.push_back( preset.template get<CharacterPreset>() );
+                }
+            }
+        }
+    }
     return retval;
 }
