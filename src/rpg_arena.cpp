@@ -82,20 +82,18 @@ namespace RPG
 
     bool Arena::executeTurn()
     {
+        executeAction( *currentUnit, currentUnit->get().getAction() );
+        ++currentUnit;
+
         if ( currentUnit == initiativeList.end() ) {
             newTurn();
             if ( initiativeList.empty() ) {
                 return false;
             }
         }
-
-        auto list = getInitiativeList();
-        if ( list.empty() ) {
-            return false;
+        else if ( currentUnit->get().isDead() ) {
+            ++currentUnit;
         }
-
-        executeAction( *currentUnit, currentUnit->get().getAction() );
-        ++currentUnit;
 
         return complete ? false : true;
     }
@@ -180,6 +178,12 @@ namespace RPG
         return !attackers.isAnyAlive() || !defenders.isAnyAlive();
     }
 
+    BattleUnit * Arena::getCurrentUnit()
+    {
+        // treat this as assert
+        return &currentUnit->get();
+    }
+
     BattleUnit * Arena::getUnitByIndex( int index )
     {
         if ( index < 0 ) {
@@ -201,7 +205,7 @@ namespace RPG
 
     BattleUnit::BattleUnit( CharacterRef unit, bool isDefender )
         : Character( unit )
-        , rightSide(isDefender)
+        , rightSide( isDefender )
     {}
 
     void BattleUnit::update( float deltaTime )
@@ -216,7 +220,7 @@ namespace RPG
 
     Action BattleUnit::getAction() const
     {
-        switch (getClass()) {
+        switch ( getClass() ) {
         case CharacterClass::MARTIAL_STR:
             return Action();
         case CharacterClass::MARTIAL_AGI:

@@ -97,6 +97,11 @@ void ModeBattle::renderForce( const RPG::Force & target, bool mirror )
         if ( !units.empty() ) {
             const RPG::BattleUnit & unit = units.front().get();
             RenderEngine::Draw( unit.getSprite(), drawArea, mirror );
+            if ( _arena.getCurrentUnit() && _arena.getCurrentUnit()->getId() == unit.getId() ) {
+                RenderEngine::DrawPieSlice( { drawArea.pos.add( BATTLE_TILE / 2, 0 ), { BATTLE_TILE, BATTLE_TILE } }, 255, 285,
+                                            StandardColor::REALM_PRECISION );
+            }
+
             Point textPosition = drawArea.pos;
             if ( mirror ) {
                 textPosition.x += BATTLE_TILE - 22;

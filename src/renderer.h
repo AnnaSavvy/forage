@@ -54,7 +54,7 @@ public:
     static SDL_Surface * GetTextSurface( const std::string & text, StandardFont font, StandardColor color );
     static bool DrawDestroySurface( SDL_Surface * surface, const Rect & target );
     static bool DrawDestroyAlphaSurface( SDL_Surface * surface, const Rect & target, int alpha );
-    static bool DrawPieSlice( const Rect & target, double startAngle, double size, StandardColor color );
+    static bool DrawPieSlice( const Rect & target, double startAngle, double endAngle, StandardColor color );
 
     static int GetTextWidth( const std::string & text, StandardFont font = StandardFont::REGULAR );
 };

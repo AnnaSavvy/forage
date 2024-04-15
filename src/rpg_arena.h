@@ -88,7 +88,9 @@ namespace RPG
             : attackers( atk )
             , defenders( def )
             , currentUnit( initiativeList.begin() )
-        {}
+        {
+            newTurn();
+        }
 
         bool executeTurn();
         bool executeAction( BattleUnit & currentUnit, Action action );
@@ -96,6 +98,7 @@ namespace RPG
         std::vector<BattleUnitRef> getInitiativeList();
         bool checkIfCombatEnded() const;
 
+        BattleUnit * getCurrentUnit();
         BattleUnit * getUnitByIndex( int index );
 
         inline Force & getAttackers()
