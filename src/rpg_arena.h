@@ -82,6 +82,8 @@ namespace RPG
         bool complete = false;
 
         void newTurn();
+        bool nextUnit();
+        int findBestMove();
 
     public:
         Arena( Force atk, Force def )
@@ -92,7 +94,7 @@ namespace RPG
             newTurn();
         }
 
-        bool executeTurn();
+        bool executeTurn( int targetIndex );
         bool executeAction( BattleUnit & currentUnit, Action action );
 
         std::vector<BattleUnitRef> getInitiativeList();

@@ -29,7 +29,7 @@ GameModeName ModeBattle::handleEvents()
                 return GameModeName::CANCEL;
             }
             else {
-                _arena.executeTurn();
+                _arena.executeTurn( targetIndex );
             }
         }
         else if ( input.isSet( InputHandler::MOUSE_MOVED ) ) {
@@ -111,7 +111,7 @@ void ModeBattle::renderForce( const RPG::Force & target, bool mirror )
             const RPG::BattleUnit & unit = units.front().get();
             RenderEngine::Draw( unit.getSprite(), drawArea, mirror );
             if ( _arena.getCurrentUnit() && _arena.getCurrentUnit()->getId() == unit.getId() ) {
-                RenderEngine::DrawPieSlice( { drawArea.pos.add( BATTLE_TILE / 2, 0 ), { BATTLE_TILE, BATTLE_TILE } }, 255, 285, StandardColor::REALM_PRECISION );
+                RenderEngine::DrawPieSlice( { drawArea.pos.add( BATTLE_TILE / 2, 0 ), { 30, 30 } }, 255, 285, StandardColor::REALM_PRECISION );
             }
 
             Point textPosition = drawArea.pos;

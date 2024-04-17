@@ -3,6 +3,7 @@
 #include <cassert>
 #include <iostream>
 #include <queue>
+#include <format>
 
 namespace RPG
 {
@@ -80,10 +81,13 @@ namespace RPG
         currentUnit = initiativeList.begin();
     }
 
-    bool Arena::executeTurn()
+    bool Arena::nextUnit()
     {
-        executeAction( *currentUnit, currentUnit->get().getAction() );
         ++currentUnit;
+
+        while ( currentUnit != initiativeList.end() && currentUnit->get().isDead() ) {
+            ++currentUnit;
+        }
 
         if ( currentUnit == initiativeList.end() ) {
             newTurn();
@@ -91,8 +95,38 @@ namespace RPG
                 return false;
             }
         }
-        else if ( currentUnit->get().isDead() ) {
-            ++currentUnit;
+        return true;
+    }
+
+    int Arena::findBestMove()
+    {
+        const std::vector<Force::Position> positions = { Force::Position::BACK, Force::Position::CENTER, Force::Position::SIDE, Force::Position::FRONT };
+
+        for ( int index = positions.size() - 1; index >= 0; --index ) {
+            const auto & list = attackers.getCharacters( positions[index] );
+            if ( !list.empty() && !list.front().get().isDead() ) {
+                return index;
+            }
+        }
+
+        return -1;
+    }
+
+    bool Arena::executeTurn( int targetIndex )
+    {
+        Action action = currentUnit->get().getAction();
+        action.target = targetIndex;
+
+        if ( !executeAction( *currentUnit, action ) ) {
+            return false;
+        }
+
+        if ( !nextUnit() ) {
+            return false;
+        }
+
+        if ( currentUnit->get().rightSide ) {
+            executeTurn( findBestMove() );
         }
 
         return complete ? false : true;
@@ -100,8 +134,9 @@ namespace RPG
 
     bool Arena::executeAction( BattleUnit & currentUnit, Action action )
     {
+        BattleUnit * target = getUnitByIndex( action.target );
         // check if still possible
-        if ( currentUnit.isDead() ) {
+        if ( !target || currentUnit.isDead() || target->rightSide == currentUnit.rightSide ) {
             return false;
         }
 
@@ -110,30 +145,21 @@ namespace RPG
         switch ( action.type ) {
         case Action::MELEE:
         case Action::SKILL: {
-            auto list = targets.modifyCharacters( Force::Position::ALL );
-            if ( !list.empty() ) {
-                const int damage = currentUnit.getWeaponDamage();
-                list.front().get().recieveDamage( AttackSource::PHYSICAL, damage );
-                std::cout << "Melee attack! " << list.front().get().getId() << " takes " << damage << std::endl;
-            }
+            const int damage = currentUnit.getWeaponDamage();
+            target->recieveDamage( AttackSource::PHYSICAL, damage );
+            std::cout << std::format( "#{} Melee attack! {} takes {} damage.\n", currentUnit.getId(), target->getId(), damage );
             break;
         }
         case Action::RANGED: {
-            auto list = targets.modifyCharacters( Force::Position::ALL );
-            if ( !list.empty() ) {
-                const int damage = currentUnit.getWeaponDamage();
-                list.front().get().recieveDamage( AttackSource::PHYSICAL, damage );
-                std::cout << "Ranged attack! " << list.front().get().getId() << " takes " << damage << std::endl;
-            }
+            const int damage = currentUnit.getWeaponDamage();
+            target->recieveDamage( AttackSource::PHYSICAL, damage );
+            std::cout << std::format( "#{} Ranged attack! {} takes {} damage.\n", currentUnit.getId(), target->getId(), damage );
             break;
         }
         case Action::SPELL: {
-            auto list = targets.modifyCharacters( Force::Position::ALL );
-            if ( !list.empty() ) {
-                const int damage = currentUnit.getMagicDamage();
-                list.front().get().recieveDamage( AttackSource::MAGIC, damage );
-                std::cout << "Spell effect " << list.front().get().getId() << " takes " << damage << std::endl;
-            }
+            const int damage = currentUnit.getMagicDamage();
+            target->recieveDamage( AttackSource::MAGIC, damage );
+            std::cout << std::format( "#{} Spell effect {} takes {} damage.\n", currentUnit.getId(), target->getId(), damage );
             break;
         }
         default:
