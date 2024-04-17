@@ -132,6 +132,12 @@ bool InputHandler::handleEvent()
                 break;
             }
             break;
+        case SDL_MOUSEMOTION: {
+            _modes |= InputToggle::MOUSE_MOVED;
+            _mousePosition.x = event.motion.x / _scaling;
+            _mousePosition.y = event.motion.y / _scaling;
+            break;
+        }
         case SDL_MOUSEBUTTONDOWN: {
             switch ( event.button.button ) {
             case SDL_BUTTON_LEFT:

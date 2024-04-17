@@ -32,10 +32,23 @@ GameModeName ModeBattle::handleEvents()
                 _arena.executeTurn();
             }
         }
+        else if ( input.isSet( InputHandler::MOUSE_MOVED ) ) {
+            Rect unitArea = { RenderEngine::GetScreenSize().modSub( BATTLE_TILE, BATTLE_TILE ).modDiv( 2 ), { BATTLE_TILE, BATTLE_TILE } };
+            const int offset = BATTLE_TILE + PADDING;
+
+            unitArea.modAdd( -offset * 4, 0 );
+
+            for ( int i = 0; i < 8; ++i ) {
+                if ( unitArea.contains( input.getClickPosition() ) ) {
+                    targetIndex = i;
+                    break;
+                }
+                unitArea.modAdd( ( i == 3 ) ? offset * 2 : offset, 0 );
+            }
+        }
         else if ( input.consume( InputHandler::KEY_PRESSED ) ) {
             const char key = input.consumeKey( true );
             if ( key == '1' ) {
-
             }
         }
         return name;
@@ -98,8 +111,7 @@ void ModeBattle::renderForce( const RPG::Force & target, bool mirror )
             const RPG::BattleUnit & unit = units.front().get();
             RenderEngine::Draw( unit.getSprite(), drawArea, mirror );
             if ( _arena.getCurrentUnit() && _arena.getCurrentUnit()->getId() == unit.getId() ) {
-                RenderEngine::DrawPieSlice( { drawArea.pos.add( BATTLE_TILE / 2, 0 ), { BATTLE_TILE, BATTLE_TILE } }, 255, 285,
-                                            StandardColor::REALM_PRECISION );
+                RenderEngine::DrawPieSlice( { drawArea.pos.add( BATTLE_TILE / 2, 0 ), { BATTLE_TILE, BATTLE_TILE } }, 255, 285, StandardColor::REALM_PRECISION );
             }
 
             Point textPosition = drawArea.pos;
@@ -107,6 +119,11 @@ void ModeBattle::renderForce( const RPG::Force & target, bool mirror )
                 textPosition.x += BATTLE_TILE - 22;
             }
             RenderEngine::DrawText( std::to_string( unit.getCurrentHealth() ), textPosition );
+
+            const RPG::BattleUnit * target = _arena.getUnitByIndex( targetIndex );
+            if ( target && target->getId() == unit.getId() ) {
+                RenderEngine::Draw( targetIndex < 4 ? "assets/mask_target_1.png" : "assets/mask_target_0.png", drawArea );
+            }
         }
     }
 }

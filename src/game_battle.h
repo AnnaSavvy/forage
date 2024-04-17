@@ -12,6 +12,7 @@ class ModeBattle : public GameMode
     RPG::Arena _arena;
 
     float _animTimer = 0;
+    int targetIndex = -1;
 
     void renderForce( const RPG::Force & target, bool mirror );
 
