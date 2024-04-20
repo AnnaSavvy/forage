@@ -2,6 +2,7 @@
 #include "input.h"
 #include "renderer.h"
 #include "rpg_generation.h"
+#include <format>
 
 namespace
 {
@@ -13,7 +14,8 @@ namespace
 ModeBattle::ModeBattle( GameState & state )
     : _title( { 0, 0, RenderEngine::GetScreenSize().x, 50 }, "Battle" )
     , _bExit( RenderEngine::GetAnchorRect( AnchorPoint::BOTTOM_RIGHT, 270, 80 ), "Return", {} )
-    , _arena( state.battle.playerForce, state.battle.otherForce )
+    , _arena( *this, state.battle.playerForce, state.battle.otherForce )
+    , temporaryUI( {} )
 {
     name = GameModeName::BATTLE;
 }
@@ -33,17 +35,11 @@ GameModeName ModeBattle::handleEvents()
             }
         }
         else if ( input.isSet( InputHandler::MOUSE_MOVED ) ) {
-            Rect unitArea = { RenderEngine::GetScreenSize().modSub( BATTLE_TILE, BATTLE_TILE ).modDiv( 2 ), { BATTLE_TILE, BATTLE_TILE } };
-            const int offset = BATTLE_TILE + PADDING;
-
-            unitArea.modAdd( -offset * 4, 0 );
-
             for ( int i = 0; i < 8; ++i ) {
-                if ( unitArea.contains( input.getClickPosition() ) ) {
+                if ( getUnitArea( i ).contains( input.getClickPosition() ) ) {
                     targetIndex = i;
                     break;
                 }
-                unitArea.modAdd( ( i == 3 ) ? offset * 2 : offset, 0 );
             }
         }
         else if ( input.consume( InputHandler::KEY_PRESSED ) ) {
@@ -59,6 +55,7 @@ GameModeName ModeBattle::handleEvents()
 void ModeBattle::update( float deltaTime )
 {
     _animTimer += deltaTime;
+    temporaryUI.update( deltaTime );
 
     for ( auto & unit : _arena.getAttackers().modifyCharacters( RPG::Force::ALL ) ) {
         unit.get().update( deltaTime );
@@ -93,6 +90,27 @@ void ModeBattle::render()
 
     _title.render();
     _bExit.render();
+
+    temporaryUI.render();
+}
+
+Rect ModeBattle::getUnitArea( int targetIndex ) const
+{
+    const int offset = BATTLE_TILE + PADDING;
+    Rect unitArea{ RenderEngine::GetScreenSize().modSub( BATTLE_TILE, BATTLE_TILE ).modDiv( 2 ).modSub( offset * 4, 0 ), { BATTLE_TILE, BATTLE_TILE } };
+    unitArea.modAdd( offset * targetIndex, 0 );
+    if ( targetIndex >= 4 ) {
+        unitArea.modAdd( offset, 0 );
+    }
+    return unitArea;
+}
+
+void ModeBattle::damageEvent( int targetIndex, int amount )
+{
+    Rect unitArea = getUnitArea( targetIndex );
+    StandardColor color = amount < 0 ? StandardColor::HIGHLIGHT_RED : StandardColor::REALM_NATURE;
+    temporaryUI.addElement(
+        std::make_shared<FlyingText>( unitArea.pos.add( 80, -8 ), std::format( "{}{}", ( amount > 0 ) ? "+" : "", amount ), 3, StandardFont::REGULAR, color ) );
 }
 
 void ModeBattle::renderForce( const RPG::Force & target, bool mirror )

@@ -1,9 +1,10 @@
 #include "rpg_arena.h"
+#include "game_battle.h"
 
 #include <cassert>
+#include <format>
 #include <iostream>
 #include <queue>
-#include <format>
 
 namespace RPG
 {
@@ -147,18 +148,21 @@ namespace RPG
         case Action::SKILL: {
             const int damage = currentUnit.getWeaponDamage();
             target->recieveDamage( AttackSource::PHYSICAL, damage );
+            battleMode.damageEvent( action.target, -damage );
             std::cout << std::format( "#{} Melee attack! {} takes {} damage.\n", currentUnit.getId(), target->getId(), damage );
             break;
         }
         case Action::RANGED: {
             const int damage = currentUnit.getWeaponDamage();
             target->recieveDamage( AttackSource::PHYSICAL, damage );
+            battleMode.damageEvent( action.target, -damage );
             std::cout << std::format( "#{} Ranged attack! {} takes {} damage.\n", currentUnit.getId(), target->getId(), damage );
             break;
         }
         case Action::SPELL: {
             const int damage = currentUnit.getMagicDamage();
             target->recieveDamage( AttackSource::MAGIC, damage );
+            battleMode.damageEvent( action.target, -damage );
             std::cout << std::format( "#{} Spell effect {} takes {} damage.\n", currentUnit.getId(), target->getId(), damage );
             break;
         }
@@ -167,8 +171,6 @@ namespace RPG
             assert( false );
             break;
         }
-
-        // move
 
         if ( checkIfCombatEnded() ) {
             complete = true;

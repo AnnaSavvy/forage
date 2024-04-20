@@ -2,6 +2,8 @@
 
 #include "character.h"
 
+class ModeBattle;
+
 namespace RPG
 {
     struct Action
@@ -74,6 +76,7 @@ namespace RPG
 
     class Arena
     {
+        ModeBattle & battleMode;
         Force attackers;
         Force defenders;
 
@@ -86,8 +89,9 @@ namespace RPG
         int findBestMove();
 
     public:
-        Arena( Force atk, Force def )
-            : attackers( atk )
+        Arena( ModeBattle & mode, Force atk, Force def )
+            : battleMode( mode )
+            , attackers( atk )
             , defenders( def )
             , currentUnit( initiativeList.begin() )
         {

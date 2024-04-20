@@ -7,6 +7,7 @@
 
 class ModeBattle : public GameMode
 {
+    UIContainer temporaryUI;
     CenteringLabel _title;
     Button _bExit;
     RPG::Arena _arena;
@@ -21,4 +22,7 @@ public:
     virtual GameModeName handleEvents() override;
     virtual void update( float deltaTime ) override;
     virtual void render() override;
+
+    Rect getUnitArea( int targetIndex ) const;
+    void damageEvent( int targetIndex, int amount );
 };
