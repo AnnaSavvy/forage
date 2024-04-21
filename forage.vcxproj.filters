@@ -54,9 +54,6 @@
     <ClCompile Include="src\wave_function.cpp">
       <Filter>Source Files\experimental</Filter>
     </ClCompile>
-    <ClCompile Include="src\village.cpp">
-      <Filter>Source Files\experimental</Filter>
-    </ClCompile>
     <ClCompile Include="src\tournament.cpp">
       <Filter>Source Files\experimental</Filter>
     </ClCompile>
@@ -110,9 +107,6 @@
     </ClCompile>
     <ClCompile Include="src\renderer.cpp">
       <Filter>Source Files\engine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\unit.cpp">
-      <Filter>Source Files\experimental</Filter>
     </ClCompile>
     <ClCompile Include="src\rpg_arena.cpp">
       <Filter>Source Files\rpg</Filter>
@@ -180,15 +174,6 @@
       <Filter>Header Files\engine</Filter>
     </ClInclude>
     <ClInclude Include="src\tournament.h">
-      <Filter>Header Files\experimental</Filter>
-    </ClInclude>
-    <ClInclude Include="src\unit_villager.h">
-      <Filter>Header Files\experimental</Filter>
-    </ClInclude>
-    <ClInclude Include="src\village.h">
-      <Filter>Header Files\experimental</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resource.h">
       <Filter>Header Files\experimental</Filter>
     </ClInclude>
     <ClInclude Include="src\wave_function.h">
@@ -265,9 +250,6 @@
     </ClInclude>
     <ClInclude Include="src\component.h">
       <Filter>Header Files\engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\unit.h">
-      <Filter>Header Files\experimental</Filter>
     </ClInclude>
     <ClInclude Include="src\rpg_arena.h">
       <Filter>Header Files\rpg</Filter>

@@ -180,8 +180,6 @@
     <ClCompile Include="src\ui_base.cpp" />
     <ClCompile Include="src\ui_components.cpp" />
     <ClCompile Include="src\ui_styling.cpp" />
-    <ClCompile Include="src\unit.cpp" />
-    <ClCompile Include="src\village.cpp" />
     <ClCompile Include="src\wave_function.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -223,7 +221,6 @@
     <ClInclude Include="src\particle_system.h" />
     <ClInclude Include="src\point.h" />
     <ClInclude Include="src\renderer.h" />
-    <ClInclude Include="src\resource.h" />
     <ClInclude Include="src\rng.h" />
     <ClInclude Include="src\rpg_arena.h" />
     <ClInclude Include="src\rpg_base.h" />
@@ -236,10 +233,7 @@
     <ClInclude Include="src\ui_base.h" />
     <ClInclude Include="src\ui_components.h" />
     <ClInclude Include="src\ui_styling.h" />
-    <ClInclude Include="src\unit.h" />
-    <ClInclude Include="src\unit_villager.h" />
     <ClInclude Include="src\utils.h" />
-    <ClInclude Include="src\village.h" />
     <ClInclude Include="src\wave_function.h" />
   </ItemGroup>
   <ItemGroup>
