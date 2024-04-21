@@ -61,6 +61,11 @@ SDL_Renderer * RenderEngine::GetRenderer()
     return _renderer;
 }
 
+void RenderEngine::Present()
+{
+    SDL_RenderPresent( _renderer );
+}
+
 void RenderEngine::applyTint( StandardColor tint )
 {
     _tint = tint;
@@ -130,6 +135,25 @@ bool RenderEngine::Draw( const std::string & image, const Rect & target, bool fl
     }
 
     SDL_Color * sdlColor = static_cast<SDL_Color *>( StandardStyles::getColor( engine._tint ) );
+    SDL_SetTextureColorMod( texture, sdlColor->r, sdlColor->g, sdlColor->b );
+
+    SDL_Rect rect = convertRect( target );
+
+    if ( !flipped ) {
+        return SDL_RenderCopy( engine._renderer, texture, NULL, &rect ) == 0;
+    }
+
+    return SDL_RenderCopyEx( engine._renderer, texture, NULL, &rect, 0, NULL, SDL_FLIP_HORIZONTAL ) == 0;
+}
+
+bool RenderEngine::DrawTinted( const std::string & image, const Rect & target, StandardColor mask, bool flipped )
+{
+    SDL_Texture * texture = engine._assets.loadTexture( image );
+    if ( !texture ) {
+        return false;
+    }
+
+    SDL_Color * sdlColor = static_cast<SDL_Color *>( StandardStyles::getColor( mask ) );
     SDL_SetTextureColorMod( texture, sdlColor->r, sdlColor->g, sdlColor->b );
 
     SDL_Rect rect = convertRect( target );
@@ -255,8 +279,8 @@ bool RenderEngine::DrawPieSlice( const Rect & target, double startAngle, double 
     if ( !pieColor ) {
         return false;
     }
-    return SDL::aaFilledPieRGBA( engine._renderer, target.pos.x, target.pos.y, target.size.x, target.size.y, startAngle, endAngle, false, pieColor->r,
-                                 pieColor->g, pieColor->b, pieColor->a )
+    return SDL::aaFilledPieRGBA( engine._renderer, target.pos.x, target.pos.y, target.size.x, target.size.y, startAngle, endAngle, false, pieColor->r, pieColor->g,
+                                 pieColor->b, pieColor->a )
            == 0;
 }
 

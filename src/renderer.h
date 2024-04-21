@@ -36,6 +36,7 @@ class RenderEngine
 public:
     bool Initialize( Point logicalSize, double scaling );
     SDL_Renderer * GetRenderer();
+    void Present();
     void applyTint( StandardColor tint );
 
     static Point GetScreenSize();
@@ -44,7 +45,7 @@ public:
     static RenderEngine & Get();
 
     static bool Draw( const std::string & image, const Rect & target, bool flipped = false );
-    static bool DrawTinted( const std::string & image, const Rect & target, bool flipped = false );
+    static bool DrawTinted( const std::string & image, const Rect & target, StandardColor mask, bool flipped = false );
     static bool DrawRect( const Rect & target, StandardColor color );
     static bool DrawStyledRect( const Rect & target, const Style & style );
 

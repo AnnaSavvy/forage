@@ -159,6 +159,9 @@
     <ClCompile Include="src\game_state.cpp">
       <Filter>Source Files\state</Filter>
     </ClCompile>
+    <ClCompile Include="src\timer.cpp">
+      <Filter>Source Files\engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ui_base.h">
@@ -316,6 +319,9 @@
     </ClInclude>
     <ClInclude Include="src\equipment.h">
       <Filter>Header Files\rpg</Filter>
+    </ClInclude>
+    <ClInclude Include="src\timer.h">
+      <Filter>Header Files\engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -31,6 +31,7 @@ namespace RPG
         int _frame = 0;
 
     public:
+        int effect = 0;
         bool rightSide = false;
 
         BattleUnit( CharacterRef unit, bool isDefender );

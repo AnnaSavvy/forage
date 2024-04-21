@@ -2,6 +2,8 @@
 #include "input.h"
 #include "renderer.h"
 #include "rpg_generation.h"
+#include "timer.h"
+
 #include <format>
 
 namespace
@@ -107,10 +109,30 @@ Rect ModeBattle::getUnitArea( int targetIndex ) const
 
 void ModeBattle::damageEvent( int targetIndex, int amount )
 {
+    RPG::BattleUnit * unit = _arena.getUnitByIndex( targetIndex );
+    if ( !unit ) {
+        return;
+    }
+
     Rect unitArea = getUnitArea( targetIndex );
     StandardColor color = amount < 0 ? StandardColor::HIGHLIGHT_RED : StandardColor::REALM_NATURE;
     temporaryUI.addElement(
-        std::make_shared<FlyingText>( unitArea.pos.add( 80, -8 ), std::format( "{}{}", ( amount > 0 ) ? "+" : "", amount ), 3, StandardFont::REGULAR, color ) );
+        std::make_shared<FlyingText>( unitArea.pos.add( 80, -8 ), std::format( "{}{}", ( amount > 0 ) ? "+" : "", amount ), 2, StandardFont::REGULAR, color ) );
+
+    unit->effect = 1;
+
+    const int delay = 500;
+    const int interval = 500 / 10;
+    SimpleTimer eventTimer{ 500 };
+
+    while ( eventTimer.isRunning() ) {
+        eventTimer.run( interval );
+        update( interval / 1000.0f );
+        render();
+        RenderEngine::Get().Present();
+    }
+
+    unit->effect = 0;
 }
 
 void ModeBattle::renderForce( const RPG::Force & target, bool mirror )
@@ -127,9 +149,18 @@ void ModeBattle::renderForce( const RPG::Force & target, bool mirror )
         auto units = target.getCharacters( position );
         if ( !units.empty() ) {
             const RPG::BattleUnit & unit = units.front().get();
-            RenderEngine::Draw( unit.getSprite(), drawArea, mirror );
+
+            switch ( unit.effect ) {
+            case 1:
+                RenderEngine::DrawTinted( unit.getSprite(), drawArea, StandardColor::REALM_CHAOS, mirror );
+                break;
+            default:
+                RenderEngine::Draw( unit.getSprite(), drawArea, mirror );
+                break;
+            }
             if ( _arena.getCurrentUnit() && _arena.getCurrentUnit()->getId() == unit.getId() ) {
-                RenderEngine::DrawPieSlice( { drawArea.pos.add( BATTLE_TILE / 2, 0 ), { 30, 30 } }, 255, 285, StandardColor::REALM_PRECISION );
+                StandardColor markColor = unit.rightSide ? StandardColor::HIGHLIGHT_RED : StandardColor::REALM_PRECISION;
+                RenderEngine::DrawPieSlice( { drawArea.pos.add( BATTLE_TILE / 2, 0 ), { 30, 30 } }, 255, 285, markColor );
             }
 
             Point textPosition = drawArea.pos;

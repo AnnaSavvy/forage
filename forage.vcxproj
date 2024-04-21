@@ -176,6 +176,7 @@
     <ClCompile Include="src\SDL2_gfx.cpp" />
     <ClCompile Include="src\spell.cpp" />
     <ClCompile Include="src\static.cpp" />
+    <ClCompile Include="src\timer.cpp" />
     <ClCompile Include="src\tournament.cpp" />
     <ClCompile Include="src\ui_base.cpp" />
     <ClCompile Include="src\ui_components.cpp" />
@@ -228,6 +229,7 @@
     <ClInclude Include="src\SDL2_gfx.h" />
     <ClInclude Include="src\spell.h" />
     <ClInclude Include="src\static.h" />
+    <ClInclude Include="src\timer.h" />
     <ClInclude Include="src\tournament.h" />
     <ClInclude Include="src\types.h" />
     <ClInclude Include="src\ui_base.h" />
