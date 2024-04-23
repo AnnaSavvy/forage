@@ -185,7 +185,7 @@ void ModeStrategicView::update( float deltaTime )
             const WaveTile * tile = dynamic_cast<const WaveTile *>( _mapView.getPlayerTile() );
             if ( tile ) {
                 switch ( tile->type ) {
-                case WaveTile::FOREST:
+                case WaveTile::HILL:
                     passTime( 1800 );
                     break;
                 case WaveTile::SAND:
@@ -203,7 +203,7 @@ void ModeStrategicView::update( float deltaTime )
 
             std::cout << std::format( "Day {} {}: Moved to next tile\n", days, hours );
 
-            int event = RandomGenerator::Get().next( 0, 10 );
+            int event = RandomGenerator::Get().next( 0, 100 );
             switch ( event ) {
             case 0: {
                 std::cout << std::format( "Day {} {}: Random encounter!\n", days, hours );

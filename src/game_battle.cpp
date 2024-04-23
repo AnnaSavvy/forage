@@ -32,8 +32,8 @@ GameModeName ModeBattle::handleEvents()
             if ( _bExit.getRect().contains( mouseClick ) ) {
                 return GameModeName::CANCEL;
             }
-            else {
-                _arena.executeTurn( targetIndex );
+            else if ( !_arena.executeTurn( targetIndex ) && _arena.checkIfCombatEnded() ) {
+                processCombatResult();
             }
         }
         else if ( input.isSet( InputHandler::MOUSE_MOVED ) ) {
@@ -81,7 +81,7 @@ void ModeBattle::render()
     for ( int i = 0; i < 6; i++ ) {
         for ( int j = 0; j < 11; j++ ) {
             target.pos.x += tileSize;
-            RenderEngine::Draw( j % 2 ? "assets/plains.png" : "assets/forest.png", target );
+            RenderEngine::Draw( j % 2 ? "assets/t_plains.png" : "assets/t_forest.png", target );
         }
         target.pos.x -= tileSize * 11;
         target.pos.y += tileSize;
@@ -117,13 +117,13 @@ void ModeBattle::damageEvent( int targetIndex, int amount )
     Rect unitArea = getUnitArea( targetIndex );
     StandardColor color = amount < 0 ? StandardColor::HIGHLIGHT_RED : StandardColor::REALM_NATURE;
     temporaryUI.addElement(
-        std::make_shared<FlyingText>( unitArea.pos.add( 80, -8 ), std::format( "{}{}", ( amount > 0 ) ? "+" : "", amount ), 2, StandardFont::REGULAR, color ) );
+        std::make_shared<FlyingText>( unitArea.pos.add( 80, -8 ), std::format( "{}{}", ( amount > 0 ) ? "+" : "", amount ), 3, StandardFont::REGULAR, color ) );
 
     unit->effect = 1;
 
-    const int delay = 500;
-    const int interval = 500 / 10;
-    SimpleTimer eventTimer{ 500 };
+    const int delay = 2000;
+    const int interval = delay / 20;
+    SimpleTimer eventTimer{ delay };
 
     while ( eventTimer.isRunning() ) {
         eventTimer.run( interval );
@@ -175,4 +175,20 @@ void ModeBattle::renderForce( const RPG::Force & target, bool mirror )
             }
         }
     }
+}
+
+void ModeBattle::processCombatResult() 
+{
+    // update game state
+
+    displayCombatResult();
+}
+
+void ModeBattle::displayCombatResult()
+{
+    Rect overlayArea = RenderEngine::GetAnchorRect( AnchorPoint::CENTER, 640, 480 );
+    std::shared_ptr<UIContainer> overlay = std::make_shared<UIContainer>( overlayArea.pos );
+    
+
+    //temporaryUI.addElement( overlay );
 }

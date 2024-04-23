@@ -263,6 +263,9 @@ namespace RPG
     {
         std::string spriteName = "assets/char_";
         switch ( getClass() ) {
+        case CharacterClass::MARTIAL_AGI:
+            spriteName.append( "dog" );
+            break;
         case CharacterClass::MARTIAL_STR:
             spriteName.append( "orc" );
             break;

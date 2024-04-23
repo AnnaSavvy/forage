@@ -9,12 +9,15 @@ struct WaveTile : public MapTile
     enum TileTypes
     {
         NONE = 0,
-        FOREST = 0x1,
-        TREES = 0x2,
-        GRASS = 0x4,
-        SAND = 0x8,
-        LAKE = 0x10,
-        ALL = 0x1F
+        MOUNTAIN = 0x1,
+        HILL = 0x2,
+        DEEP_FOREST = 0x4,
+        FOREST = 0x8,
+        GRASS = 0x10,
+        SAND = 0x20,
+        WATER = 0x40,
+        DEEP_WATER = 0x80,
+        ALL = 0xFF
     };
 
     int type = NONE;

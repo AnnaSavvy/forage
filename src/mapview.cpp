@@ -83,25 +83,34 @@ void MapView::render() const
 
             const MapTile & ref = _map->getTile( yCoord * _map->getWidth() + xCoord );
             const WaveTile & tile = dynamic_cast<const WaveTile &>( ref );
-            std::string texture = "assets/water.png";
+            std::string texture = "assets/t_water.png";
             switch ( tile.type ) {
-            case WaveTile::FOREST:
-                texture = "assets/mountain.png";
+            case WaveTile::MOUNTAIN:
+                texture = "assets/t_mountain_snow.png";
                 break;
-            case WaveTile::TREES:
-                texture = "assets/forest.png";
+            case WaveTile::HILL:
+                texture = "assets/t_mountain.png";
+                break;
+            case WaveTile::DEEP_FOREST:
+                texture = "assets/t_forest_deep.png";
+                break;
+            case WaveTile::FOREST:
+                texture = "assets/t_forest.png";
                 break;
             case WaveTile::GRASS:
-                texture = "assets/plains.png";
+                texture = "assets/t_plains.png";
                 break;
             case WaveTile::SAND:
-                texture = "assets/swamp.png";
+                texture = "assets/t_swamp.png";
                 break;
-            case WaveTile::LAKE:
-                texture = "assets/water.png";
+            case WaveTile::WATER:
+                texture = "assets/t_water.png";
+                break;
+            case WaveTile::DEEP_WATER:
+                texture = "assets/t_water_deep.png";
                 break;
             default:
-                texture = "assets/water.png";
+                texture = "assets/t_water.png";
                 break;
             }
             RenderEngine::Draw( texture, target );

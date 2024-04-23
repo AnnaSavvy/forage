@@ -20,20 +20,29 @@ void WaveTile::limit( int fromTileType )
 {
     int mask = 0;
     switch ( fromTileType ) {
-    case FOREST:
-        mask = FOREST | TREES | LAKE;
+    case MOUNTAIN:
+        mask = HILL | WATER;
         break;
-    case TREES:
-        mask = FOREST | TREES | GRASS;
+    case HILL:
+        mask = MOUNTAIN | HILL | FOREST | WATER;
+        break;
+    case FOREST:
+        mask = HILL | FOREST | DEEP_FOREST | GRASS;
+        break;
+    case DEEP_FOREST:
+        mask = FOREST | DEEP_FOREST;
         break;
     case GRASS:
-        mask = TREES | GRASS | SAND;
+        mask = FOREST | GRASS | SAND;
         break;
     case SAND:
-        mask = GRASS | LAKE;
+        mask = GRASS | WATER;
         break;
-    case LAKE:
-        mask = GRASS | SAND | LAKE;
+    case WATER:
+        mask = GRASS | SAND | WATER | DEEP_WATER;
+        break;
+    case DEEP_WATER:
+        mask = WATER | DEEP_WATER;
         break;
     default:
         break;
@@ -48,7 +57,7 @@ WaveMap::WaveMap( size_t side )
     for ( size_t i = 0; i < side * side; i++ ) {
         _map.emplace_back();
     }
-    _map.begin()->possible = WaveTile::LAKE;
+    _map.begin()->possible = WaveTile::WATER;
     place( 0 );
 }
 
@@ -155,10 +164,10 @@ bool WaveMap::updateMap()
 void WaveRenderer::renderTile( const WaveTile & tile ) const 
 {
     switch ( tile.type ) {
-    case WaveTile::FOREST:
+    case WaveTile::HILL:
         std::cout << "F";
         break;
-    case WaveTile::TREES:
+    case WaveTile::FOREST:
         std::cout << "T";
         break;
     case WaveTile::GRASS:
@@ -167,7 +176,7 @@ void WaveRenderer::renderTile( const WaveTile & tile ) const
     case WaveTile::SAND:
         std::cout << "S";
         break;
-    case WaveTile::LAKE:
+    case WaveTile::WATER:
         std::cout << "L";
         break;
     default:
