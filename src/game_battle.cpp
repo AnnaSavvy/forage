@@ -34,6 +34,7 @@ GameModeName ModeBattle::handleEvents()
             }
             else if ( !_arena.executeTurn( targetIndex ) && _arena.checkIfCombatEnded() ) {
                 processCombatResult();
+                return GameModeName::CANCEL;
             }
         }
         else if ( input.isSet( InputHandler::MOUSE_MOVED ) ) {
@@ -121,7 +122,7 @@ void ModeBattle::damageEvent( int targetIndex, int amount )
 
     unit->effect = 1;
 
-    const int delay = 2000;
+    const int delay = 1000;
     const int interval = delay / 20;
     SimpleTimer eventTimer{ delay };
 
@@ -188,7 +189,18 @@ void ModeBattle::displayCombatResult()
 {
     Rect overlayArea = RenderEngine::GetAnchorRect( AnchorPoint::CENTER, 640, 480 );
     std::shared_ptr<UIContainer> overlay = std::make_shared<UIContainer>( overlayArea.pos );
-    
 
-    //temporaryUI.addElement( overlay );
+    const int delay = 2000;
+    const int updates = 20;
+    const int interval = delay / updates;
+    SimpleTimer eventTimer{ delay };
+
+    for ( int i = 0; i < updates; i++ ) {
+        eventTimer.run( interval );
+        RenderEngine::Get().applyTint( StandardColor::BLACK, i * 0.06 );
+        update( interval / 1000.0f );
+        render();
+        RenderEngine::Get().Present();
+    }
+    RenderEngine::Get().applyTint( StandardColor::WHITE );
 }

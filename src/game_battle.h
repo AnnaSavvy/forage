@@ -16,6 +16,8 @@ class ModeBattle : public GameMode
     int targetIndex = -1;
 
     void renderForce( const RPG::Force & target, bool mirror );
+    void processCombatResult();
+    void displayCombatResult();
 
 public:
     ModeBattle( GameState & state );

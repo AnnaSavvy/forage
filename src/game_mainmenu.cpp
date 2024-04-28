@@ -32,7 +32,7 @@ ModeMainMenu::ModeMainMenu()
     _backgroundMap.updateMap();
     _mapView.setMap( _backgroundMap );
 
-    _particles.addEmitter( ParticleEmitter( _particles, { 640, 360 }, 0.03 ) );
+    // _particles.addEmitter( ParticleEmitter( _particles, { 640, 360 }, 0.03 ) );
 }
 
 GameModeName ModeMainMenu::handleEvents()

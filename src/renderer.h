@@ -31,13 +31,12 @@ class RenderEngine
     SDL_Window * _window = nullptr;
     SDL_Renderer * _renderer = nullptr;
     Point _logicalSize = { BASE_RESOLUTION_X, BASE_RESOLUTION_Y };
-    StandardColor _tint = StandardColor::TINT_NONE;
 
 public:
     bool Initialize( Point logicalSize, double scaling );
     SDL_Renderer * GetRenderer();
     void Present();
-    void applyTint( StandardColor tint );
+    void applyTint( StandardColor tint, float value = 1.0f );
 
     static Point GetScreenSize();
     static Point GetAnchorPoint( AnchorPoint anchor );

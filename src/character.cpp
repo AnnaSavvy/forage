@@ -29,7 +29,10 @@ namespace RPG
         if ( stats.strength > 60 ) {
             return CharacterClass::MARTIAL_STR;
         }
-        else if ( stats.agility > 60 ) {
+        else if ( stats.dexterity > 60 ) {
+            return CharacterClass::MARTIAL_DEX;
+        }
+        else if ( stats.agility > 80 ) {
             return CharacterClass::MARTIAL_AGI;
         }
         return CharacterClass::MAGICAL_NATURE;

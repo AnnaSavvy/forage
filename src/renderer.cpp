@@ -10,6 +10,7 @@
 namespace
 {
     RenderEngine engine;
+    SDL_Color tintValue = { 255, 255, 255, 255 };
 }
 
 SDL_Rect convertRect( const Rect & rect )
@@ -66,9 +67,14 @@ void RenderEngine::Present()
     SDL_RenderPresent( _renderer );
 }
 
-void RenderEngine::applyTint( StandardColor tint )
+void RenderEngine::applyTint( StandardColor tint, float value )
 {
-    _tint = tint;
+    tintValue = *static_cast<SDL_Color *>( StandardStyles::getColor( tint ) );
+    if ( value < 1.0f ) {
+        tintValue.r = 255 - ( 255 - tintValue.r ) * value;
+        tintValue.g = 255 - ( 255 - tintValue.g ) * value;
+        tintValue.b = 255 - ( 255 - tintValue.b ) * value;
+    }
 }
 
 Point RenderEngine::GetScreenSize()
@@ -134,8 +140,7 @@ bool RenderEngine::Draw( const std::string & image, const Rect & target, bool fl
         return false;
     }
 
-    SDL_Color * sdlColor = static_cast<SDL_Color *>( StandardStyles::getColor( engine._tint ) );
-    SDL_SetTextureColorMod( texture, sdlColor->r, sdlColor->g, sdlColor->b );
+    SDL_SetTextureColorMod( texture, tintValue.r, tintValue.g, tintValue.b );
 
     SDL_Rect rect = convertRect( target );
 
