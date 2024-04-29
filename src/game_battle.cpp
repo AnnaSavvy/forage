@@ -11,6 +11,15 @@ namespace
     const int BATTLE_TILE = 96;
     const int PADDING = 5;
     const int ANIM_DELAY = 100;
+
+    const int ACTION_SIZE = 48;
+    const int ACTION_ITEMS = 9;
+
+    const std::vector<std::string> actionSprites = {
+        "assets/icons/broad-dagger.png", "assets/icons/triple-scratches.png", "",
+        "assets/icons/round-shield.png", "assets/icons/hourglass.png",        "assets/icons/hospital-cross.png",
+        "",     "assets/icons/rapidshare-arrow.png", "assets/icons/tread.png",
+    };
 }
 
 ModeBattle::ModeBattle( GameState & state )
@@ -18,8 +27,18 @@ ModeBattle::ModeBattle( GameState & state )
     , _bExit( RenderEngine::GetAnchorRect( AnchorPoint::BOTTOM_RIGHT, 270, 80 ), "Return", {} )
     , _arena( *this, state.battle.playerForce, state.battle.otherForce )
     , temporaryUI( {} )
+    , actionBar( RenderEngine::GetAnchorRect( AnchorPoint::BOTTOM_CENTER, ACTION_SIZE * ACTION_ITEMS + 20, ACTION_SIZE + 8 ) )
 {
     name = GameModeName::BATTLE;
+
+    Style actionStyle;
+    actionStyle.borderWidth = 2;
+    actionStyle.borderColor = StandardColor::DARK_RED;
+    actionStyle.textColor = StandardColor::WHITE;
+    for ( int i = 0; i < ACTION_ITEMS; i++ ) {
+        actionBar.addElement( std::make_shared<ImageButton>( actionBar.getRect().pos.add( ( ACTION_SIZE + 2 ) * i, 0 ), ACTION_SIZE, ACTION_SIZE, std::to_string( i + 1 ),
+                                                             actionStyle, actionSprites[i] ) );
+    }
 }
 
 GameModeName ModeBattle::handleEvents()
@@ -58,6 +77,7 @@ GameModeName ModeBattle::handleEvents()
 void ModeBattle::update( float deltaTime )
 {
     _animTimer += deltaTime;
+    actionBar.update( deltaTime );
     temporaryUI.update( deltaTime );
 
     for ( auto & unit : _arena.getAttackers().modifyCharacters( RPG::Force::ALL ) ) {
@@ -91,6 +111,7 @@ void ModeBattle::render()
     renderForce( left, false );
     renderForce( right, true );
 
+    actionBar.render();
     _title.render();
     _bExit.render();
 
@@ -178,7 +199,7 @@ void ModeBattle::renderForce( const RPG::Force & target, bool mirror )
     }
 }
 
-void ModeBattle::processCombatResult() 
+void ModeBattle::processCombatResult()
 {
     // update game state
 

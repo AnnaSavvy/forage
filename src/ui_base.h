@@ -110,6 +110,7 @@ public:
 
 class Button : public UIComponent
 {
+protected:
     std::string _label;
     Style _style;
     bool _isHovered = false;
@@ -128,6 +129,17 @@ public:
     void setHovered( bool value );
     void setStyle( const Style & style );
     void setLabel( const std::string & label );
+};
+
+class ImageButton : public Button
+{
+    std::string spriteName;
+    std::string pressedSprite;
+
+public:
+    ImageButton( const Point & position, int width, int height, const std::string & label, const Style & style, const std::string & sprite );
+
+    virtual void render() override;
 };
 
 class Window : public UIComponent

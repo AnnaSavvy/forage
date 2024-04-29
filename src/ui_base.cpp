@@ -351,3 +351,46 @@ bool FlyingText::isDone() const
 {
     return timer > toCompletion;
 }
+
+ImageButton::ImageButton( const Point & position, int width, int height, const std::string & label, const Style & style, const std::string & sprite )
+    : Button( position, width, height, label, style )
+    , spriteName( sprite )
+{}
+
+void ImageButton::render()
+{
+    if ( _hidden ) {
+        return;
+    }
+
+    if ( _style.borderWidth && ( _style.borderColor != _style.backgroundColor ) ) {
+        RenderEngine::DrawRect( _rect, _style.borderColor );
+
+        Rect innerArea = _rect;
+        innerArea.pos.x += _style.borderWidth;
+        innerArea.pos.y += _style.borderWidth;
+        innerArea.size.x -= _style.borderWidth * 2;
+        innerArea.size.y -= _style.borderWidth * 2;
+
+        if ( spriteName.empty() ) {
+            RenderEngine::DrawRect( innerArea, _style.backgroundColor );
+        }
+        else {
+            RenderEngine::DrawTinted( spriteName, innerArea, StandardColor::REALM_PRECISION );
+        }
+    }
+    else {
+        RenderEngine::Draw( spriteName, _rect );
+    }
+
+    SDL_Surface * surface = RenderEngine::GetTextSurface( _label, _style.font, _style.textColor );
+    if ( surface ) {
+        Rect textRect = _rect;
+        textRect.pos.x += ( _rect.size.x - surface->w ) / 2;
+        textRect.pos.y += ( _rect.size.y - surface->h );
+        textRect.size.x = surface->w;
+        textRect.size.y = surface->h;
+
+        RenderEngine::DrawDestroySurface( surface, textRect );
+    }
+}

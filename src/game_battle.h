@@ -10,6 +10,7 @@ class ModeBattle : public GameMode
     UIContainer temporaryUI;
     CenteringLabel _title;
     Button _bExit;
+    UIContainer actionBar;
     RPG::Arena _arena;
 
     float _animTimer = 0;

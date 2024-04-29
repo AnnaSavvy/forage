@@ -6,6 +6,7 @@
 #include "rng.h"
 #include "static.h"
 
+#include "timer.h"
 #include <SDL_scancode.h>
 #include <format>
 #include <iostream>
@@ -17,7 +18,7 @@ namespace
 
     class RandomEncounter : public Window
     {
-        std::function<void(const Reward &)> resultCallback;
+        std::function<void( const Reward & )> resultCallback;
         DialogTree dialog;
         const DialogNode * currentNode = nullptr;
 
@@ -113,6 +114,22 @@ GameModeName ModeStrategicView::handleEvents()
 {
     if ( runBattle ) {
         runBattle = false;
+
+        const int delay = 1000;
+        const int updates = 20;
+        const int interval = delay / updates;
+        SimpleTimer eventTimer{ delay };
+        activeWindow->setHidden( true );
+
+        for ( int i = 0; i < updates; i++ ) {
+            eventTimer.run( interval );
+            RenderEngine::Get().applyTint( StandardColor::BLACK, i * 0.06 );
+            update( interval / 1000.0f );
+            render();
+            RenderEngine::Get().Present();
+        }
+        activeWindow->setHidden( false );
+        RenderEngine::Get().applyTint( StandardColor::WHITE );
         return GameModeName::BATTLE;
     }
 
@@ -203,7 +220,7 @@ void ModeStrategicView::update( float deltaTime )
 
             std::cout << std::format( "Day {} {}: Moved to next tile\n", days, hours );
 
-            int event = RandomGenerator::Get().next( 0, 100 );
+            int event = RandomGenerator::Get().next( 0, 10 );
             switch ( event ) {
             case 0: {
                 std::cout << std::format( "Day {} {}: Random encounter!\n", days, hours );
